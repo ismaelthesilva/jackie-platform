@@ -41,10 +41,10 @@ function App() {
           <Route element={<LayoutWithoutNavbar />}>
             <Route path="/ptnz" element={<Ptnz />} />
             <Route path="/nzcoachonline" element={<Nzcoachonline />} />
-            <Route path="/fitness-br" element={<FitnessBR />} />
-            <Route path="/fitness-usa" element={<FitnessUSA />} />
-            <Route path="/nutrition-br" element={<NutritionBR />} />
-            <Route path="/nutrition-usa" element={<NutritionUSA />} />
+            <Route path="/fitnessbr" element={<FitnessBR />} />
+            <Route path="/fitnessusa" element={<FitnessUSA />} />
+            <Route path="/nutritionbr" element={<NutritionBR />} />
+            <Route path="/nutritionusa" element={<NutritionUSA />} />
           </Route>
         </Routes>
       </Router>
