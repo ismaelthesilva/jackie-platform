@@ -1,0 +1,159 @@
+/* NutritionForm.css */
+.nutrition-form-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #f7f9fc;
+  padding: 20px;
+  font-family: 'Helvetica', sans-serif;
+}
+
+.question-card {
+  background: white;
+  border-radius: 12px;
+  padding: 40px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  animation: slideIn 0.3s ease-in-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+h1, h2 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.description {
+  color: #7f8c8d;
+  margin-bottom: 30px;
+  font-size: 16px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+input, textarea {
+  padding: 15px;
+  border: 1px solid #dfe6e9;
+  border-radius: 8px;
+  font-size: 16px;
+  width: 100%;
+  transition: border-color 0.3s;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: #2980b9;
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.options-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.typeform-option {
+  padding: 12px 25px;
+  border: 1px solid #dfe6e9;
+  border-radius: 25px;
+  background: white;
+  color: #2c3e50;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 16px;
+}
+
+.typeform-option:hover {
+  border-color: #2980b9;
+}
+
+.typeform-option.selected {
+  background: #2980b9;
+  color: white;
+  border-color: #2980b9;
+}
+
+.typeform-btn {
+  padding: 12px 30px;
+  background: #2980b9;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s;
+  align-self: flex-end;
+}
+
+.typeform-btn:hover {
+  background: #3498db;
+}
+
+.typeform-btn:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.welcome, .thank-you {
+  text-align: center;
+}
+
+.processing, .success {
+  margin-top: 20px;
+  color: #2980b9;
+  font-weight: 500;
+}
+
+.progress-bar {
+  width: 100%;
+  max-width: 600px;
+  height: 4px;
+  background: #dfe6e9;
+  margin-top: 20px;
+}
+
+.progress {
+  height: 100%;
+  background: #2980b9;
+  transition: width 0.3s ease-in-out;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.button-left {
+  flex: 1;
+  text-align: left;
+}
+
+.button-right {
+  flex: 1;
+  text-align: right;
+}
