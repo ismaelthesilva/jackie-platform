@@ -2,219 +2,509 @@ import React from 'react';
 import { Button } from '../components/ui/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
-import { ArrowRight, Stethoscope, Dumbbell, Heart, Users, Award, Globe } from 'lucide-react';
+import { ArrowRight, Dumbbell, Heart, Users, Award, Globe, FlaskConical, Apple, TrendingUp, Star, CheckCircle } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 const Home: React.FC = () => {
-  const { language } = useLanguage();
+  const { t } = useLanguage();
 
-  const getText = (en: string, pt: string) => {
-    return language === 'en' ? en : pt;
+  // Flag click handler to switch between regions
+  const [selectedRegion, setSelectedRegion] = React.useState<'brazil' | 'newzealand'>('brazil');
+
+  const handleFlagClick = (region: 'brazil' | 'newzealand') => {
+    setSelectedRegion(region);
   };
 
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900 py-12 md:py-24 lg:py-32">
+      <section className="relative overflow-hidden bg-gradient-to-br from-green-50 via-white to-emerald-50 dark:from-gray-900 dark:via-gray-800 dark:to-green-900 pt-8 pb-16 md:pt-12 md:pb-24 lg:pt-16 lg:pb-32">
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
-        <div className="container relative px-4 md:px-6">
-          <div className="flex flex-col items-center space-y-4 text-center">
-            <Badge variant="secondary" className="mb-4">
-              🇧🇷 {getText('Doctor in Brazil', 'Médica no Brasil')} • 🇳🇿 {getText('PT in New Zealand', 'Personal Trainer na Nova Zelândia')}
-            </Badge>
-            <div className="space-y-2">
-              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent">
-                Dr. Jackie Souto
-              </h1>
-              <p className="mx-auto max-w-[700px] text-muted-foreground text-lg md:text-xl">
-                {getText(
-                  'Bridging medical expertise from Brazil with fitness coaching from New Zealand. Your comprehensive health and wellness journey starts here.',
-                  'Unindo expertise médica do Brasil com coaching fitness da Nova Zelândia. Sua jornada completa de saúde e bem-estar começa aqui.'
-                )}
-              </p>
+        <div className="container relative mx-auto px-4 md:px-6 max-w-7xl">
+          <div className="flex flex-col items-center justify-center space-y-6 text-center">
+            {/* Flag Selection */}
+            <div className="flex gap-4 mb-4">
+              <button 
+                onClick={() => handleFlagClick('brazil')}
+                className={`p-3 rounded-lg transition-all ${selectedRegion === 'brazil' ? 'bg-green-100 dark:bg-green-900 ring-2 ring-green-500' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`}
+              >
+                <span className="text-3xl">🇧🇷</span>
+              </button>
+              <button 
+                onClick={() => handleFlagClick('newzealand')}
+                className={`p-3 rounded-lg transition-all ${selectedRegion === 'newzealand' ? 'bg-green-100 dark:bg-green-900 ring-2 ring-green-500' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`}
+              >
+                <span className="text-3xl">🇳🇿</span>
+              </button>
             </div>
-            <div className="flex flex-col gap-2 min-[400px]:flex-row">
-              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg">
-                {getText('Start Your Journey', 'Comece Sua Jornada')}
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-              <Button variant="outline" size="lg" className="shadow-lg">
-                {getText('Learn More', 'Saiba Mais')}
-              </Button>
-            </div>
+
+            {selectedRegion === 'brazil' ? (
+              // Brazil Hero Content
+              <div className="w-full max-w-5xl mx-auto">
+                <Badge variant="secondary" className="mb-6 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
+                  🩺 {t('home.hero.brazil.badge', 'Médica Especialista em Análises Laboratoriais • Medicina Preventiva')}
+                </Badge>
+                <div className="space-y-6">
+                  <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl bg-gradient-to-r from-green-600 via-emerald-600 to-green-800 bg-clip-text text-transparent">
+                    {t('home.hero.name', 'Dra. Jackie Souto')}
+                  </h1>
+                  <h2 className="text-2xl font-semibold text-green-700 dark:text-green-300 mb-6">
+                    {t('home.hero.brazil.title', 'Descubra Sua Saúde Real Através dos Seus Exames')}
+                  </h2>
+                  <p className="mx-auto max-w-[700px] text-muted-foreground text-lg md:text-xl leading-relaxed">
+                    {t('home.hero.brazil.description', 'Você já fez exames de sangue e não entendeu nada? Eu transformo seus resultados em um plano claro de saúde.')}
+                  </p>
+                </div>
+                <div className="bg-green-50 dark:bg-green-950 p-6 rounded-xl border border-green-200 dark:border-green-800 max-w-2xl mx-auto my-8">
+                  <h3 className="font-bold text-green-800 dark:text-green-200 mb-3">
+                    ⚠️ {t('home.hero.brazil.attention.title', 'ATENÇÃO: Você pode estar perdendo sinais importantes!')}
+                  </h3>
+                  <p className="text-green-700 dark:text-green-300 text-sm leading-relaxed">
+                    {t('home.hero.brazil.attention.description', '80% dos meus pacientes descobriram deficiências nutricionais e desequilíbrios hormonais.')}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-4 min-[400px]:flex-row justify-center mt-8">
+                  <Button size="lg" className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-lg">
+                    {t('home.hero.brazil.buttons.primary', 'Analisar Meus Exames Agora')}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" size="lg" className="shadow-lg border-green-600 text-green-600 hover:bg-green-50 dark:border-green-400 dark:text-green-400">
+                    {t('home.hero.brazil.buttons.secondary', 'Ver Casos de Sucesso')}
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              // New Zealand Hero Content - use same pattern with fallbacks
+              <div className="w-full max-w-5xl mx-auto">
+                <Badge variant="secondary" className="mb-6 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
+                  💪 {t('home.hero.newzealand.badge', 'Certified Personal Trainer • Medical Background')}
+                </Badge>
+                <div className="space-y-6">
+                  <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl bg-gradient-to-r from-green-600 via-emerald-600 to-green-800 bg-clip-text text-transparent">
+                    {t('home.hero.name', 'Dr. Jackie Souto')}
+                  </h1>
+                  <h2 className="text-2xl font-semibold text-green-700 dark:text-green-300 mb-6">
+                    {t('home.hero.newzealand.title', 'The Only PT in NZ with Medical Doctor Background')}
+                  </h2>
+                  <p className="mx-auto max-w-[700px] text-muted-foreground text-lg md:text-xl leading-relaxed">
+                    {t('home.hero.newzealand.description', 'Stop wasting time with generic fitness programs. Get medically-informed training that works.')}
+                  </p>
+                </div>
+                <div className="bg-green-50 dark:bg-green-950 p-6 rounded-xl border border-green-200 dark:border-green-800 max-w-2xl mx-auto my-8">
+                  <h3 className="font-bold text-green-800 dark:text-green-200 mb-3">
+                    🎯 {t('home.hero.newzealand.attention.title', 'BREAKTHROUGH: Medical + Fitness = Real Results')}
+                  </h3>
+                  <p className="text-green-700 dark:text-green-300 text-sm leading-relaxed">
+                    {t('home.hero.newzealand.attention.description', 'My clients get 3x faster results because I understand how your body works.')}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-4 min-[400px]:flex-row justify-center mt-8">
+                  <Button size="lg" className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-lg">
+                    {t('home.hero.newzealand.buttons.primary', 'Start My Transformation')}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" size="lg" className="shadow-lg border-green-600 text-green-600 hover:bg-green-50 dark:border-green-400 dark:text-green-400">
+                    {t('home.hero.newzealand.buttons.secondary', 'View Success Stories')}
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
 
-      {/* About Section */}
-      <section className="py-12 md:py-24 lg:py-32 bg-background">
-        <div className="container px-4 md:px-6">
-          <div className="grid gap-10 lg:grid-cols-2 items-center">
-            <div className="space-y-4">
-              <Badge variant="outline" className="w-fit">
-                {getText('About Dr. Jackie', 'Sobre Dra. Jackie')}
-              </Badge>
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                {getText(
-                  'Dual Expertise, One Mission',
-                  'Dupla Expertise, Uma Missão'
-                )}
+      {/* Problem/Solution Section */}
+      <section className="py-16 md:py-20 lg:py-24 bg-red-50 dark:bg-red-950/20">
+        <div className="container mx-auto px-4 md:px-6 max-w-7xl">
+          {selectedRegion === 'brazil' ? (
+            // Brazil Problem/Solution
+            <div className="max-w-5xl mx-auto text-center space-y-8">
+              <h2 className="text-3xl md:text-4xl font-bold text-red-700 dark:text-red-400">
+                {t('home.problem.brazil.title')}
               </h2>
-              <p className="text-muted-foreground md:text-lg">
-                {getText(
-                  'As a licensed medical doctor in Brazil and certified personal trainer in New Zealand, I bring a unique perspective to health and fitness. My approach combines evidence-based medicine with practical fitness strategies.',
-                  'Como médica licenciada no Brasil e personal trainer certificada na Nova Zelândia, trago uma perspectiva única para saúde e fitness. Minha abordagem combina medicina baseada em evidências com estratégias práticas de fitness.'
-                )}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <Badge variant="secondary" className="flex items-center gap-1">
-                  <Stethoscope className="h-3 w-3" />
-                  {getText('Medical Doctor', 'Médica')}
-                </Badge>
-                <Badge variant="secondary" className="flex items-center gap-1">
-                  <Dumbbell className="h-3 w-3" />
-                  {getText('Certified PT', 'PT Certificada')}
-                </Badge>
-                <Badge variant="secondary" className="flex items-center gap-1">
-                  <Globe className="h-3 w-3" />
-                  {getText('International Experience', 'Experiência Internacional')}
-                </Badge>
-              </div>
-            </div>
-            <div className="relative">
-              <div className="aspect-square rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 p-8 text-white">
-                <div className="flex h-full flex-col justify-between">
-                  <div>
-                    <h3 className="text-2xl font-bold mb-4">
-                      {getText('Holistic Health Approach', 'Abordagem Holística da Saúde')}
-                    </h3>
-                    <p className="text-blue-100">
-                      {getText(
-                        'Combining medical knowledge with fitness expertise for optimal results.',
-                        'Combinando conhecimento médico com expertise em fitness para resultados ideais.'
-                      )}
-                    </p>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4 text-center">
-                    <div>
-                      <div className="text-3xl font-bold">🇧🇷</div>
-                      <div className="text-sm text-blue-100">{getText('Medical Background', 'Formação Médica')}</div>
-                    </div>
-                    <div>
-                      <div className="text-3xl font-bold">🇳🇿</div>
-                      <div className="text-sm text-blue-100">{getText('Fitness Expertise', 'Expertise em Fitness')}</div>
-                    </div>
-                  </div>
+              <div className="grid md:grid-cols-2 gap-8 mt-12">
+                <div className="bg-red-100 dark:bg-red-900/30 p-8 rounded-lg">
+                  <h3 className="font-bold text-red-800 dark:text-red-300 mb-6 text-xl">❌ {t('home.problem.brazil.problem.title')}</h3>
+                  <ul className="text-left space-y-3 text-red-700 dark:text-red-400">
+                    <li>• {t('home.problem.brazil.problem.point1')}</li>
+                    <li>• {t('home.problem.brazil.problem.point2')}</li>
+                    <li>• {t('home.problem.brazil.problem.point3')}</li>
+                    <li>• {t('home.problem.brazil.problem.point4')}</li>
+                  </ul>
+                </div>
+                <div className="bg-green-100 dark:bg-green-900/30 p-8 rounded-lg">
+                  <h3 className="font-bold text-green-800 dark:text-green-300 mb-6 text-xl">✅ {t('home.problem.brazil.solution.title')}</h3>
+                  <ul className="text-left space-y-3 text-green-700 dark:text-green-400">
+                    <li>• {t('home.problem.brazil.solution.point1')}</li>
+                    <li>• {t('home.problem.brazil.solution.point2')}</li>
+                    <li>• {t('home.problem.brazil.solution.point3')}</li>
+                    <li>• {t('home.problem.brazil.solution.point4')}</li>
+                  </ul>
                 </div>
               </div>
             </div>
-          </div>
+          ) : (
+            // New Zealand Problem/Solution
+            <div className="max-w-5xl mx-auto text-center space-y-8">
+              <h2 className="text-3xl md:text-4xl font-bold text-red-700 dark:text-red-400">
+                {t('home.problem.newzealand.title')}
+              </h2>
+              <div className="grid md:grid-cols-2 gap-8 mt-12">
+                <div className="bg-red-100 dark:bg-red-900/30 p-8 rounded-lg">
+                  <h3 className="font-bold text-red-800 dark:text-red-300 mb-6 text-xl">❌ {t('home.problem.newzealand.problem.title')}</h3>
+                  <ul className="text-left space-y-3 text-red-700 dark:text-red-400">
+                    <li>• {t('home.problem.newzealand.problem.point1')}</li>
+                    <li>• {t('home.problem.newzealand.problem.point2')}</li>
+                    <li>• {t('home.problem.newzealand.problem.point3')}</li>
+                    <li>• {t('home.problem.newzealand.problem.point4')}</li>
+                  </ul>
+                </div>
+                <div className="bg-green-100 dark:bg-green-900/30 p-8 rounded-lg">
+                  <h3 className="font-bold text-green-800 dark:text-green-300 mb-6 text-xl">✅ {t('home.problem.newzealand.solution.title')}</h3>
+                  <ul className="text-left space-y-3 text-green-700 dark:text-green-400">
+                    <li>• {t('home.problem.newzealand.solution.point1')}</li>
+                    <li>• {t('home.problem.newzealand.solution.point2')}</li>
+                    <li>• {t('home.problem.newzealand.solution.point3')}</li>
+                    <li>• {t('home.problem.newzealand.solution.point4')}</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
       {/* Services Section */}
-      <section className="py-12 md:py-24 lg:py-32 bg-muted/30">
-        <div className="container px-4 md:px-6">
-          <div className="flex flex-col items-center justify-center space-y-4 text-center">
-            <div className="space-y-2">
-              <Badge variant="secondary" className="mb-2">
-                {getText('Services', 'Serviços')}
-              </Badge>
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-                {getText('Comprehensive Health Solutions', 'Soluções Completas de Saúde')}
-              </h2>
-              <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                {getText(
-                  'From medical consultations to personalized fitness programs, get everything you need for optimal health.',
-                  'De consultas médicas a programas de fitness personalizados, obtenha tudo que precisa para uma saúde ideal.'
-                )}
-              </p>
-            </div>
+      <section className="py-16 md:py-20 lg:py-24 bg-background">
+        <div className="container mx-auto px-4 md:px-6 max-w-7xl">
+          <div className="flex flex-col items-center justify-center space-y-4 text-center mb-16">
+            <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
+              {t(`home.services.${selectedRegion}.badge`)}
+            </Badge>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tighter text-green-800 dark:text-green-200">
+              {t(`home.services.${selectedRegion}.title`)}
+            </h2>
           </div>
-          <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-3 lg:gap-12">
-            <Card className="relative overflow-hidden border-0 shadow-lg bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900">
-              <CardHeader>
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-500 text-white">
-                  <Stethoscope className="h-6 w-6" />
-                </div>
-                <CardTitle className="text-blue-900 dark:text-blue-100">
-                  {getText('Medical Consultations', 'Consultas Médicas')}
-                </CardTitle>
-                <CardDescription>
-                  {getText(
-                    'Professional medical advice with a focus on preventive care and wellness optimization.',
-                    'Aconselhamento médico profissional com foco em cuidados preventivos e otimização do bem-estar.'
-                  )}
-                </CardDescription>
-              </CardHeader>
-            </Card>
-            
-            <Card className="relative overflow-hidden border-0 shadow-lg bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950 dark:to-purple-900">
-              <CardHeader>
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-purple-500 text-white">
-                  <Dumbbell className="h-6 w-6" />
-                </div>
-                <CardTitle className="text-purple-900 dark:text-purple-100">
-                  {getText('Personal Training', 'Personal Training')}
-                </CardTitle>
-                <CardDescription>
-                  {getText(
-                    'Customized fitness programs designed with medical insights for safe and effective results.',
-                    'Programas de fitness personalizados desenvolvidos com insights médicos para resultados seguros e eficazes.'
-                  )}
-                </CardDescription>
-              </CardHeader>
-            </Card>
-            
-            <Card className="relative overflow-hidden border-0 shadow-lg bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950 dark:to-green-900">
-              <CardHeader>
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-500 text-white">
-                  <Heart className="h-6 w-6" />
-                </div>
-                <CardTitle className="text-green-900 dark:text-green-100">
-                  {getText('Wellness Coaching', 'Coaching de Bem-estar')}
-                </CardTitle>
-                <CardDescription>
-                  {getText(
-                    'Holistic approach combining nutrition, lifestyle, and mental health for complete wellness.',
-                    'Abordagem holística combinando nutrição, estilo de vida e saúde mental para bem-estar completo.'
-                  )}
-                </CardDescription>
-              </CardHeader>
-            </Card>
+
+          {selectedRegion === 'brazil' ? (
+            // Brazil Services
+            <div className="grid gap-8 lg:grid-cols-3 max-w-6xl mx-auto">
+              <Card className="border-0 shadow-lg bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-950 dark:to-emerald-900">
+                <CardHeader className="p-8">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-500 text-white mb-4">
+                    <FlaskConical className="h-6 w-6" />
+                  </div>
+                  <CardTitle className="text-green-900 dark:text-green-100 text-xl mb-3">
+                    {t('home.services.brazil.service1.title')}
+                  </CardTitle>
+                  <CardDescription className="text-base leading-relaxed mb-6">
+                    {t('home.services.brazil.service1.description')}
+                  </CardDescription>
+                  <div className="mt-auto">
+                    <div className="text-3xl font-bold text-green-600">{t('home.services.brazil.service1.price')}</div>
+                    <div className="text-sm text-muted-foreground">{t('home.services.brazil.service1.period')}</div>
+                  </div>
+                </CardHeader>
+              </Card>
+
+              <Card className="border-0 shadow-lg bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-950 dark:to-green-900">
+                <CardHeader className="p-8">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-emerald-500 text-white mb-4">
+                    <Apple className="h-6 w-6" />
+                  </div>
+                  <CardTitle className="text-emerald-900 dark:text-emerald-100 text-xl mb-3">
+                    {t('home.services.brazil.service2.title')}
+                  </CardTitle>
+                  <CardDescription className="text-base leading-relaxed mb-6">
+                    {t('home.services.brazil.service2.description')}
+                  </CardDescription>
+                  <div className="mt-auto">
+                    <div className="text-3xl font-bold text-emerald-600">{t('home.services.brazil.service2.price')}</div>
+                    <div className="text-sm text-muted-foreground">{t('home.services.brazil.service2.period')}</div>
+                  </div>
+                </CardHeader>
+              </Card>
+
+              <Card className="border-0 shadow-lg bg-gradient-to-br from-teal-50 to-green-100 dark:from-teal-950 dark:to-green-900">
+                <CardHeader className="p-8">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-teal-500 text-white mb-4">
+                    <TrendingUp className="h-6 w-6" />
+                  </div>
+                  <CardTitle className="text-teal-900 dark:text-teal-100 text-xl mb-3">
+                    {t('home.services.brazil.service3.title')}
+                  </CardTitle>
+                  <CardDescription className="text-base leading-relaxed mb-6">
+                    {t('home.services.brazil.service3.description')}
+                  </CardDescription>
+                  <div className="mt-auto">
+                    <div className="text-3xl font-bold text-teal-600">{t('home.services.brazil.service3.price')}</div>
+                    <div className="text-sm text-muted-foreground">{t('home.services.brazil.service3.period')}</div>
+                  </div>
+                </CardHeader>
+              </Card>
+            </div>
+          ) : (
+            // New Zealand Services
+            <div className="grid gap-8 lg:grid-cols-3 max-w-6xl mx-auto">
+              <Card className="border-0 shadow-lg bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-950 dark:to-emerald-900">
+                <CardHeader className="p-8">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-500 text-white mb-4">
+                    <Dumbbell className="h-6 w-6" />
+                  </div>
+                  <CardTitle className="text-green-900 dark:text-green-100 text-xl mb-3">
+                    {t('home.services.newzealand.service1.title')}
+                  </CardTitle>
+                  <CardDescription className="text-base leading-relaxed mb-6">
+                    {t('home.services.newzealand.service1.description')}
+                  </CardDescription>
+                  <div className="mt-auto">
+                    <div className="text-3xl font-bold text-green-600">{t('home.services.newzealand.service1.price')}</div>
+                    <div className="text-sm text-muted-foreground">{t('home.services.newzealand.service1.period')}</div>
+                  </div>
+                </CardHeader>
+              </Card>
+
+              <Card className="border-0 shadow-lg bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-950 dark:to-green-900">
+                <CardHeader className="p-8">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-emerald-500 text-white mb-4">
+                    <Heart className="h-6 w-6" />
+                  </div>
+                  <CardTitle className="text-emerald-900 dark:text-emerald-100 text-xl mb-3">
+                    {t('home.services.newzealand.service2.title')}
+                  </CardTitle>
+                  <CardDescription className="text-base leading-relaxed mb-6">
+                    {t('home.services.newzealand.service2.description')}
+                  </CardDescription>
+                  <div className="mt-auto">
+                    <div className="text-3xl font-bold text-emerald-600">{t('home.services.newzealand.service2.price')}</div>
+                    <div className="text-sm text-muted-foreground">{t('home.services.newzealand.service2.period')}</div>
+                  </div>
+                </CardHeader>
+              </Card>
+
+              <Card className="border-0 shadow-lg bg-gradient-to-br from-teal-50 to-green-100 dark:from-teal-950 dark:to-green-900">
+                <CardHeader className="p-8">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-teal-500 text-white mb-4">
+                    <Users className="h-6 w-6" />
+                  </div>
+                  <CardTitle className="text-teal-900 dark:text-teal-100 text-xl mb-3">
+                    {t('home.services.newzealand.service3.title')}
+                  </CardTitle>
+                  <CardDescription className="text-base leading-relaxed mb-6">
+                    {t('home.services.newzealand.service3.description')}
+                  </CardDescription>
+                  <div className="mt-auto">
+                    <div className="text-3xl font-bold text-teal-600">{t('home.services.newzealand.service3.price')}</div>
+                    <div className="text-sm text-muted-foreground">{t('home.services.newzealand.service3.period')}</div>
+                  </div>
+                </CardHeader>
+              </Card>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-16 md:py-20 lg:py-24 bg-green-50 dark:bg-green-950/20">
+        <div className="container mx-auto px-4 md:px-6 max-w-7xl">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-green-800 dark:text-green-200 mb-4">
+              {t(`home.testimonials.${selectedRegion}.title`)}
+            </h2>
+          </div>
+          
+          <div className="grid gap-8 lg:grid-cols-3 max-w-6xl mx-auto">
+            {selectedRegion === 'brazil' ? (
+              // Brazil Testimonials
+              <>
+                <Card className="bg-white dark:bg-gray-900 shadow-lg">
+                  <CardHeader className="p-8">
+                    <div className="flex items-center gap-1 mb-4">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                      ))}
+                    </div>
+                    <CardDescription className="text-base leading-relaxed mb-6">
+                      {t('home.testimonials.brazil.testimonial1.quote')}
+                    </CardDescription>
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                        <span className="text-green-600 font-semibold">MC</span>
+                      </div>
+                      <div>
+                        <div className="font-semibold">{t('home.testimonials.brazil.testimonial1.name')}</div>
+                        <div className="text-sm text-muted-foreground">{t('home.testimonials.brazil.testimonial1.location')}</div>
+                      </div>
+                    </div>
+                  </CardHeader>
+                </Card>
+
+                <Card className="bg-white dark:bg-gray-900 shadow-lg">
+                  <CardHeader className="p-8">
+                    <div className="flex items-center gap-1 mb-4">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                      ))}
+                    </div>
+                    <CardDescription className="text-base leading-relaxed mb-6">
+                      {t('home.testimonials.brazil.testimonial2.quote')}
+                    </CardDescription>
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                        <span className="text-green-600 font-semibold">RS</span>
+                      </div>
+                      <div>
+                        <div className="font-semibold">{t('home.testimonials.brazil.testimonial2.name')}</div>
+                        <div className="text-sm text-muted-foreground">{t('home.testimonials.brazil.testimonial2.location')}</div>
+                      </div>
+                    </div>
+                  </CardHeader>
+                </Card>
+
+                <Card className="bg-white dark:bg-gray-900 shadow-lg">
+                  <CardHeader className="p-8">
+                    <div className="flex items-center gap-1 mb-4">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                      ))}
+                    </div>
+                    <CardDescription className="text-base leading-relaxed mb-6">
+                      {t('home.testimonials.brazil.testimonial3.quote')}
+                    </CardDescription>
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                        <span className="text-green-600 font-semibold">AL</span>
+                      </div>
+                      <div>
+                        <div className="font-semibold">{t('home.testimonials.brazil.testimonial3.name')}</div>
+                        <div className="text-sm text-muted-foreground">{t('home.testimonials.brazil.testimonial3.location')}</div>
+                      </div>
+                    </div>
+                  </CardHeader>
+                </Card>
+              </>
+            ) : (
+              // New Zealand Testimonials
+              <>
+                <Card className="bg-white dark:bg-gray-900 shadow-lg">
+                  <CardHeader className="p-8">
+                    <div className="flex items-center gap-1 mb-4">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                      ))}
+                    </div>
+                    <CardDescription className="text-base leading-relaxed mb-6">
+                      {t('home.testimonials.newzealand.testimonial1.quote')}
+                    </CardDescription>
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                        <span className="text-green-600 font-semibold">SJ</span>
+                      </div>
+                      <div>
+                        <div className="font-semibold">{t('home.testimonials.newzealand.testimonial1.name')}</div>
+                        <div className="text-sm text-muted-foreground">{t('home.testimonials.newzealand.testimonial1.location')}</div>
+                      </div>
+                    </div>
+                  </CardHeader>
+                </Card>
+
+                <Card className="bg-white dark:bg-gray-900 shadow-lg">
+                  <CardHeader className="p-8">
+                    <div className="flex items-center gap-1 mb-4">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                      ))}
+                    </div>
+                    <CardDescription className="text-base leading-relaxed mb-6">
+                      {t('home.testimonials.newzealand.testimonial2.quote')}
+                    </CardDescription>
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                        <span className="text-green-600 font-semibold">MT</span>
+                      </div>
+                      <div>
+                        <div className="font-semibold">{t('home.testimonials.newzealand.testimonial2.name')}</div>
+                        <div className="text-sm text-muted-foreground">{t('home.testimonials.newzealand.testimonial2.location')}</div>
+                      </div>
+                    </div>
+                  </CardHeader>
+                </Card>
+
+                <Card className="bg-white dark:bg-gray-900 shadow-lg">
+                  <CardHeader className="p-8">
+                    <div className="flex items-center gap-1 mb-4">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                      ))}
+                    </div>
+                    <CardDescription className="text-base leading-relaxed mb-6">
+                      {t('home.testimonials.newzealand.testimonial3.quote')}
+                    </CardDescription>
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                        <span className="text-green-600 font-semibold">EP</span>
+                      </div>
+                      <div>
+                        <div className="font-semibold">{t('home.testimonials.newzealand.testimonial3.name')}</div>
+                        <div className="text-sm text-muted-foreground">{t('home.testimonials.newzealand.testimonial3.location')}</div>
+                      </div>
+                    </div>
+                  </CardHeader>
+                </Card>
+              </>
+            )}
           </div>
         </div>
       </section>
 
       {/* Stats Section */}
-      <section className="py-12 md:py-24 lg:py-32 bg-background">
-        <div className="container px-4 md:px-6">
-          <div className="grid gap-6 lg:grid-cols-3 lg:gap-12">
-            <div className="flex flex-col items-center space-y-4">
-              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white">
+      <section className="py-16 md:py-20 lg:py-24 bg-background">
+        <div className="container mx-auto px-4 md:px-6 max-w-7xl">
+          <div className="grid gap-8 lg:grid-cols-4 max-w-5xl mx-auto">
+            <div className="flex flex-col items-center space-y-4 text-center">
+              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-emerald-600 text-white">
                 <Users className="h-8 w-8" />
               </div>
-              <div className="space-y-1 text-center">
-                <h3 className="text-3xl font-bold">1000+</h3>
-                <p className="text-muted-foreground">{getText('Clients Helped', 'Clientes Atendidos')}</p>
+              <div className="space-y-2">
+                <h3 className="text-4xl font-bold text-green-700">
+                  {t(`home.stats.${selectedRegion}.clients.number`)}
+                </h3>
+                <p className="text-muted-foreground">
+                  {t(`home.stats.${selectedRegion}.clients.label`)}
+                </p>
               </div>
             </div>
-            <div className="flex flex-col items-center space-y-4">
-              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-pink-600 text-white">
+            <div className="flex flex-col items-center space-y-4 text-center">
+              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-green-600 text-white">
                 <Award className="h-8 w-8" />
               </div>
-              <div className="space-y-1 text-center">
-                <h3 className="text-3xl font-bold">10+</h3>
-                <p className="text-muted-foreground">{getText('Years Experience', 'Anos de Experiência')}</p>
+              <div className="space-y-2">
+                <h3 className="text-4xl font-bold text-green-700">{t('home.stats.experience.number')}</h3>
+                <p className="text-muted-foreground">
+                  {t(`home.stats.${selectedRegion}.experience.label`)}
+                </p>
               </div>
             </div>
-            <div className="flex flex-col items-center space-y-4">
-              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-blue-600 text-white">
+            <div className="flex flex-col items-center space-y-4 text-center">
+              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-teal-600 text-white">
+                <CheckCircle className="h-8 w-8" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-4xl font-bold text-green-700">{t('home.stats.success.number')}</h3>
+                <p className="text-muted-foreground">
+                  {t(`home.stats.${selectedRegion}.success.label`)}
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-col items-center space-y-4 text-center">
+              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-green-600 text-white">
                 <Globe className="h-8 w-8" />
               </div>
-              <div className="space-y-1 text-center">
-                <h3 className="text-3xl font-bold">2</h3>
-                <p className="text-muted-foreground">{getText('Countries', 'Países')}</p>
+              <div className="space-y-2">
+                <h3 className="text-4xl font-bold text-green-700">{t('home.stats.countries.number')}</h3>
+                <p className="text-muted-foreground">
+                  {t(`home.stats.${selectedRegion}.countries.label`)}
+                </p>
               </div>
             </div>
           </div>
@@ -222,27 +512,37 @@ const Home: React.FC = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-12 md:py-24 lg:py-32 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-        <div className="container px-4 md:px-6">
-          <div className="flex flex-col items-center justify-center space-y-4 text-center">
-            <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-                {getText('Ready to Transform Your Health?', 'Pronto para Transformar Sua Saúde?')}
+      <section className="py-16 md:py-20 lg:py-24 bg-gradient-to-r from-green-600 to-emerald-600 text-white">
+        <div className="container mx-auto px-4 md:px-6 max-w-7xl">
+          <div className="flex flex-col items-center justify-center space-y-8 text-center">
+            <div className="space-y-6 max-w-4xl">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tighter">
+                {t(`home.cta.${selectedRegion}.title`)}
               </h2>
-              <p className="mx-auto max-w-[600px] text-blue-100 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                {getText(
-                  'Join hundreds of clients who have achieved their health goals with our unique medical-fitness approach.',
-                  'Junte-se a centenas de clientes que alcançaram seus objetivos de saúde com nossa abordagem única médico-fitness.'
-                )}
+              <p className="mx-auto max-w-[600px] text-green-100 text-lg md:text-xl leading-relaxed">
+                {t(`home.cta.${selectedRegion}.description`)}
               </p>
             </div>
-            <div className="flex flex-col gap-2 min-[400px]:flex-row">
-              <Button size="lg" variant="secondary" className="bg-white text-blue-600 hover:bg-gray-100">
-                {getText('Book Consultation', 'Agendar Consulta')}
+            
+            <div className="bg-green-500 p-8 rounded-xl max-w-md mx-auto">
+              <h3 className="font-bold text-white mb-3 text-lg">
+                🎁 {t(`home.cta.${selectedRegion}.offer.title`)}
+              </h3>
+              <p className="text-green-100 text-sm mb-4 leading-relaxed">
+                {t(`home.cta.${selectedRegion}.offer.description`)}
+              </p>
+              <Badge variant="secondary" className="bg-white text-green-600">
+                {t(`home.cta.${selectedRegion}.offer.spots`)}
+              </Badge>
+            </div>
+
+            <div className="flex flex-col gap-4 min-[400px]:flex-row justify-center">
+              <Button size="lg" variant="secondary" className="bg-white text-green-600 hover:bg-gray-100">
+                {t(`home.cta.${selectedRegion}.buttons.primary`)}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600">
-                {getText('View Programs', 'Ver Programas')}
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-green-600">
+                {t(`home.cta.${selectedRegion}.buttons.secondary`)}
               </Button>
             </div>
           </div>

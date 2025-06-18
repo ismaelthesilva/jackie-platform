@@ -25,7 +25,7 @@ const LayoutWithoutNavbar: React.FC = () => {
   return <Outlet />;
 };
 
-const App: React.FC = () => {
+function App() {
   return (
     <LanguageProvider>
       <Router>
@@ -50,6 +50,6 @@ const App: React.FC = () => {
       </Router>
     </LanguageProvider>
   );
-};
+}
 
 export default App;
