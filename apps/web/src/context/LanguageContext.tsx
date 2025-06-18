@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 
 // Import translation files
 import enTranslations from '../locales/en.json';
-import brTranslations from '../locales/br.json';
+import brTranslations from '../locales/br.json'; // Use br.json
 
 // Define the shape of our context
 interface LanguageContextType {
@@ -16,10 +16,10 @@ type Translations = {
   [key: string]: any;
 };
 
-// Available translations
+// Available translations - change 'pt' to 'br'
 const translations: { [key: string]: Translations } = {
   en: enTranslations,
-  br: brTranslations,
+  br: brTranslations, // Changed from pt: ptTranslations
 };
 
 // Create the context
@@ -57,6 +57,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
           value = value[k];
         } else {
           // Key not found, return fallback or key
+          console.warn(`Translation key not found: ${key} for language: ${language}`);
           return fallback || key;
         }
       }

@@ -1,4 +1,11 @@
 {
+  "navbar": {
+    "home": "Início",
+    "techniques": "Técnicas", 
+    "diet": "Dieta",
+    "toggleLanguage": "Mudar para Inglês",
+    "toggleTheme": "Alternar tema"
+  },
   "home": {
     "hero": {
       "name": "Dra. Jackie Souto",

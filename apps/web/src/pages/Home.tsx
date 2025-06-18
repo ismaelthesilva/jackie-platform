@@ -6,14 +6,10 @@ import { ArrowRight, Dumbbell, Heart, Users, Award, Globe, FlaskConical, Apple, 
 import { useLanguage } from '../context/LanguageContext';
 
 const Home: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
-  // Flag click handler to switch between regions
-  const [selectedRegion, setSelectedRegion] = React.useState<'brazil' | 'newzealand'>('brazil');
-
-  const handleFlagClick = (region: 'brazil' | 'newzealand') => {
-    setSelectedRegion(region);
-  };
+  // Map language to region - this connects navbar language to content region
+  const selectedRegion = language === 'br' ? 'brazil' : 'newzealand';
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -22,89 +18,73 @@ const Home: React.FC = () => {
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
         <div className="container relative mx-auto px-4 md:px-6 max-w-7xl">
           <div className="flex flex-col items-center justify-center space-y-6 text-center">
-            {/* Flag Selection */}
-            <div className="flex gap-4 mb-4">
-              <button 
-                onClick={() => handleFlagClick('brazil')}
-                className={`p-3 rounded-lg transition-all ${selectedRegion === 'brazil' ? 'bg-green-100 dark:bg-green-900 ring-2 ring-green-500' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`}
-              >
-                <span className="text-3xl">🇧🇷</span>
-              </button>
-              <button 
-                onClick={() => handleFlagClick('newzealand')}
-                className={`p-3 rounded-lg transition-all ${selectedRegion === 'newzealand' ? 'bg-green-100 dark:bg-green-900 ring-2 ring-green-500' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`}
-              >
-                <span className="text-3xl">🇳🇿</span>
-              </button>
-            </div>
-
             {selectedRegion === 'brazil' ? (
               // Brazil Hero Content
               <div className="w-full max-w-5xl mx-auto">
                 <Badge variant="secondary" className="mb-6 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
-                  🩺 {t('home.hero.brazil.badge', 'Médica Especialista em Análises Laboratoriais • Medicina Preventiva')}
+                  🩺 {t('home.hero.brazil.badge')}
                 </Badge>
                 <div className="space-y-6">
-                  <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl bg-gradient-to-r from-green-600 via-emerald-600 to-green-800 bg-clip-text text-transparent">
-                    {t('home.hero.name', 'Dra. Jackie Souto')}
+                  <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl bg-gradient-to-r from-green-600 via-emerald-600 to-green-800 bg-clip-text text-transparent dark:bg-gradient-to-r dark:from-black dark:via-gray-900 dark:to-gray-800 dark:text-transparent">
+                    {t('home.hero.name')}
                   </h1>
-                  <h2 className="text-2xl font-semibold text-green-700 dark:text-green-300 mb-6">
-                    {t('home.hero.brazil.title', 'Descubra Sua Saúde Real Através dos Seus Exames')}
+                  <h2 className="text-2xl font-semibold text-green-700 dark:text-black mb-6">
+                    {t('home.hero.brazil.title')}
                   </h2>
-                  <p className="mx-auto max-w-[700px] text-muted-foreground text-lg md:text-xl leading-relaxed">
-                    {t('home.hero.brazil.description', 'Você já fez exames de sangue e não entendeu nada? Eu transformo seus resultados em um plano claro de saúde.')}
+                  <p className="mx-auto max-w-[700px] text-muted-foreground dark:text-gray-800 text-lg md:text-xl leading-relaxed">
+                    {t('home.hero.brazil.description')}
                   </p>
                 </div>
                 <div className="bg-green-50 dark:bg-green-950 p-6 rounded-xl border border-green-200 dark:border-green-800 max-w-2xl mx-auto my-8">
                   <h3 className="font-bold text-green-800 dark:text-green-200 mb-3">
-                    ⚠️ {t('home.hero.brazil.attention.title', 'ATENÇÃO: Você pode estar perdendo sinais importantes!')}
+                    ⚠️ {t('home.hero.brazil.attention.title')}
                   </h3>
                   <p className="text-green-700 dark:text-green-300 text-sm leading-relaxed">
-                    {t('home.hero.brazil.attention.description', '80% dos meus pacientes descobriram deficiências nutricionais e desequilíbrios hormonais.')}
+                    {t('home.hero.brazil.attention.description')}
                   </p>
                 </div>
                 <div className="flex flex-col gap-4 min-[400px]:flex-row justify-center mt-8">
                   <Button size="lg" className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-lg">
-                    {t('home.hero.brazil.buttons.primary', 'Analisar Meus Exames Agora')}
+                    {t('home.hero.brazil.buttons.primary')}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                   <Button variant="outline" size="lg" className="shadow-lg border-green-600 text-green-600 hover:bg-green-50 dark:border-green-400 dark:text-green-400">
-                    {t('home.hero.brazil.buttons.secondary', 'Ver Casos de Sucesso')}
+                    {t('home.hero.brazil.buttons.secondary')}
                   </Button>
                 </div>
               </div>
             ) : (
-              // New Zealand Hero Content - use same pattern with fallbacks
+              // New Zealand Hero Content
               <div className="w-full max-w-5xl mx-auto">
                 <Badge variant="secondary" className="mb-6 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
-                  💪 {t('home.hero.newzealand.badge', 'Certified Personal Trainer • Medical Background')}
+                  💪 {t('home.hero.newzealand.badge')}
                 </Badge>
                 <div className="space-y-6">
-                  <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl bg-gradient-to-r from-green-600 via-emerald-600 to-green-800 bg-clip-text text-transparent">
-                    {t('home.hero.name', 'Dr. Jackie Souto')}
+                  <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl bg-gradient-to-r from-green-600 via-emerald-600 to-green-800 bg-clip-text text-transparent dark:bg-gradient-to-r dark:from-black dark:via-gray-900 dark:to-gray-800 dark:text-transparent">
+                    {t('home.hero.name')}
                   </h1>
-                  <h2 className="text-2xl font-semibold text-green-700 dark:text-green-300 mb-6">
-                    {t('home.hero.newzealand.title', 'The Only PT in NZ with Medical Doctor Background')}
+                  <h2 className="text-2xl font-semibold text-green-700 dark:text-black mb-6">
+                    {t('home.hero.newzealand.title')}
                   </h2>
-                  <p className="mx-auto max-w-[700px] text-muted-foreground text-lg md:text-xl leading-relaxed">
-                    {t('home.hero.newzealand.description', 'Stop wasting time with generic fitness programs. Get medically-informed training that works.')}
+                  <p className="mx-auto max-w-[700px] text-muted-foreground dark:text-gray-800 text-lg md:text-xl leading-relaxed">
+                    {t('home.hero.newzealand.description')}
                   </p>
                 </div>
                 <div className="bg-green-50 dark:bg-green-950 p-6 rounded-xl border border-green-200 dark:border-green-800 max-w-2xl mx-auto my-8">
                   <h3 className="font-bold text-green-800 dark:text-green-200 mb-3">
-                    🎯 {t('home.hero.newzealand.attention.title', 'BREAKTHROUGH: Medical + Fitness = Real Results')}
+                    🎯 {t('home.hero.newzealand.attention.title')}
                   </h3>
                   <p className="text-green-700 dark:text-green-300 text-sm leading-relaxed">
-                    {t('home.hero.newzealand.attention.description', 'My clients get 3x faster results because I understand how your body works.')}
+                    {t('home.hero.newzealand.attention.description')}
                   </p>
                 </div>
                 <div className="flex flex-col gap-4 min-[400px]:flex-row justify-center mt-8">
                   <Button size="lg" className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-lg">
-                    {t('home.hero.newzealand.buttons.primary', 'Start My Transformation')}
+                    {t('home.hero.newzealand.buttons.primary')}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                   <Button variant="outline" size="lg" className="shadow-lg border-green-600 text-green-600 hover:bg-green-50 dark:border-green-400 dark:text-green-400">
-                    {t('home.hero.newzealand.buttons.secondary', 'View Success Stories')}
+                    {t('home.hero.newzealand.buttons.secondary')}
                   </Button>
                 </div>
               </div>

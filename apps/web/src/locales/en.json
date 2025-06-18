@@ -1,4 +1,11 @@
 {
+  "navbar": {
+    "home": "Home",
+    "techniques": "Techniques",
+    "diet": "Diet", 
+    "toggleLanguage": "Switch to Portuguese",
+    "toggleTheme": "Toggle theme"
+  },
   "home": {
     "hero": {
       "name": "Dr. Jackie Souto",

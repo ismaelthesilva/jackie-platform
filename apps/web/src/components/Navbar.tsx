@@ -29,7 +29,7 @@ const Navbar: React.FC = () => {
   };
 
   const toggleLanguage = () => {
-    const newLanguage = language === 'en' ? 'pt' : 'en';
+    const newLanguage = language === 'en' ? 'br' : 'en';
     setLanguage(newLanguage);
   };
 
@@ -37,8 +37,8 @@ const Navbar: React.FC = () => {
     return language === 'en' ? '🇳🇿' : '🇧🇷';
   };
 
-  const getText = (en: string, pt: string) => {
-    return language === 'en' ? en : pt;
+  const getText = (en: string, br: string) => {
+    return language === 'en' ? en : br;
   };
 
   return (
@@ -47,9 +47,11 @@ const Navbar: React.FC = () => {
         {/* Logo */}
         <div className="mr-4 hidden md:flex">
           <Link to="/" className="mr-6 flex items-center space-x-2">
-            <div className="h-8 w-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-sm font-bold text-white">J</span>
-            </div>
+            <img 
+              src="/jackie-favicon.png" 
+              alt="Jackie Souto" 
+              className="h-8 w-8 rounded-lg object-cover"
+            />
             <span className="hidden font-bold sm:inline-block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               Jackie Souto
             </span>
@@ -86,18 +88,7 @@ const Navbar: React.FC = () => {
           <span className="sr-only">Toggle Menu</span>
         </Button>
         
-        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-          {/* Search - Desktop only */}
-          <div className="w-full flex-1 md:w-auto md:flex-none hidden md:block">
-            <Button variant="outline" className="relative w-full justify-start text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64">
-              <span className="hidden lg:inline-flex">{getText('Search...', 'Buscar...')}</span>
-              <span className="inline-flex lg:hidden">{getText('Search', 'Buscar')}</span>
-              <kbd className="pointer-events-none absolute right-1.5 top-1.5 hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
-                <span className="text-xs">⌘</span>K
-              </kbd>
-            </Button>
-          </div>
-          
+        <div className="flex flex-1 items-center justify-end space-x-2">
           {/* Controls */}
           <nav className="flex items-center space-x-1">
             {/* Language Toggle */}
@@ -121,11 +112,6 @@ const Navbar: React.FC = () => {
             >
               {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               <span className="sr-only">{getText('Toggle theme', 'Alternar tema')}</span>
-            </Button>
-
-            {/* CTA Button */}
-            <Button size="sm" className="ml-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-              {getText('Get Started', 'Começar')}
             </Button>
           </nav>
         </div>
@@ -157,11 +143,6 @@ const Navbar: React.FC = () => {
               >
                 {getText('Diet', 'Dieta')}
               </Link>
-              <div className="pt-2">
-                <Button variant="outline" className="w-full justify-start text-sm text-muted-foreground">
-                  {getText('Search...', 'Buscar...')}
-                </Button>
-              </div>
             </div>
           </nav>
         </div>
