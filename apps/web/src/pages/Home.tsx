@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { Button } from '../components/ui/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
@@ -12,87 +12,176 @@ const Home: React.FC = () => {
   const selectedRegion = language === 'br' ? 'brazil' : 'newzealand';
 
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-green-50 via-white to-emerald-50 dark:from-gray-900 dark:via-gray-800 dark:to-green-900 pt-8 pb-16 md:pt-12 md:pb-24 lg:pt-16 lg:pb-32">
-        <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
-        <div className="container relative mx-auto px-4 md:px-6 max-w-7xl">
-          <div className="flex flex-col items-center justify-center space-y-6 text-center">
-            {selectedRegion === 'brazil' ? (
-              // Brazil Hero Content
-              <div className="w-full max-w-5xl mx-auto">
-                <Badge variant="secondary" className="mb-6 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section with Dr. Jackie Professional Overlay */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Background Image with Professional Styling */}
+        <div className="absolute inset-0">
+          <img
+            src="/jackie-images/dr-jackie-hero.jpeg"
+            alt="Dr. Jackie - Professional Health & Fitness Coach"
+            className="w-full h-full object-cover object-center"
+          />
+          {/* Multi-layer Professional Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/30"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/40"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/20 via-transparent to-blue-900/20"></div>
+        </div>
+        
+        {/* Content Overlay with Enhanced Design */}
+        <div className="relative z-10 container mx-auto px-6 text-center">
+          <div className="max-w-5xl mx-auto">
+            {/* Professional Badge */}
+            <div className="mb-8 animate-fade-in">
+              {selectedRegion === 'brazil' ? (
+                <Badge variant="secondary" className="text-emerald-100 bg-emerald-500/20 border-emerald-400/30 px-6 py-2 text-sm backdrop-blur-sm shadow-lg">
+                  <Star className="h-4 w-4 mr-2" />
                   🩺 {t('home.hero.brazil.badge')}
                 </Badge>
-                <div className="space-y-6">
-                  <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl bg-gradient-to-r from-green-600 via-emerald-600 to-green-800 bg-clip-text text-transparent dark:bg-gradient-to-r dark:from-black dark:via-gray-900 dark:to-gray-800 dark:text-transparent">
-                    {t('home.hero.name')}
-                  </h1>
-                  <h2 className="text-2xl font-semibold text-green-700 dark:text-black mb-6">
+              ) : (
+                <Badge variant="secondary" className="text-emerald-100 bg-emerald-500/20 border-emerald-400/30 px-6 py-2 text-sm backdrop-blur-sm shadow-lg">
+                  <Star className="h-4 w-4 mr-2" />
+                  💪 {t('home.hero.newzealand.badge')}
+                </Badge>
+              )}
+            </div>
+            
+            {/* Main Heading with Animation */}
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight text-center animate-slide-in-up">
+              <span className="text-white block mb-4">Transform Your Health with</span>
+              <span className="bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+                {t('home.hero.name')}
+              </span>
+            </h1>
+            
+            {/* Dynamic Subtitle Based on Region */}
+            <div className="mb-12 animate-slide-in-up" style={{animationDelay: '0.2s'}}>
+              {selectedRegion === 'brazil' ? (
+                <>
+                  <h2 className="text-2xl md:text-3xl lg:text-4xl mb-6 text-emerald-400 leading-relaxed text-center font-semibold">
                     {t('home.hero.brazil.title')}
                   </h2>
-                  <p className="mx-auto max-w-[700px] text-muted-foreground dark:text-gray-800 text-lg md:text-xl leading-relaxed">
+                  <p className="text-xl md:text-2xl text-gray-200 leading-relaxed text-center max-w-4xl mx-auto font-light">
                     {t('home.hero.brazil.description')}
                   </p>
+                </>
+              ) : (
+                <>
+                  <h2 className="text-2xl md:text-3xl lg:text-4xl mb-6 text-emerald-400 leading-relaxed text-center font-semibold">
+                    {t('home.hero.newzealand.title')}
+                  </h2>
+                  <p className="text-xl md:text-2xl text-gray-200 leading-relaxed text-center max-w-4xl mx-auto font-light">
+                    {t('home.hero.newzealand.description')}
+                  </p>
+                </>
+              )}
+            </div>
+            
+            {/* Enhanced CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12 animate-slide-in-up" style={{animationDelay: '0.4s'}}>
+              {selectedRegion === 'brazil' ? (
+                <>
+                  <Button asChild size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-2xl transform hover:scale-105 transition-all duration-300">
+                    <div className="flex items-center gap-2 px-8 py-4">
+                      <Dumbbell className="h-5 w-5" />
+                      {t('home.hero.brazil.buttons.primary')}
+                      <ArrowRight className="h-4 w-4" />
+                    </div>
+                  </Button>
+                  <Button variant="outline" size="lg" className="border-white/40 text-white hover:bg-white/10 backdrop-blur-sm shadow-2xl px-8 py-4">
+                    <div className="flex items-center gap-2">
+                      <Heart className="h-5 w-5" />
+                      {t('home.hero.brazil.buttons.secondary')}
+                    </div>
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button asChild size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-2xl transform hover:scale-105 transition-all duration-300">
+                    <div className="flex items-center gap-2 px-8 py-4">
+                      <Dumbbell className="h-5 w-5" />
+                      {t('home.hero.newzealand.buttons.primary')}
+                      <ArrowRight className="h-4 w-4" />
+                    </div>
+                  </Button>
+                  <Button variant="outline" size="lg" className="border-white/40 text-white hover:bg-white/10 backdrop-blur-sm shadow-2xl px-8 py-4">
+                    <div className="flex items-center gap-2">
+                      <Apple className="h-5 w-5" />
+                      {t('home.hero.newzealand.buttons.secondary')}
+                    </div>
+                  </Button>
+                </>
+              )}
+            </div>
+            
+            {/* Professional Stats with Icons */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto mb-12 animate-slide-in-up" style={{animationDelay: '0.6s'}}>
+              <div className="text-center">
+                <div className="flex items-center justify-center mb-2">
+                  <Users className="h-6 w-6 text-emerald-400" />
                 </div>
-                <div className="bg-green-50 dark:bg-green-950 p-6 rounded-xl border border-green-200 dark:border-green-800 max-w-2xl mx-auto my-8">
-                  <h3 className="font-bold text-green-800 dark:text-green-200 mb-3">
+                <div className="text-3xl font-bold text-emerald-400">500+</div>
+                <div className="text-sm text-gray-300">Happy Clients</div>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center mb-2">
+                  <Globe className="h-6 w-6 text-blue-400" />
+                </div>
+                <div className="text-3xl font-bold text-blue-400">3</div>
+                <div className="text-sm text-gray-300">Countries</div>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center mb-2">
+                  <Award className="h-6 w-6 text-purple-400" />
+                </div>
+                <div className="text-3xl font-bold text-purple-400">5+</div>
+                <div className="text-sm text-gray-300">Years Experience</div>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center mb-2">
+                  <TrendingUp className="h-6 w-6 text-green-400" />
+                </div>
+                <div className="text-3xl font-bold text-green-400">98%</div>
+                <div className="text-sm text-gray-300">Success Rate</div>
+              </div>
+            </div>
+            
+            {/* Important Notice with Glass Effect */}
+            <div className="mt-8 animate-slide-in-up" style={{animationDelay: '0.8s'}}>
+              {selectedRegion === 'brazil' ? (
+                <div className="bg-emerald-500/20 backdrop-blur-sm p-6 rounded-xl border border-emerald-400/30 max-w-3xl mx-auto shadow-xl">
+                  <h3 className="font-bold text-emerald-100 mb-3 flex items-center justify-center gap-2 text-lg">
                     ⚠️ {t('home.hero.brazil.attention.title')}
                   </h3>
-                  <p className="text-green-700 dark:text-green-300 text-sm leading-relaxed">
+                  <p className="text-emerald-200 text-sm leading-relaxed">
                     {t('home.hero.brazil.attention.description')}
                   </p>
                 </div>
-                <div className="flex flex-col gap-4 min-[400px]:flex-row justify-center mt-8">
-                  <Button size="lg" className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-lg">
-                    {t('home.hero.brazil.buttons.primary')}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                  <Button variant="outline" size="lg" className="shadow-lg border-green-600 text-green-600 hover:bg-green-50 dark:border-green-400 dark:text-green-400">
-                    {t('home.hero.brazil.buttons.secondary')}
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              // New Zealand Hero Content
-              <div className="w-full max-w-5xl mx-auto">
-                <Badge variant="secondary" className="mb-6 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
-                  💪 {t('home.hero.newzealand.badge')}
-                </Badge>
-                <div className="space-y-6">
-                  <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl bg-gradient-to-r from-green-600 via-emerald-600 to-green-800 bg-clip-text text-transparent dark:bg-gradient-to-r dark:from-black dark:via-gray-900 dark:to-gray-800 dark:text-transparent">
-                    {t('home.hero.name')}
-                  </h1>
-                  <h2 className="text-2xl font-semibold text-green-700 dark:text-black mb-6">
-                    {t('home.hero.newzealand.title')}
-                  </h2>
-                  <p className="mx-auto max-w-[700px] text-muted-foreground dark:text-gray-800 text-lg md:text-xl leading-relaxed">
-                    {t('home.hero.newzealand.description')}
-                  </p>
-                </div>
-                <div className="bg-green-50 dark:bg-green-950 p-6 rounded-xl border border-green-200 dark:border-green-800 max-w-2xl mx-auto my-8">
-                  <h3 className="font-bold text-green-800 dark:text-green-200 mb-3">
+              ) : (
+                <div className="bg-blue-500/20 backdrop-blur-sm p-6 rounded-xl border border-blue-400/30 max-w-3xl mx-auto shadow-xl">
+                  <h3 className="font-bold text-blue-100 mb-3 flex items-center justify-center gap-2 text-lg">
                     🎯 {t('home.hero.newzealand.attention.title')}
                   </h3>
-                  <p className="text-green-700 dark:text-green-300 text-sm leading-relaxed">
+                  <p className="text-blue-200 text-sm leading-relaxed">
                     {t('home.hero.newzealand.attention.description')}
                   </p>
                 </div>
-                <div className="flex flex-col gap-4 min-[400px]:flex-row justify-center mt-8">
-                  <Button size="lg" className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-lg">
-                    {t('home.hero.newzealand.buttons.primary')}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                  <Button variant="outline" size="lg" className="shadow-lg border-green-600 text-green-600 hover:bg-green-50 dark:border-green-400 dark:text-green-400">
-                    {t('home.hero.newzealand.buttons.secondary')}
-                  </Button>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
+          </div>
+        </div>
+        
+        {/* Enhanced Scroll Indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
+          <div className="flex flex-col items-center">
+            <span className="text-sm mb-2 text-gray-200">Scroll Down</span>
+            <div className="w-6 h-10 border-2 border-white/40 rounded-full flex justify-center backdrop-blur-sm">
+              <div className="w-1 h-3 bg-white/70 rounded-full mt-2 animate-pulse"></div>
+            </div>
           </div>
         </div>
       </section>
-
+      
       {/* Problem/Solution Section */}
       <section className="py-16 md:py-20 lg:py-24 bg-red-50 dark:bg-red-950/20">
         <div className="container mx-auto px-4 md:px-6 max-w-7xl">
