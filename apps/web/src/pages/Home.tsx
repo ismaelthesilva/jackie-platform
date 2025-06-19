@@ -1,9 +1,9 @@
 import React from "react";
-import { Button } from '../components/ui/button';
-import { Card, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { Badge } from '../components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { ArrowRight, Dumbbell, Heart, Users, Award, Globe, FlaskConical, Apple, TrendingUp, Star, CheckCircle } from 'lucide-react';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '@/context/LanguageContext';
 
 const Home: React.FC = () => {
   const { t, language } = useLanguage();

@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 // Import translation files
-import enTranslations from '../locales/en.json';
-import brTranslations from '../locales/br.json'; // Use br.json
+import enTranslations from '@/locales/en.json';
+import brTranslations from '@/locales/br.json'; // Use br.json
 
 // Define the shape of our context
 interface LanguageContextType {
