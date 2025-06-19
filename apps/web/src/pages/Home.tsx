@@ -48,7 +48,7 @@ const Home: React.FC = () => {
             
             {/* Main Heading with Animation */}
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight text-center animate-slide-in-up">
-              <span className="text-white block mb-4">Transform Your Health with</span>
+              <span className="text-white block mb-4">{t('home.hero.transformText')}</span>
               <span className="bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
                 {t('home.hero.name')}
               </span>

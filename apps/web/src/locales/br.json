@@ -1,13 +1,41 @@
 {
   "navbar": {
     "home": "Início",
-    "techniques": "Técnicas", 
-    "diet": "Dieta",
+    "services": "Serviços",
+    "locations": "Localizações",
+    "about": "Sobre",
+    "contact": "Contato",
+    "bookSession": "Agendar Sessão",
+    "subtitle": "Coach de Saúde e Fitness",
     "toggleLanguage": "Mudar para Inglês",
-    "toggleTheme": "Alternar tema"
+    "toggleTheme": "Alternar tema",
+    "servicesMenu": {
+      "fitnessCoaching": "Coaching de Fitness",
+      "fitnessDescription": "Planos de treino personalizados e treinamento",
+      "nutritionGuidance": "Orientação Nutricional",
+      "nutritionDescription": "Planos alimentares personalizados e conselhos dietéticos",
+      "onlineCoaching": "Coaching Online",
+      "onlineDescription": "Coaching remoto e sessões virtuais"
+    },
+    "locationsMenu": {
+      "brazilCoaching": "Coaching Brasil",
+      "brazilDescription": "Serviços de coaching no Brasil",
+      "usaCoaching": "Coaching EUA",
+      "usaDescription": "Treinamento pessoal nos EUA",
+      "newZealand": "Nova Zelândia",
+      "newZealandDescription": "Serviços de coaching na NZ"
+    },
+    "mobile": {
+      "services": "Serviços",
+      "locations": "Localizações",
+      "aboutDrJackie": "Sobre Dra. Jackie",
+      "contactSupport": "Contato e Suporte",
+      "bookYourSession": "Agende Sua Sessão"
+    }
   },
   "home": {
     "hero": {
+      "transformText": "Transforme Sua Saúde com",
       "name": "Dra. Jackie Souto",
       "brazil": {
         "badge": "Médica Especialista em Análises Laboratoriais • Medicina Preventiva",
@@ -79,19 +107,19 @@
         "service1": {
           "title": "Análise Completa de Exames",
           "description": "Interpretação detalhada dos seus exames laboratoriais com foco em otimização da saúde e prevenção de doenças.",
-          "price": "R$ 297",
+          "price": "Consulte o valor",
           "period": "Consulta única"
         },
         "service2": {
           "title": "Plano Nutricional Personalizado",
           "description": "Dieta baseada nos resultados dos seus exames para corrigir deficiências e otimizar marcadores de saúde.",
-          "price": "R$ 497",
+          "price": "Consulte o valor",
           "period": "Plano + acompanhamento"
         },
         "service3": {
           "title": "Acompanhamento Mensal",
           "description": "Monitoramento contínuo da evolução dos seus marcadores de saúde com ajustes no tratamento.",
-          "price": "R$ 197",
+          "price": "Consulte o valor",
           "period": "Por mês"
         }
       },
@@ -101,19 +129,19 @@
         "service1": {
           "title": "PT com Base Médica",
           "description": "Programas de treinamento personalizados desenvolvidos com expertise médica para resultados seguros e eficazes.",
-          "price": "$120",
+          "price": "Consulte o valor",
           "period": "Por sessão"
         },
         "service2": {
           "title": "Avaliação de Saúde e Fitness",
           "description": "Triagem de saúde abrangente combinada com avaliação de fitness para criar seu programa ideal.",
-          "price": "$200",
+          "price": "Consulte o valor",
           "period": "Avaliação única"
         },
         "service3": {
           "title": "Pacote de Coaching Mensal",
           "description": "4 sessões de PT + monitoramento contínuo de saúde e ajustes no programa durante o mês.",
-          "price": "$400",
+          "price": "Consulte o valor",
           "period": "Por mês"
         }
       }

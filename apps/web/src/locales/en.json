@@ -1,13 +1,41 @@
 {
   "navbar": {
     "home": "Home",
-    "techniques": "Techniques",
-    "diet": "Diet", 
+    "services": "Services",
+    "locations": "Locations",
+    "about": "About",
+    "contact": "Contact",
+    "bookSession": "Book Session",
+    "subtitle": "Health & Fitness Coach",
     "toggleLanguage": "Switch to Portuguese",
-    "toggleTheme": "Toggle theme"
+    "toggleTheme": "Toggle theme",
+    "servicesMenu": {
+      "fitnessCoaching": "Fitness Coaching",
+      "fitnessDescription": "Personalized workout plans and training",
+      "nutritionGuidance": "Nutrition Guidance",
+      "nutritionDescription": "Custom meal plans and dietary advice",
+      "onlineCoaching": "Online Coaching",
+      "onlineDescription": "Remote coaching and virtual sessions"
+    },
+    "locationsMenu": {
+      "brazilCoaching": "Brazil Coaching",
+      "brazilDescription": "Coaching services in Brazil",
+      "usaCoaching": "USA Coaching",
+      "usaDescription": "Personal training in the USA",
+      "newZealand": "New Zealand",
+      "newZealandDescription": "NZ-based coaching services"
+    },
+    "mobile": {
+      "services": "Services",
+      "locations": "Locations",
+      "aboutDrJackie": "About Dr. Jackie",
+      "contactSupport": "Contact & Support",
+      "bookYourSession": "Book Your Session"
+    }
   },
   "home": {
     "hero": {
+      "transformText": "Transform Your Health with",
       "name": "Dr. Jackie Souto",
       "brazil": {
         "badge": "Medical Specialist in Laboratory Analysis • Preventive Medicine",
@@ -79,19 +107,19 @@
         "service1": {
           "title": "Complete Test Analysis",
           "description": "Detailed interpretation of your laboratory tests with focus on health optimization and disease prevention.",
-          "price": "R$ 297",
+          "price": "Check the price",
           "period": "Single consultation"
         },
         "service2": {
           "title": "Personalized Nutrition Plan",
           "description": "Diet based on your test results to correct deficiencies and optimize health markers.",
-          "price": "R$ 497",
+          "price": "Check the price",
           "period": "Plan + follow-up"
         },
         "service3": {
           "title": "Monthly Follow-up",
           "description": "Continuous monitoring of your health markers evolution with treatment adjustments.",
-          "price": "R$ 197",
+          "price": "Check the price",
           "period": "Per month"
         }
       },
@@ -101,19 +129,19 @@
         "service1": {
           "title": "Medical-Informed PT",
           "description": "Personalized training programs designed with medical expertise for safe and effective results.",
-          "price": "$120",
+          "price": "Check the price",
           "period": "Per session"
         },
         "service2": {
           "title": "Health & Fitness Assessment",
           "description": "Comprehensive health screening combined with fitness evaluation to create your optimal program.",
-          "price": "$200",
+          "price": "Check the price",
           "period": "One-time assessment"
         },
         "service3": {
           "title": "Monthly Coaching Package",
           "description": "4 PT sessions + ongoing health monitoring and program adjustments throughout the month.",
-          "price": "$400",
+          "price": "Check the price",
           "period": "Per month"
         }
       }
