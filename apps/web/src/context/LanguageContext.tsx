@@ -2,30 +2,32 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 
 // Import translation files
 import enTranslations from '@/locales/en.json';
-import brTranslations from '@/locales/br.json'; // Use br.json
+import brTranslations from '@/locales/br.json';
 
-// Define the shape of our context
-interface LanguageContextType {
+// Define the translations type structure
+interface TranslationValue {
+  [key: string]: string | TranslationValue;
+}
+
+type Translations = TranslationValue;
+
+// Export the context type so it can be used elsewhere
+export interface LanguageContextType {
   language: string;
   setLanguage: (lang: string) => void;
   t: (key: string, fallback?: string) => string;
 }
 
-// Define the translations type
-type Translations = {
-  [key: string]: any;
-};
-
-// Available translations - change 'pt' to 'br'
+// Available translations
 const translations: { [key: string]: Translations } = {
   en: enTranslations,
-  br: brTranslations, // Changed from pt: ptTranslations
+  br: brTranslations,
 };
 
-// Create the context
+// Create the context with proper typing
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-// Provider component
+// Provider component props
 interface LanguageProviderProps {
   children: ReactNode;
 }
@@ -50,7 +52,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
   const t = (key: string, fallback?: string): string => {
     try {
       const keys = key.split('.');
-      let value: any = translations[language];
+      let value: string | TranslationValue = translations[language];
       
       for (const k of keys) {
         if (value && typeof value === 'object' && k in value) {

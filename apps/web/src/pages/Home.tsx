@@ -104,12 +104,12 @@ const Home: React.FC = () => {
                       <ArrowRight className="h-4 w-4" />
                     </div>
                   </Button>
-                  <Button variant="outline" size="lg" className="border-white/40 text-white hover:bg-white/10 backdrop-blur-sm shadow-2xl px-8 py-4">
-                    <div className="flex items-center gap-2">
-                      <Apple className="h-5 w-5" />
-                      {t('home.hero.newzealand.buttons.secondary')}
-                    </div>
-                  </Button>
+                    <Button asChild variant="outline" size="lg" className="border-white/40 text-white hover:bg-white/10 backdrop-blur-sm shadow-2xl px-8 py-4">
+                      <a href="https://www.jackiesouto.com/nzcoachonline" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                        <Apple className="h-5 w-5" />
+                        {t('home.hero.newzealand.buttons.secondary')}
+                      </a>
+                    </Button>
                 </>
               )}
             </div>

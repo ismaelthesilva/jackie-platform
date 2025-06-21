@@ -1,0 +1,7 @@
+name = "jackie-contact-form"
+main = "src/index.js"
+compatibility_date = "2023-12-01"
+
+[vars]
+TO_EMAIL = "doc@jackiesouto.com"
+FROM_EMAIL = "noreply@jackiesouto.com"

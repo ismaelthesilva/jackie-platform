@@ -86,7 +86,7 @@ const LanguageSwitcher: React.FC = () => {
       className="rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
     >
       <span className="text-sm font-medium">
-        {language === 'en' ? '🇧🇷' : '🇳🇿'}
+        {language === 'en' ? '🇳🇿 EN' : '🇧🇷 BR'}
       </span>
     </Button>
   );
@@ -200,9 +200,9 @@ const Navbar: React.FC = () => {
               </div>
               <div className="hidden sm:block">
                 <span className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent">
-                  Dr. Jackie Souto
+                  Dr. Jackie
                 </span>
-                <p className="text-xs text-muted-foreground font-medium">{t('navbar.subtitle', 'Health & Fitness Coach')}</p>
+                <p className="text-xs text-muted-foreground font-medium">Health & Fitness Coach</p>
               </div>
             </Link>
           </div>
@@ -313,7 +313,7 @@ const Navbar: React.FC = () => {
                     <div className="h-8 w-8 rounded-full bg-gradient-to-r from-emerald-600 to-blue-600 flex items-center justify-center">
                       <span className="text-white font-bold text-sm">DJ</span>
                     </div>
-                    <span className="text-lg font-bold bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent">Dr. Jackie Souto</span>
+                    <span className="text-lg font-bold bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent">Dr. Jackie</span>
                   </Link>
 
                   <Separator />
@@ -392,7 +392,7 @@ const Navbar: React.FC = () => {
                       className="w-full justify-start"
                       onClick={() => setIsOpen(false)}
                     >
-                      <Link to="/about">{t('navbar.mobile.aboutDrJackie')}</Link>
+                      <Link to="/about">About Dr. Jackie</Link>
                     </Button>
                     <Button
                       asChild
@@ -402,7 +402,7 @@ const Navbar: React.FC = () => {
                     >
                       <Link to="/contact" className="flex items-center gap-2">
                         <MessageCircle className="h-4 w-4" />
-                        {t('navbar.mobile.contactSupport')}
+                        Contact & Support
                       </Link>
                     </Button>
                   </div>
@@ -413,7 +413,7 @@ const Navbar: React.FC = () => {
                   <Button asChild className="w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg">
                     <Link to="/get-started" onClick={() => setIsOpen(false)} className="flex items-center justify-center gap-2">
                       <Calendar className="h-4 w-4" />
-                      {t('navbar.mobile.bookYourSession')}
+                      Book Your Session
                     </Link>
                   </Button>
                 </div>
