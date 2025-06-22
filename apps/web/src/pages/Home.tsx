@@ -13,9 +13,9 @@ const Home: React.FC = () => {
   const selectedRegion = language === 'br' ? 'brazil' : 'newzealand';
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
       {/* Hero Section with Dr. Jackie Professional Overlay */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white dark:bg-gray-900">
         {/* Background Image with Professional Styling */}
         <div className="absolute inset-0">
           <img
@@ -255,7 +255,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* Services Section */}
-      <section className="py-16 md:py-20 lg:py-24 bg-background">
+      <section className="py-20 bg-gray-50 dark:bg-gray-800">
         <div className="container mx-auto px-4 md:px-6 max-w-7xl">
           <div className="flex flex-col items-center justify-center space-y-4 text-center mb-16">
             <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
@@ -408,8 +408,8 @@ const Home: React.FC = () => {
                       {t('home.testimonials.brazil.testimonial1.quote')}
                     </CardDescription>
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-                        <span className="text-green-600 font-semibold">MC</span>
+                      <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-800 flex items-center justify-center">
+                        <span className="text-green-600 dark:text-green-200 font-semibold">MC</span>
                       </div>
                       <div>
                         <div className="font-semibold">{t('home.testimonials.brazil.testimonial1.name')}</div>
@@ -430,8 +430,8 @@ const Home: React.FC = () => {
                       {t('home.testimonials.brazil.testimonial2.quote')}
                     </CardDescription>
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-                        <span className="text-green-600 font-semibold">RS</span>
+                      <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-800 flex items-center justify-center">
+                        <span className="text-green-600 dark:text-green-200 font-semibold">RS</span>
                       </div>
                       <div>
                         <div className="font-semibold">{t('home.testimonials.brazil.testimonial2.name')}</div>
@@ -452,8 +452,8 @@ const Home: React.FC = () => {
                       {t('home.testimonials.brazil.testimonial3.quote')}
                     </CardDescription>
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-                        <span className="text-green-600 font-semibold">AL</span>
+                      <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-800 flex items-center justify-center">
+                        <span className="text-green-600 dark:text-green-200 font-semibold">AL</span>
                       </div>
                       <div>
                         <div className="font-semibold">{t('home.testimonials.brazil.testimonial3.name')}</div>
@@ -477,8 +477,8 @@ const Home: React.FC = () => {
                       {t('home.testimonials.newzealand.testimonial1.quote')}
                     </CardDescription>
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-                        <span className="text-green-600 font-semibold">SJ</span>
+                      <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-800 flex items-center justify-center">
+                        <span className="text-green-600 dark:text-green-200 font-semibold">SJ</span>
                       </div>
                       <div>
                         <div className="font-semibold">{t('home.testimonials.newzealand.testimonial1.name')}</div>
@@ -499,8 +499,8 @@ const Home: React.FC = () => {
                       {t('home.testimonials.newzealand.testimonial2.quote')}
                     </CardDescription>
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-                        <span className="text-green-600 font-semibold">MT</span>
+                      <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-800 flex items-center justify-center">
+                        <span className="text-green-600 dark:text-green-200 font-semibold">MT</span>
                       </div>
                       <div>
                         <div className="font-semibold">{t('home.testimonials.newzealand.testimonial2.name')}</div>
@@ -521,8 +521,8 @@ const Home: React.FC = () => {
                       {t('home.testimonials.newzealand.testimonial3.quote')}
                     </CardDescription>
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-                        <span className="text-green-600 font-semibold">EP</span>
+                      <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-800 flex items-center justify-center">
+                        <span className="text-green-600 dark:text-green-200 font-semibold">EP</span>
                       </div>
                       <div>
                         <div className="font-semibold">{t('home.testimonials.newzealand.testimonial3.name')}</div>
@@ -538,7 +538,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 md:py-20 lg:py-24 bg-background">
+      <section className="py-16 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4 md:px-6 max-w-7xl">
           <div className="grid gap-8 lg:grid-cols-4 max-w-5xl mx-auto">
             <div className="flex flex-col items-center space-y-4 text-center">
@@ -546,7 +546,7 @@ const Home: React.FC = () => {
                 <Users className="h-8 w-8" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-4xl font-bold text-green-700">
+                <h3 className="text-4xl font-bold text-green-700 dark:text-green-300">
                   {t(`home.stats.${selectedRegion}.clients.number`)}
                 </h3>
                 <p className="text-muted-foreground">
@@ -559,7 +559,7 @@ const Home: React.FC = () => {
                 <Award className="h-8 w-8" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-4xl font-bold text-green-700">{t('home.stats.experience.number')}</h3>
+                <h3 className="text-4xl font-bold text-green-700 dark:text-green-300">{t('home.stats.experience.number')}</h3>
                 <p className="text-muted-foreground">
                   {t(`home.stats.${selectedRegion}.experience.label`)}
                 </p>
@@ -570,7 +570,7 @@ const Home: React.FC = () => {
                 <CheckCircle className="h-8 w-8" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-4xl font-bold text-green-700">{t('home.stats.success.number')}</h3>
+                <h3 className="text-4xl font-bold text-green-700 dark:text-green-300">{t('home.stats.success.number')}</h3>
                 <p className="text-muted-foreground">
                   {t(`home.stats.${selectedRegion}.success.label`)}
                 </p>
@@ -581,7 +581,7 @@ const Home: React.FC = () => {
                 <Globe className="h-8 w-8" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-4xl font-bold text-green-700">{t('home.stats.countries.number')}</h3>
+                <h3 className="text-4xl font-bold text-green-700 dark:text-green-300">{t('home.stats.countries.number')}</h3>
                 <p className="text-muted-foreground">
                   {t(`home.stats.${selectedRegion}.countries.label`)}
                 </p>

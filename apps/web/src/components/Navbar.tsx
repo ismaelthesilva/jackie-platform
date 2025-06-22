@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -25,6 +25,7 @@ import {
   MessageCircle
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { useTheme } from "@/context/ThemeContext";
 
 interface NavItem {
   title: string;
@@ -34,42 +35,39 @@ interface NavItem {
 }
 
 const DarkModeToggle: React.FC = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { theme, setTheme } = useTheme();
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-      setIsDarkMode(true);
-      document.documentElement.classList.add('dark');
-    }
-  }, []);
-
-  const toggleDarkMode = () => {
-    const newMode = !isDarkMode;
-    setIsDarkMode(newMode);
-    
-    if (newMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
+  const toggleTheme = () => {
+    if (theme === 'dark') {
+      setTheme('light');
+    } else if (theme === 'light') {
+      setTheme('dark');
     } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
+      // If system, check current system preference and toggle opposite
+      const systemIsDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setTheme(systemIsDark ? 'light' : 'dark');
     }
+  };
+
+  // Determine current effective theme for icon display
+  const getCurrentTheme = () => {
+    if (theme === 'system') {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    return theme;
   };
 
   return (
     <Button
       variant="ghost"
       size="icon"
-      onClick={toggleDarkMode}
+      onClick={toggleTheme}
       className="rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
     >
-      {isDarkMode ? (
+      {getCurrentTheme() === 'dark' ? (
         <Sun className="h-5 w-5 text-yellow-500" />
       ) : (
-        <Moon className="h-5 w-5 text-gray-700" />
+        <Moon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
       )}
     </Button>
   );
@@ -293,7 +291,7 @@ const Navbar: React.FC = () => {
             <DarkModeToggle />
             
             <Button asChild variant="default" size="sm" className="hidden md:flex bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg">
-              <Link to="/get-started" className="flex items-center gap-2">
+              <Link to="/contact" className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
                 {t('navbar.bookSession')}
               </Link>
@@ -411,7 +409,7 @@ const Navbar: React.FC = () => {
 
                   {/* CTA Button */}
                   <Button asChild className="w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg">
-                    <Link to="/get-started" onClick={() => setIsOpen(false)} className="flex items-center justify-center gap-2">
+                    <Link to="/contact" onClick={() => setIsOpen(false)} className="flex items-center justify-center gap-2">
                       <Calendar className="h-4 w-4" />
                       Book Your Session
                     </Link>

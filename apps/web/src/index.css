@@ -69,5 +69,26 @@
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
     font-feature-settings: "rlig" 1, "calt" 1;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  /* Ensure smooth transitions for dark mode */
+  html {
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Fix for dark mode scrollbar */
+  .dark {
+    color-scheme: dark;
+  }
+  
+  /* Ensure all elements inherit proper colors */
+  .dark * {
+    border-color: hsl(var(--border));
+  }
+  
+  /* Force background color inheritance */
+  .dark body {
+    background-color: hsl(var(--background)) !important;
   }
 }
