@@ -37,6 +37,7 @@
     "hero": {
       "transformText": "Transform Your Health with",
       "name": "Dr. Jackie Souto",
+      "scrollDown": "Scroll Down",
       "brazil": {
         "badge": "Medical Specialist in Laboratory Analysis • Preventive Medicine",
         "title": "Discover Your Real Health Through Your Tests",
@@ -222,7 +223,7 @@
         "number": "98%"
       },
       "countries": {
-        "number": "2"
+        "number": "3"
       }
     },
     "cta": {
@@ -252,6 +253,37 @@
           "secondary": "Send WhatsApp Message"
         }
       }
+    }
+  },
+  "contact": {
+    "title": "Contact Dr. Jackie",
+    "subtitle": "Ready to start your health and fitness journey? Get in touch with Dr. Jackie today!",
+    "getInTouch": "Get In Touch",
+    "email": "Email",
+    "responseTime": "Response Time",
+    "within24Hours": "Within 24 hours",
+    "locations": "Locations",
+    "form": {
+      "title": "Send a Message",
+      "description": "Fill out the form below and Dr. Jackie will get back to you soon.",
+      "fullName": "Full Name",
+      "email": "Email",
+      "phoneNumber": "Phone Number",
+      "subject": "Subject",
+      "message": "Message",
+      "fullNamePlaceholder": "Your full name",
+      "emailPlaceholder": "your.email@example.com",
+      "phonePlaceholder": "+1 (555) 123-4567",
+      "subjectPlaceholder": "What can we help you with?",
+      "messagePlaceholder": "Tell us about your health and fitness goals, current situation, and how Dr. Jackie can help you...",
+      "sendMessage": "Send Message",
+      "sending": "Sending...",
+      "errorMessage": "Failed to send message. Please try again or contact doc@jackiesouto.com directly."
+    },
+    "success": {
+      "title": "Message Sent!",
+      "description": "Thank you for contacting Dr. Jackie. Your message has been sent successfully and you'll receive a response within 24 hours.",
+      "sendAnother": "Send Another Message"
     }
   }
 }

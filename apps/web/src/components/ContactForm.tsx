@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/context/LanguageContext";
+import emailjs from '@emailjs/browser';
 import { 
   Mail, 
   MapPin, 
@@ -24,8 +25,9 @@ const Contact: React.FC = () => {
     subject: '',
     message: ''
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -37,25 +39,30 @@ const Contact: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitError('');
 
     try {
-      const response = await fetch('https://your-worker.your-subdomain.workers.dev', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-      });
+      // EmailJS configuration
+      const serviceId = 'service_vimorsl'; // Replace with your EmailJS service ID
+      const templateId = 'template_o5pa1ug'; // Replace with your EmailJS template ID  
+      const publicKey = '33LlxQRSnDWVe7oCJ'; // Replace with your EmailJS public key
 
-      if (response.ok) {
-        setIsSubmitted(true);
-        setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
-      } else {
-        throw new Error('Failed to send message');
-      }
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        phone: formData.phone || 'Not provided',
+        subject: formData.subject,
+        message: formData.message,
+        to_email: 'doc@jackiesouto.com'
+      };
+
+      await emailjs.send(serviceId, templateId, templateParams, publicKey);
+      
+      setIsSubmitted(true);
+      setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
     } catch (error) {
-      console.error('Error sending email:', error);
-      alert('Error sending message. Please try again.');
+      console.error('EmailJS Error:', error);
+      setSubmitError(t('contact.form.errorMessage'));
     } finally {
       setIsSubmitting(false);
     }
@@ -69,14 +76,14 @@ const Contact: React.FC = () => {
             <div className="mx-auto bg-emerald-100 dark:bg-emerald-900/30 w-16 h-16 rounded-full flex items-center justify-center mb-4">
               <CheckCircle className="h-8 w-8 text-emerald-600" />
             </div>
-            <CardTitle className="text-2xl text-emerald-600">Message Sent!</CardTitle>
+            <CardTitle className="text-2xl text-emerald-600">{t('contact.success.title')}</CardTitle>
             <CardDescription>
-              Thank you for contacting Dr. Jackie. We'll get back to you within 24 hours.
+              {t('contact.success.description')}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Button onClick={() => setIsSubmitted(false)} className="w-full">
-              Send Another Message
+              {t('contact.success.sendAnother')}
             </Button>
           </CardContent>
         </Card>
@@ -90,10 +97,10 @@ const Contact: React.FC = () => {
       <section className="bg-gradient-to-r from-emerald-600 to-blue-600 text-white py-20">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            {t('contact.title', 'Contact Dr. Jackie')}
+            {t('contact.title')}
           </h1>
           <p className="text-xl text-emerald-100 max-w-3xl mx-auto">
-            {t('contact.subtitle', 'Ready to start your health and fitness journey? Get in touch with Dr. Jackie today!')}
+            {t('contact.subtitle')}
           </p>
         </div>
       </section>
@@ -109,14 +116,14 @@ const Contact: React.FC = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <MessageCircle className="h-5 w-5 text-emerald-600" />
-                    Get In Touch
+                    {t('contact.getInTouch')}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex items-start gap-3">
                     <Mail className="h-5 w-5 text-emerald-600 mt-1" />
                     <div>
-                      <p className="font-medium">Email</p>
+                      <p className="font-medium">{t('contact.email')}</p>
                       <p className="text-muted-foreground">doc@jackiesouto.com</p>
                     </div>
                   </div>
@@ -124,15 +131,15 @@ const Contact: React.FC = () => {
                   <div className="flex items-start gap-3">
                     <Clock className="h-5 w-5 text-emerald-600 mt-1" />
                     <div>
-                      <p className="font-medium">Response Time</p>
-                      <p className="text-muted-foreground">Within 24 hours</p>
+                      <p className="font-medium">{t('contact.responseTime')}</p>
+                      <p className="text-muted-foreground">{t('contact.within24Hours')}</p>
                     </div>
                   </div>
 
                   <div className="flex items-start gap-3">
                     <MapPin className="h-5 w-5 text-emerald-600 mt-1" />
                     <div>
-                      <p className="font-medium">Locations</p>
+                      <p className="font-medium">{t('contact.locations')}</p>
                       <div className="space-y-1">
                         <Badge variant="secondary">🇧🇷 Brazil</Badge>
                         <Badge variant="secondary">🇺🇸 USA</Badge>
@@ -148,16 +155,16 @@ const Contact: React.FC = () => {
             <div className="lg:col-span-2">
               <Card>
                 <CardHeader>
-                  <CardTitle>Send a Message</CardTitle>
+                  <CardTitle>{t('contact.form.title')}</CardTitle>
                   <CardDescription>
-                    Fill out the form below and Dr. Jackie will get back to you soon.
+                    {t('contact.form.description')}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="name">Full Name *</Label>
+                        <Label htmlFor="name">{t('contact.form.fullName')} *</Label>
                         <Input
                           id="name"
                           name="name"
@@ -165,11 +172,11 @@ const Contact: React.FC = () => {
                           required
                           value={formData.name}
                           onChange={handleChange}
-                          placeholder="Your full name"
+                          placeholder={t('contact.form.fullNamePlaceholder')}
                         />
                       </div>
                       <div>
-                        <Label htmlFor="email">Email *</Label>
+                        <Label htmlFor="email">{t('contact.form.email')} *</Label>
                         <Input
                           id="email"
                           name="email"
@@ -177,25 +184,25 @@ const Contact: React.FC = () => {
                           required
                           value={formData.email}
                           onChange={handleChange}
-                          placeholder="your.email@example.com"
+                          placeholder={t('contact.form.emailPlaceholder')}
                         />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="phone">Phone Number</Label>
+                        <Label htmlFor="phone">{t('contact.form.phoneNumber')}</Label>
                         <Input
                           id="phone"
                           name="phone"
                           type="tel"
                           value={formData.phone}
                           onChange={handleChange}
-                          placeholder="+1 (555) 123-4567"
+                          placeholder={t('contact.form.phonePlaceholder')}
                         />
                       </div>
                       <div>
-                        <Label htmlFor="subject">Subject *</Label>
+                        <Label htmlFor="subject">{t('contact.form.subject')} *</Label>
                         <Input
                           id="subject"
                           name="subject"
@@ -203,13 +210,13 @@ const Contact: React.FC = () => {
                           required
                           value={formData.subject}
                           onChange={handleChange}
-                          placeholder="What can we help you with?"
+                          placeholder={t('contact.form.subjectPlaceholder')}
                         />
                       </div>
                     </div>
 
                     <div>
-                      <Label htmlFor="message">Message *</Label>
+                      <Label htmlFor="message">{t('contact.form.message')} *</Label>
                       <Textarea
                         id="message"
                         name="message"
@@ -217,24 +224,30 @@ const Contact: React.FC = () => {
                         rows={6}
                         value={formData.message}
                         onChange={handleChange}
-                        placeholder="Tell us about your health and fitness goals, current situation, and how Dr. Jackie can help you..."
+                        placeholder={t('contact.form.messagePlaceholder')}
                       />
                     </div>
+
+                    {submitError && (
+                      <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
+                        <p className="text-red-800 dark:text-red-200 text-sm">{t('contact.form.errorMessage')}</p>
+                      </div>
+                    )}
 
                     <Button 
                       type="submit" 
                       disabled={isSubmitting}
-                      className="w-full bg-emerald-600 hover:bg-emerald-700"
+                      className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50"
                     >
                       {isSubmitting ? (
                         <>
                           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                          Sending...
+                          {t('contact.form.sending')}
                         </>
                       ) : (
                         <>
                           <Send className="h-4 w-4 mr-2" />
-                          Send Message
+                          {t('contact.form.sendMessage')}
                         </>
                       )}
                     </Button>

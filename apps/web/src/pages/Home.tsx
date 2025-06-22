@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from '@/components/ui/button';
+import { Link } from "react-router-dom";
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight, Dumbbell, Heart, Users, Award, Globe, FlaskConical, Apple, TrendingUp, Star, CheckCircle } from 'lucide-react';
@@ -82,34 +83,34 @@ const Home: React.FC = () => {
               {selectedRegion === 'brazil' ? (
                 <>
                   <Button asChild size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-2xl transform hover:scale-105 transition-all duration-300">
-                    <div className="flex items-center gap-2 px-8 py-4">
+                    <Link to="/contact" className="flex items-center gap-2 px-8 py-4">
                       <Dumbbell className="h-5 w-5" />
                       {t('home.hero.brazil.buttons.primary')}
                       <ArrowRight className="h-4 w-4" />
-                    </div>
+                    </Link>
                   </Button>
-                  <Button variant="outline" size="lg" className="border-white/40 text-white hover:bg-white/10 backdrop-blur-sm shadow-2xl px-8 py-4">
-                    <div className="flex items-center gap-2">
+                  <Button asChild variant="outline" size="lg" className="border-white/40 text-white hover:bg-white/10 backdrop-blur-sm shadow-2xl px-8 py-4">
+                    <Link to="/nzcoachonline" className="flex items-center gap-2">
                       <Heart className="h-5 w-5" />
                       {t('home.hero.brazil.buttons.secondary')}
-                    </div>
+                    </Link>
                   </Button>
                 </>
               ) : (
                 <>
                   <Button asChild size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-2xl transform hover:scale-105 transition-all duration-300">
-                    <div className="flex items-center gap-2 px-8 py-4">
+                    <Link to="/contact" className="flex items-center gap-2 px-8 py-4">
                       <Dumbbell className="h-5 w-5" />
                       {t('home.hero.newzealand.buttons.primary')}
                       <ArrowRight className="h-4 w-4" />
-                    </div>
+                    </Link>
                   </Button>
-                    <Button asChild variant="outline" size="lg" className="border-white/40 text-white hover:bg-white/10 backdrop-blur-sm shadow-2xl px-8 py-4">
-                      <a href="https://www.jackiesouto.com/nzcoachonline" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                        <Apple className="h-5 w-5" />
-                        {t('home.hero.newzealand.buttons.secondary')}
-                      </a>
-                    </Button>
+                  <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-green-600">
+                    <Link to="/nzcoachonline" className="flex items-center gap-2">
+                      <Heart className="h-5 w-5" />
+                      {t(`home.hero.newzealand.buttons.secondary`)}
+                    </Link>
+                  </Button>
                 </>
               )}
             </div>
@@ -120,29 +121,39 @@ const Home: React.FC = () => {
                 <div className="flex items-center justify-center mb-2">
                   <Users className="h-6 w-6 text-emerald-400" />
                 </div>
-                <div className="text-3xl font-bold text-emerald-400">500+</div>
-                <div className="text-sm text-gray-300">Happy Clients</div>
+                <div className="text-3xl font-bold text-emerald-400">
+                  {selectedRegion === 'brazil' ? t('home.stats.brazil.clients.number') : t('home.stats.newzealand.clients.number')}
+                </div>
+                <div className="text-sm text-gray-300">
+                  {selectedRegion === 'brazil' ? t('home.stats.brazil.clients.label') : t('home.stats.newzealand.clients.label')}
+                </div>
               </div>
               <div className="text-center">
                 <div className="flex items-center justify-center mb-2">
                   <Globe className="h-6 w-6 text-blue-400" />
                 </div>
                 <div className="text-3xl font-bold text-blue-400">3</div>
-                <div className="text-sm text-gray-300">Countries</div>
+                <div className="text-sm text-gray-300">
+                  {selectedRegion === 'brazil' ? t('home.stats.brazil.countries.label') : t('home.stats.newzealand.countries.label')}
+                </div>
               </div>
               <div className="text-center">
                 <div className="flex items-center justify-center mb-2">
                   <Award className="h-6 w-6 text-purple-400" />
                 </div>
-                <div className="text-3xl font-bold text-purple-400">5+</div>
-                <div className="text-sm text-gray-300">Years Experience</div>
+                <div className="text-3xl font-bold text-purple-400">{t('home.stats.experience.number')}</div>
+                <div className="text-sm text-gray-300">
+                  {selectedRegion === 'brazil' ? t('home.stats.brazil.experience.label') : t('home.stats.newzealand.experience.label')}
+                </div>
               </div>
               <div className="text-center">
                 <div className="flex items-center justify-center mb-2">
                   <TrendingUp className="h-6 w-6 text-green-400" />
                 </div>
                 <div className="text-3xl font-bold text-green-400">98%</div>
-                <div className="text-sm text-gray-300">Success Rate</div>
+                <div className="text-sm text-gray-300">
+                  {selectedRegion === 'brazil' ? t('home.stats.brazil.success.label') : t('home.stats.newzealand.success.label')}
+                </div>
               </div>
             </div>
             
@@ -174,7 +185,7 @@ const Home: React.FC = () => {
         {/* Enhanced Scroll Indicator */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
           <div className="flex flex-col items-center">
-            <span className="text-sm mb-2 text-gray-200">Scroll Down</span>
+            <span className="text-sm mb-2 text-gray-200">{t('home.hero.scrollDown', 'Scroll Down')}</span>
             <div className="w-6 h-10 border-2 border-white/40 rounded-full flex justify-center backdrop-blur-sm">
               <div className="w-1 h-3 bg-white/70 rounded-full mt-2 animate-pulse"></div>
             </div>
@@ -606,13 +617,20 @@ const Home: React.FC = () => {
             </div>
 
             <div className="flex flex-col gap-4 min-[400px]:flex-row justify-center">
-              <Button size="lg" variant="secondary" className="bg-white text-green-600 hover:bg-gray-100">
-                {t(`home.cta.${selectedRegion}.buttons.primary`)}
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-green-600">
-                {t(`home.cta.${selectedRegion}.buttons.secondary`)}
-              </Button>
+              {/* Update the final CTA section buttons to link to contact*/}
+              <div className="flex flex-col gap-4 min-[400px]:flex-row justify-center">
+                <Button asChild size="lg" variant="secondary" className="bg-white text-green-600 hover:bg-gray-100">
+                  <Link to="/contact" className="flex items-center gap-2">
+                    {t(`home.cta.${selectedRegion}.buttons.primary`)}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-green-600">
+                  <Link to="/contact" className="flex items-center gap-2">
+                    {t(`home.cta.${selectedRegion}.buttons.secondary`)}
+                  </Link>
+                </Button>
+              </div>
             </div>
           </div>
         </div>

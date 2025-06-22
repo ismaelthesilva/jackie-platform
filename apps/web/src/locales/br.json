@@ -37,6 +37,7 @@
     "hero": {
       "transformText": "Transforme Sua Saúde com",
       "name": "Dra. Jackie Souto",
+      "scrollDown": "Role para Baixo",
       "brazil": {
         "badge": "Médica Especialista em Análises Laboratoriais • Medicina Preventiva",
         "title": "Descubra Sua Saúde Real Através dos Seus Exames",
@@ -222,7 +223,7 @@
         "number": "98%"
       },
       "countries": {
-        "number": "2"
+        "number": "3"
       }
     },
     "cta": {
@@ -252,6 +253,37 @@
           "secondary": "Enviar Mensagem WhatsApp"
         }
       }
+    }
+  },
+  "contact": {
+    "title": "Contate a Dra. Jackie",
+    "subtitle": "Pronto para começar sua jornada de saúde e fitness? Entre em contato com a Dra. Jackie hoje!",
+    "getInTouch": "Entre em Contato",
+    "email": "Email",
+    "responseTime": "Tempo de Resposta",
+    "within24Hours": "Dentro de 24 horas",
+    "locations": "Localizações",
+    "form": {
+      "title": "Enviar uma Mensagem",
+      "description": "Preencha o formulário abaixo e a Dra. Jackie entrará em contato em breve.",
+      "fullName": "Nome Completo",
+      "email": "Email",
+      "phoneNumber": "Número de Telefone",
+      "subject": "Assunto",
+      "message": "Mensagem",
+      "fullNamePlaceholder": "Seu nome completo",
+      "emailPlaceholder": "seu.email@exemplo.com",
+      "phonePlaceholder": "+55 (11) 99999-9999",
+      "subjectPlaceholder": "Como podemos ajudá-lo?",
+      "messagePlaceholder": "Conte-nos sobre seus objetivos de saúde e fitness, situação atual e como a Dra. Jackie pode ajudá-lo...",
+      "sendMessage": "Enviar Mensagem",
+      "sending": "Enviando...",
+      "errorMessage": "Falha ao enviar mensagem. Tente novamente ou contate doc@jackiesouto.com diretamente."
+    },
+    "success": {
+      "title": "Mensagem Enviada!",
+      "description": "Obrigado por entrar em contato com a Dra. Jackie. Sua mensagem foi enviada com sucesso e você receberá uma resposta dentro de 24 horas.",
+      "sendAnother": "Enviar Outra Mensagem"
     }
   }
 }

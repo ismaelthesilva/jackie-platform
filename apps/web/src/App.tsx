@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Techniques from './pages/Techniques';
 import Diet from './pages/Diet';
+import Contact from './pages/Contact';
 import Ptnz from "./pages/landingPages/pten/ptnz";
 import Nzcoachonline from "./pages/landingPages/pten/nzcoachonline";
 import FitnessBR from './pages/landingPages/forms/FitnessBR';
@@ -35,6 +36,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/techniques" element={<Techniques />} />
             <Route path="/diet" element={<Diet />} />
+            <Route path="/contact" element={<Contact />} />
           </Route>
 
           {/* Pages without Navbar */}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -33,7 +34,9 @@ const Diet: React.FC = () => {
                 <li>• High protein, moderate carbs</li>
                 <li>• Weekly meal prep guides</li>
               </ul>
-              <Button className="w-full">Get Started</Button>
+              <Button asChild className="w-full">
+                <Link to="/contact">Get Started</Link>
+              </Button>
             </CardContent>
           </Card>
 
@@ -51,7 +54,9 @@ const Diet: React.FC = () => {
                 <li>• 1.6-2.2g protein per kg</li>
                 <li>• Pre/post workout nutrition</li>
               </ul>
-              <Button className="w-full">Get Started</Button>
+              <Button asChild className="w-full">
+                <Link to="/contact">Get Started</Link>
+              </Button>
             </CardContent>
           </Card>
 
@@ -69,7 +74,9 @@ const Diet: React.FC = () => {
                 <li>• 80/20 flexible approach</li>
                 <li>• Sustainable habits</li>
               </ul>
-              <Button variant="outline" className="w-full">Get Started</Button>
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/contact">Get Started</Link>
+              </Button>
             </CardContent>
           </Card>
         </div>

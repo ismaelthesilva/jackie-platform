@@ -200,7 +200,7 @@ const Navbar: React.FC = () => {
               </div>
               <div className="hidden sm:block">
                 <span className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent">
-                  Dr. Jackie
+                  Dr. Jackie Souto
                 </span>
                 <p className="text-xs text-muted-foreground font-medium">Health & Fitness Coach</p>
               </div>
