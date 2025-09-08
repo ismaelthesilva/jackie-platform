@@ -1,33 +1,19 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+'use client'
 
-// Import translation files
+import React, { createContext, useContext, useState, ReactNode } from 'react';
+
+// Import JSON files directly
 import enTranslations from '@/locales/en.json';
 import brTranslations from '@/locales/br.json';
 
-// Define the translations type structure
-interface TranslationValue {
-  [key: string]: string | TranslationValue;
-}
-
-type Translations = TranslationValue;
-
-// Export the context type so it can be used elsewhere
 export interface LanguageContextType {
   language: string;
   setLanguage: (lang: string) => void;
   t: (key: string, fallback?: string) => string;
 }
 
-// Available translations
-const translations: { [key: string]: Translations } = {
-  en: enTranslations,
-  br: brTranslations,
-};
-
-// Create the context with proper typing
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-// Provider component props
 interface LanguageProviderProps {
   children: ReactNode;
 }
@@ -35,60 +21,41 @@ interface LanguageProviderProps {
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
   const [language, setLanguage] = useState<string>('en');
 
-  // Load language from localStorage on mount
-  useEffect(() => {
-    const savedLanguage = localStorage.getItem('language');
-    if (savedLanguage && translations[savedLanguage]) {
-      setLanguage(savedLanguage);
-    }
-  }, []);
+  const translations = {
+    en: enTranslations,
+    br: brTranslations
+  };
 
-  // Save language to localStorage when it changes
-  useEffect(() => {
-    localStorage.setItem('language', language);
-  }, [language]);
-
-  // Translation function
   const t = (key: string, fallback?: string): string => {
     try {
       const keys = key.split('.');
-      let value: string | TranslationValue = translations[language];
+      let value: unknown = translations[language as keyof typeof translations];
       
       for (const k of keys) {
-        if (value && typeof value === 'object' && k in value) {
-          value = value[k];
+        if (value && typeof value === 'object' && k in (value as Record<string, unknown>)) {
+          value = (value as Record<string, unknown>)[k];
         } else {
-          // Key not found, return fallback or key
-          console.warn(`Translation key not found: ${key} for language: ${language}`);
           return fallback || key;
         }
       }
       
-      // Return the found value or fallback
-      return typeof value === 'string' ? value : (fallback || key);
+      return typeof value === 'string' ? value : fallback || key;
     } catch (error) {
-      console.error('Translation error for key:', key, error);
+      console.error('Translation error:', error);
       return fallback || key;
     }
   };
 
-  const contextValue: LanguageContextType = {
-    language,
-    setLanguage,
-    t,
-  };
-
   return (
-    <LanguageContext.Provider value={contextValue}>
+    <LanguageContext.Provider value={{ language, setLanguage, t }}>
       {children}
     </LanguageContext.Provider>
   );
 };
 
-// Custom hook to use the language context
-export const useLanguage = (): LanguageContextType => {
+export const useLanguage = () => {
   const context = useContext(LanguageContext);
-  if (!context) {
+  if (context === undefined) {
     throw new Error('useLanguage must be used within a LanguageProvider');
   }
   return context;

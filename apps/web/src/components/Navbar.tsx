@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -22,7 +23,9 @@ import {
   Globe, 
   Users, 
   Calendar,
-  MessageCircle
+  MessageCircle,
+  LogIn,
+  UserPlus
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTheme } from "@/context/ThemeContext";
@@ -44,15 +47,22 @@ const DarkModeToggle: React.FC = () => {
       setTheme('dark');
     } else {
       // If system, check current system preference and toggle opposite
-      const systemIsDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setTheme(systemIsDark ? 'light' : 'dark');
+      if (typeof window !== 'undefined') {
+        const systemIsDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        setTheme(systemIsDark ? 'light' : 'dark');
+      } else {
+        setTheme('light'); // Default fallback for SSR
+      }
     }
   };
 
   // Determine current effective theme for icon display
   const getCurrentTheme = () => {
     if (theme === 'system') {
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      if (typeof window !== 'undefined') {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      return 'light'; // Default fallback for SSR
     }
     return theme;
   };
@@ -124,10 +134,10 @@ const ListItem = React.forwardRef<
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const location = useLocation();
-  const { t } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
+  const pathname = usePathname();
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => pathname === path;
 
   // Dynamic services array using translations
   const services: NavItem[] = [
@@ -180,7 +190,7 @@ const Navbar: React.FC = () => {
         <div className="flex h-16 items-center justify-between">
           {/* Logo Section - Aligned with main content */}
           <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-3">
+            <Link href="/" className="flex items-center space-x-3">
               <div className="relative">
                 <div className="h-10 w-10 rounded-full overflow-hidden flex items-center justify-center">
                   <img
@@ -210,7 +220,7 @@ const Navbar: React.FC = () => {
             <NavigationMenu>
               <NavigationMenuList className="space-x-2">
                 <NavigationMenuItem>
-                  <Link to="/">
+                  <Link href="/">
                     <NavigationMenuLink className={cn(
                       "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50",
                       isActive("/") && "bg-accent text-accent-foreground"
@@ -261,7 +271,7 @@ const Navbar: React.FC = () => {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <Link to="/about">
+                  <Link href="/about">
                     <NavigationMenuLink className={cn(
                       "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50",
                       isActive("/about") && "bg-accent text-accent-foreground"
@@ -272,7 +282,7 @@ const Navbar: React.FC = () => {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <Link to="/contact">
+                  <Link href="/contact">
                     <NavigationMenuLink className={cn(
                       "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50",
                       isActive("/contact") && "bg-accent text-accent-foreground"
@@ -287,11 +297,27 @@ const Navbar: React.FC = () => {
 
           {/* Right Side Actions */}
           <div className="flex items-center space-x-3">
+            {/* Authentication Buttons */}
+            <div className="hidden md:flex items-center space-x-2">
+              <Button asChild variant="ghost" size="sm" className="text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400">
+                <Link href="/login" className="flex items-center gap-2">
+                  <LogIn className="h-4 w-4" />
+                  Login
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="sm" className="border-emerald-600 text-emerald-600 hover:bg-emerald-50 dark:border-emerald-400 dark:text-emerald-400 dark:hover:bg-emerald-900/20">
+                <Link href="/register" className="flex items-center gap-2">
+                  <UserPlus className="h-4 w-4" />
+                  Sign Up
+                </Link>
+              </Button>
+            </div>
+
             <LanguageSwitcher />
             <DarkModeToggle />
             
-            <Button asChild variant="default" size="sm" className="hidden md:flex bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg">
-              <Link to="/contact" className="flex items-center gap-2">
+            <Button asChild variant="default" size="sm" className="hidden lg:flex bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg">
+              <Link href="/contact" className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
                 {t('navbar.bookSession')}
               </Link>
@@ -307,7 +333,7 @@ const Navbar: React.FC = () => {
               <SheetContent side="right" className="w-80">
                 <div className="flex flex-col space-y-4 mt-6">
                   {/* Mobile Logo */}
-                  <Link to="/" className="flex items-center space-x-3 mb-4" onClick={() => setIsOpen(false)}>
+                  <Link href="/" className="flex items-center space-x-3 mb-4" onClick={() => setIsOpen(false)}>
                     <div className="h-8 w-8 rounded-full bg-gradient-to-r from-emerald-600 to-blue-600 flex items-center justify-center">
                       <span className="text-white font-bold text-sm">DJ</span>
                     </div>
@@ -324,7 +350,7 @@ const Navbar: React.FC = () => {
                       className="w-full justify-start"
                       onClick={() => setIsOpen(false)}
                     >
-                      <Link to="/">{t('navbar.home')}</Link>
+                      <Link href="/">{t('navbar.home')}</Link>
                     </Button>
                   </div>
 
@@ -342,7 +368,7 @@ const Navbar: React.FC = () => {
                           className="w-full justify-start h-auto py-3"
                           onClick={() => setIsOpen(false)}
                         >
-                          <Link to={service.href} className="flex items-start space-x-3">
+                          <Link href={service.href} className="flex items-start space-x-3">
                             <div className="mt-0.5">{service.icon}</div>
                             <div className="text-left">
                               <div className="font-medium">{service.title}</div>
@@ -368,7 +394,7 @@ const Navbar: React.FC = () => {
                           className="w-full justify-start h-auto py-3"
                           onClick={() => setIsOpen(false)}
                         >
-                          <Link to={location.href} className="flex items-start space-x-3">
+                          <Link href={location.href} className="flex items-start space-x-3">
                             <div className="mt-0.5">{location.icon}</div>
                             <div className="text-left">
                               <div className="font-medium">{location.title}</div>
@@ -390,7 +416,7 @@ const Navbar: React.FC = () => {
                       className="w-full justify-start"
                       onClick={() => setIsOpen(false)}
                     >
-                      <Link to="/about">About Dr. Jackie</Link>
+                      <Link href="/about">About Dr. Jackie</Link>
                     </Button>
                     <Button
                       asChild
@@ -398,7 +424,7 @@ const Navbar: React.FC = () => {
                       className="w-full justify-start"
                       onClick={() => setIsOpen(false)}
                     >
-                      <Link to="/contact" className="flex items-center gap-2">
+                      <Link href="/contact" className="flex items-center gap-2">
                         <MessageCircle className="h-4 w-4" />
                         Contact & Support
                       </Link>
@@ -407,9 +433,40 @@ const Navbar: React.FC = () => {
 
                   <Separator />
 
+                  {/* Authentication Section */}
+                  <div>
+                    <h4 className="font-medium mb-2 text-sm text-muted-foreground uppercase tracking-wide">Account</h4>
+                    <div className="space-y-2">
+                      <Button
+                        asChild
+                        variant="ghost"
+                        className="w-full justify-start"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        <Link href="/login" className="flex items-center gap-2">
+                          <LogIn className="h-4 w-4" />
+                          Login to Dashboard
+                        </Link>
+                      </Button>
+                      <Button
+                        asChild
+                        variant="outline"
+                        className="w-full justify-start border-emerald-600 text-emerald-600 hover:bg-emerald-50 dark:border-emerald-400 dark:text-emerald-400 dark:hover:bg-emerald-900/20"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        <Link href="/register" className="flex items-center gap-2">
+                          <UserPlus className="h-4 w-4" />
+                          Create Account
+                        </Link>
+                      </Button>
+                    </div>
+                  </div>
+
+                  <Separator />
+
                   {/* CTA Button */}
                   <Button asChild className="w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg">
-                    <Link to="/contact" onClick={() => setIsOpen(false)} className="flex items-center justify-center gap-2">
+                    <Link href="/contact" onClick={() => setIsOpen(false)} className="flex items-center justify-center gap-2">
                       <Calendar className="h-4 w-4" />
                       Book Your Session
                     </Link>

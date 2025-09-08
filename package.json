@@ -1,5 +1,5 @@
 {
-  "name": "jackie-platform",
+  "name": "web",
   "private": true,
   "workspaces": [
     "apps/*",

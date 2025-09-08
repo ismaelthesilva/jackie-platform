@@ -1,0 +1,289 @@
+{
+  "navbar": {
+    "home": "Home",
+    "services": "Services",
+    "locations": "Locations",
+    "about": "About",
+    "contact": "Contact",
+    "bookSession": "Book Session",
+    "subtitle": "Health & Fitness Coach",
+    "toggleLanguage": "Switch to Portuguese",
+    "toggleTheme": "Toggle theme",
+    "servicesMenu": {
+      "fitnessCoaching": "Fitness Coaching",
+      "fitnessDescription": "Personalized workout plans and training",
+      "nutritionGuidance": "Nutrition Guidance",
+      "nutritionDescription": "Custom meal plans and dietary advice",
+      "onlineCoaching": "Online Coaching",
+      "onlineDescription": "Remote coaching and virtual sessions"
+    },
+    "locationsMenu": {
+      "brazilCoaching": "Brazil Coaching",
+      "brazilDescription": "Coaching services in Brazil",
+      "usaCoaching": "USA Coaching",
+      "usaDescription": "Personal training in the USA",
+      "newZealand": "New Zealand",
+      "newZealandDescription": "NZ-based coaching services"
+    },
+    "mobile": {
+      "services": "Services",
+      "locations": "Locations",
+      "aboutDrJackie": "About Dr. Jackie",
+      "contactSupport": "Contact & Support",
+      "bookYourSession": "Book Your Session"
+    }
+  },
+  "home": {
+    "hero": {
+      "transformText": "Transform Your Health with",
+      "name": "Dr. Jackie Souto",
+      "scrollDown": "Scroll Down",
+      "brazil": {
+        "badge": "Medical Specialist in Laboratory Analysis • Preventive Medicine",
+        "title": "Discover Your Real Health Through Your Tests",
+        "description": "Have you done blood tests and didn't understand anything? I transform your results into a clear health plan. More than 1,500 patients have already discovered hidden problems through my analyses.",
+        "attention": {
+          "title": "ATTENTION: You might be missing important signs!",
+          "description": "80% of my patients discovered nutritional deficiencies and hormonal imbalances that other doctors didn't identify in the same tests."
+        },
+        "buttons": {
+          "primary": "Analyze My Tests Now",
+          "secondary": "View Success Cases"
+        }
+      },
+      "newzealand": {
+        "badge": "Certified Personal Trainer • Medical Background",
+        "title": "The Only PT in NZ with Medical Doctor Background",
+        "description": "Stop wasting time with generic fitness programs. Get medically-informed training that actually works for YOUR body. Over 500 Kiwis transformed their health with my unique approach.",
+        "attention": {
+          "title": "BREAKTHROUGH: Medical + Fitness = Real Results",
+          "description": "My clients get 3x faster results because I understand how your body actually works from a medical perspective."
+        },
+        "buttons": {
+          "primary": "Start My Transformation",
+          "secondary": "View Success Stories"
+        }
+      }
+    },
+    "problem": {
+      "brazil": {
+        "title": "Why don't 9 out of 10 people know how to interpret their tests?",
+        "problem": {
+          "title": "The Problem:",
+          "point1": "Doctors don't have time to explain in detail",
+          "point2": "\"Normal\" values don't mean \"optimal\"",
+          "point3": "Correlations between tests are ignored",
+          "point4": "Prevention is not a priority in the system"
+        },
+        "solution": {
+          "title": "My Solution:",
+          "point1": "Detailed analysis of ALL markers",
+          "point2": "Personalized plan based on your results",
+          "point3": "Prevention of future diseases",
+          "point4": "Continuous monitoring of evolution"
+        }
+      },
+      "newzealand": {
+        "title": "Why Do 90% of People Fail Their Fitness Goals?",
+        "problem": {
+          "title": "The Problem:",
+          "point1": "Generic programs that ignore individual health",
+          "point2": "PTs without medical knowledge",
+          "point3": "No consideration for underlying health issues",
+          "point4": "Unrealistic expectations without medical context"
+        },
+        "solution": {
+          "title": "My Solution:",
+          "point1": "Medically-informed training programs",
+          "point2": "Health screening before fitness planning",
+          "point3": "Safe progression based on your body's capacity",
+          "point4": "Injury prevention through medical knowledge"
+        }
+      }
+    },
+    "services": {
+      "brazil": {
+        "badge": "My Services",
+        "title": "How I Can Help You",
+        "service1": {
+          "title": "Complete Test Analysis",
+          "description": "Detailed interpretation of your laboratory tests with focus on health optimization and disease prevention.",
+          "price": "Check the price",
+          "period": "Single consultation"
+        },
+        "service2": {
+          "title": "Personalized Nutrition Plan",
+          "description": "Diet based on your test results to correct deficiencies and optimize health markers.",
+          "price": "Check the price",
+          "period": "Plan + follow-up"
+        },
+        "service3": {
+          "title": "Monthly Follow-up",
+          "description": "Continuous monitoring of your health markers evolution with treatment adjustments.",
+          "price": "Check the price",
+          "period": "Per month"
+        }
+      },
+      "newzealand": {
+        "badge": "My Services",
+        "title": "How I Can Transform Your Health",
+        "service1": {
+          "title": "Medical-Informed PT",
+          "description": "Personalized training programs designed with medical expertise for safe and effective results.",
+          "price": "Check the price",
+          "period": "Per session"
+        },
+        "service2": {
+          "title": "Health & Fitness Assessment",
+          "description": "Comprehensive health screening combined with fitness evaluation to create your optimal program.",
+          "price": "Check the price",
+          "period": "One-time assessment"
+        },
+        "service3": {
+          "title": "Monthly Coaching Package",
+          "description": "4 PT sessions + ongoing health monitoring and program adjustments throughout the month.",
+          "price": "Check the price",
+          "period": "Per month"
+        }
+      }
+    },
+    "testimonials": {
+      "brazil": {
+        "title": "What My Patients Say",
+        "testimonial1": {
+          "quote": "Dr. Jackie discovered that I had B12 deficiency that no doctor had noticed. Today I feel 10 years younger!",
+          "name": "Maria Castro",
+          "location": "São Paulo, SP"
+        },
+        "testimonial2": {
+          "quote": "My tests were 'normal' but I felt terrible. Her analysis revealed important hormonal imbalances.",
+          "name": "Roberto Silva",
+          "location": "Rio de Janeiro, RJ"
+        },
+        "testimonial3": {
+          "quote": "I finally understood my tests! Her nutrition plan normalized my glucose in 3 months.",
+          "name": "Ana Lima",
+          "location": "Belo Horizonte, MG"
+        }
+      },
+      "newzealand": {
+        "title": "What My Clients Say",
+        "testimonial1": {
+          "quote": "Finally, a PT who understands my body! Jackie spotted issues other trainers missed and got me results in half the time.",
+          "name": "Sarah Johnson",
+          "location": "Auckland"
+        },
+        "testimonial2": {
+          "quote": "Her medical background made all the difference. She identified why I wasn't losing weight and fixed the underlying issue.",
+          "name": "Mike Thompson",
+          "location": "Wellington"
+        },
+        "testimonial3": {
+          "quote": "Best investment I've made! Jackie's approach prevented injuries I didn't even know I was at risk for.",
+          "name": "Emma Price",
+          "location": "Christchurch"
+        }
+      }
+    },
+    "stats": {
+      "brazil": {
+        "clients": {
+          "number": "1500+",
+          "label": "Patients Served"
+        },
+        "experience": {
+          "label": "Years of Experience"
+        },
+        "success": {
+          "label": "Success Rate"
+        },
+        "countries": {
+          "label": "Countries"
+        }
+      },
+      "newzealand": {
+        "clients": {
+          "number": "500+",
+          "label": "Clients Transformed"
+        },
+        "experience": {
+          "label": "Years Experience"
+        },
+        "success": {
+          "label": "Success Rate"
+        },
+        "countries": {
+          "label": "Countries"
+        }
+      },
+      "experience": {
+        "number": "10+"
+      },
+      "success": {
+        "number": "98%"
+      },
+      "countries": {
+        "number": "3"
+      }
+    },
+    "cta": {
+      "brazil": {
+        "title": "Ready to Discover Your Real Health?",
+        "description": "Don't leave your tests in the drawer. Schedule your analysis and discover what your body is trying to tell you.",
+        "offer": {
+          "title": "SPECIAL OFFER",
+          "description": "First 10 patients get complete analysis for only R$ 197 (normal value R$ 297)",
+          "spots": "7 spots remaining"
+        },
+        "buttons": {
+          "primary": "Schedule Analysis Now",
+          "secondary": "Talk on WhatsApp"
+        }
+      },
+      "newzealand": {
+        "title": "Ready to Transform Your Health?",
+        "description": "Stop struggling with generic fitness programs. Get medically-informed training that actually works for your unique body.",
+        "offer": {
+          "title": "LIMITED TIME OFFER",
+          "description": "First 10 clients get health assessment + first PT session for just $250 (normally $320)",
+          "spots": "5 spots remaining"
+        },
+        "buttons": {
+          "primary": "Book Assessment Now",
+          "secondary": "Send WhatsApp Message"
+        }
+      }
+    }
+  },
+  "contact": {
+    "title": "Contact Dr. Jackie",
+    "subtitle": "Ready to start your health and fitness journey? Get in touch with Dr. Jackie today!",
+    "getInTouch": "Get In Touch",
+    "email": "Email",
+    "responseTime": "Response Time",
+    "within24Hours": "Within 24 hours",
+    "locations": "Locations",
+    "form": {
+      "title": "Send a Message",
+      "description": "Fill out the form below and Dr. Jackie will get back to you soon.",
+      "fullName": "Full Name",
+      "email": "Email",
+      "phoneNumber": "Phone Number",
+      "subject": "Subject",
+      "message": "Message",
+      "fullNamePlaceholder": "Your full name",
+      "emailPlaceholder": "your.email@example.com",
+      "phonePlaceholder": "+1 (555) 123-4567",
+      "subjectPlaceholder": "What can we help you with?",
+      "messagePlaceholder": "Tell us about your health and fitness goals, current situation, and how Dr. Jackie can help you...",
+      "sendMessage": "Send Message",
+      "sending": "Sending...",
+      "errorMessage": "Failed to send message. Please try again or contact doc@jackiesouto.com directly."
+    },
+    "success": {
+      "title": "Message Sent!",
+      "description": "Thank you for contacting Dr. Jackie. Your message has been sent successfully and you'll receive a response within 24 hours.",
+      "sendAnother": "Send Another Message"
+    }
+  }
+}
