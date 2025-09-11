@@ -2,8 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { ThemeProvider } from '@/context/ThemeContext'
 import { LanguageProvider } from '@/context/LanguageContext'
-// Note: AuthProvider commented out for now
-// import { AuthProvider } from '@/context/AuthContext'
+import { AuthProvider } from '@/context/AuthContext'
 
 export const metadata: Metadata = {
   title: 'Dr. Jackie Souto - Nutrition & Fitness Expert',
@@ -20,12 +19,12 @@ export default function RootLayout({
       <head>
         <link rel="icon" type="image/png" href="/jackie-favicon.png" />
       </head>
-      <body>
+      <body suppressHydrationWarning={true}>
         <ThemeProvider defaultTheme="system" storageKey="dr-jackie-theme">
           <LanguageProvider>
-            {/* <AuthProvider> */}
+            <AuthProvider>
               {children}
-            {/* </AuthProvider> */}
+            </AuthProvider>
           </LanguageProvider>
         </ThemeProvider>
       </body>

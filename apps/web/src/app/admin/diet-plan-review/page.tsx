@@ -20,10 +20,10 @@ import {
   Target,
   Calendar
 } from 'lucide-react';
-import DietPlanStorage, { DietPlanSummary } from '@/services/DietPlanStorage';
-import { DietPlan } from '@/services/DietPlanGenerator';
-import PDFGenerator from '@/services/PDFGenerator';
-import ClientNotificationService from '@/services/ClientNotificationService';
+import DietPlanStorage, { DietPlanSummary } from '../../../services/DietPlanStorage';
+import { DietPlan, DayPlan } from '../../../services/DietPlanGenerator';
+import PDFGenerator from '../../../services/PDFGenerator';
+import ClientNotificationService from '../../../services/ClientNotificationService';
 
 const DietPlanReview: React.FC = () => {
   const [plans, setPlans] = useState<DietPlanSummary[]>([]);
@@ -310,7 +310,7 @@ const DietPlanReview: React.FC = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {selectedPlan.plan.slice(0, 7).map((day) => (
+                          {selectedPlan.plan.slice(0, 7).map((day: DayPlan) => (
                             <tr key={day.day} className="border-b">
                               <td className="p-2 font-medium">Day {day.day}</td>
                               <td className="p-2">{day.meals.breakfast.name}</td>

@@ -21,13 +21,13 @@ import {
   CheckCircle,
   ChefHat
 } from 'lucide-react';
-import DietPlanStorage from '@/services/DietPlanStorage';
-import { DietPlan, DayPlan, Meal } from '@/services/DietPlanGenerator';
-import PDFGenerator from '@/services/PDFGenerator';
+import DietPlanStorage from '../../../../services/DietPlanStorage';
+import { DietPlan, DayPlan, Meal } from '../../../../services/DietPlanGenerator';
+import PDFGenerator from '../../../../services/PDFGenerator';
 
 const DietPortal: React.FC = () => {
   const params = useParams();
-  const planId = params.planId as string;
+  const planId = params?.planId as string;
   const [dietPlan, setDietPlan] = useState<DietPlan | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -239,7 +239,7 @@ const DietPortal: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
-              {getDaysForWeek().map((day) => (
+              {getDaysForWeek().map((day: DayPlan) => (
                 <Card
                   key={day.day}
                   className={`cursor-pointer transition-all duration-200 ${

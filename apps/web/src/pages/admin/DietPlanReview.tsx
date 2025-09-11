@@ -18,10 +18,10 @@ import {
   Target,
   Calendar
 } from 'lucide-react';
-import DietPlanStorage, { DietPlanSummary } from '../../services/DietPlanStorage';
-import { DietPlan } from '../../services/DietPlanGenerator';
-import PDFGenerator from '../../services/PDFGenerator';
-import ClientNotificationService from '../../services/ClientNotificationService';
+import DietPlanStorage, { DietPlanSummary } from '@/services/DietPlanStorage';
+import { DietPlan } from '@/services/DietPlanGenerator';
+import PDFGenerator from '@/services/PDFGenerator';
+import ClientNotificationService from '@/services/ClientNotificationService';
 
 const DietPlanReview: React.FC = () => {
   const [plans, setPlans] = useState<DietPlanSummary[]>([]);

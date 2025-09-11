@@ -1,3 +1,5 @@
+'use client'
+
 // Authentication Context
 // Manages user authentication state throughout the app
 
@@ -32,14 +34,34 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         .single();
 
       if (error) {
-        console.error('Error loading user profile:', error);
+        // Handle specific database errors
+        if (error.code === 'PGRST116') {
+          console.warn('No user profile found, this might be expected for new users');
+          return;
+        }
+        if (error.code === '42P01') {
+          console.warn('user_profiles table does not exist yet');
+          return;
+        }
+        console.error('Error loading user profile:', {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code
+        });
         return;
       }
 
-      setUserProfile(data);
-      setIsAdmin(data.role === 'admin');
+      if (data) {
+        setUserProfile(data);
+        setIsAdmin(data.role === 'admin');
+      }
     } catch (error) {
-      console.error('Error loading user profile:', error);
+      console.error('Error loading user profile:', {
+        error: error,
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
     }
   };
 
