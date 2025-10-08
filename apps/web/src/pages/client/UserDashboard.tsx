@@ -51,12 +51,12 @@ const UserDashboard: React.FC = () => {
           setDietPlans([]);
           return;
         }
-        console.error('Error loading diet plans:', {
-          message: error.message,
-          details: error.details,
-          hint: error.hint,
-          code: error.code
-        });
+        console.error('Error loading diet plans:');
+        console.error('- Message:', error.message || 'No message');
+        console.error('- Details:', error.details || 'No details');
+        console.error('- Hint:', error.hint || 'No hint');
+        console.error('- Code:', error.code || 'No code');
+        console.error('- Full error:', error);
         return;
       }
 
@@ -67,11 +67,11 @@ const UserDashboard: React.FC = () => {
         setSelectedPlan(data[0]);
       }
     } catch (error) {
-      console.error('Error loading diet plans:', {
-        error: error,
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined
-      });
+      console.error('JavaScript error loading diet plans:');
+      console.error('- Error type:', typeof error);
+      console.error('- Message:', error instanceof Error ? error.message : 'Unknown error');
+      console.error('- Stack:', error instanceof Error ? error.stack : 'No stack trace');
+      console.error('- Full error:', error);
     } finally {
       setLoading(false);
     }

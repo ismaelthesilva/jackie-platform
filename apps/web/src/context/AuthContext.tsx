@@ -27,6 +27,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const loadUserProfile = async (userId: string) => {
     try {
+      console.log('Loading user profile for ID:', userId); // Debug log
+      
       const { data, error } = await supabase
         .from('user_profiles')
         .select('*')
@@ -36,32 +38,47 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (error) {
         // Handle specific database errors
         if (error.code === 'PGRST116') {
-          console.warn('No user profile found, this might be expected for new users');
+          console.warn('No user profile found for user:', userId, '- This might be expected for new users');
           return;
         }
         if (error.code === '42P01') {
-          console.warn('user_profiles table does not exist yet');
+          console.warn('user_profiles table does not exist yet - Please run the database schema');
           return;
         }
-        console.error('Error loading user profile:', {
-          message: error.message,
-          details: error.details,
-          hint: error.hint,
-          code: error.code
-        });
+        
+        // Better error logging for Supabase errors
+        console.error('Supabase error loading user profile:');
+        console.error('- User ID:', userId);
+        console.error('- Message:', error.message || 'No message');
+        console.error('- Details:', error.details || 'No details');  
+        console.error('- Hint:', error.hint || 'No hint');
+        console.error('- Code:', error.code || 'No code');
+        console.error('- Full error:', error);
         return;
       }
 
       if (data) {
+        console.log('✅ User profile loaded successfully:', {
+          id: data.id,
+          email: data.email,
+          role: data.role,
+          fullName: data.full_name
+        });
         setUserProfile(data);
         setIsAdmin(data.role === 'admin');
+        console.log('🔐 Admin status:', data.role === 'admin');
+      } else {
+        console.warn('No user profile data returned for user:', userId);
       }
     } catch (error) {
-      console.error('Error loading user profile:', {
-        error: error,
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined
-      });
+      // Better error logging for JavaScript errors
+      console.error('JavaScript error in loadUserProfile:');
+      console.error('- User ID:', userId);
+      console.error('- Error type:', typeof error);
+      console.error('- Message:', error instanceof Error ? error.message : 'Unknown error type');
+      console.error('- Name:', error instanceof Error ? error.name : 'Unknown');
+      console.error('- Stack:', error instanceof Error ? error.stack : 'No stack trace');
+      console.error('- Full error:', error);
     }
   };
 
@@ -80,12 +97,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Get initial session
     const getInitialSession = async () => {
       try {
+        console.log('🔍 Getting initial auth session...');
         const { data: { session } } = await supabase.auth.getSession();
+        console.log('📋 Initial session:', session ? 'Found' : 'Not found');
+        
         setSession(session);
         setUser(session?.user ?? null);
         
         if (session?.user) {
+          console.log('👤 User found in session:', session.user.email);
           await loadUserProfile(session.user.id);
+        } else {
+          console.log('❌ No user in session');
         }
       } catch (error) {
         console.warn('Supabase not configured properly:', error);
@@ -99,13 +122,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Listen for auth changes
     try {
-      const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+        console.log('🔄 Auth state change:', event, session ? 'Session exists' : 'No session');
+        
         setSession(session);
         setUser(session?.user ?? null);
         
         if (session?.user) {
+          console.log('👤 Loading profile for user:', session.user.email);
           await loadUserProfile(session.user.id);
         } else {
+          console.log('🚪 User signed out, clearing profile');
           setUserProfile(null);
           setIsAdmin(false);
         }

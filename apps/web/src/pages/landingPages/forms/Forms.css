@@ -1,0 +1,694 @@
+/* Import Google Fonts for medical professional look */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* CSS Variables for consistent theming */
+:root {
+  --medical-primary: #2563eb;
+  --medical-primary-dark: #1d4ed8;
+  --medical-secondary: #06b6d4;
+  --medical-success: #10b981;
+  --medical-warning: #f59e0b;
+  --medical-error: #ef4444;
+  --medical-background: #f8fafc;
+  --medical-card: #ffffff;
+  --medical-text: #1e293b;
+  --medical-text-secondary: #64748b;
+  --medical-border: #e2e8f0;
+  --medical-border-focus: #3b82f6;
+  --medical-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --medical-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --medical-radius: 12px;
+  --medical-radius-lg: 16px;
+}
+
+/* Global Form Container */
+.nutrition-form-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--medical-background) 0%, #e0f2fe 100%);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* Main Content Wrapper */
+.form-content-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* Question Card Styling - Centralized */
+.question-card {
+  background: var(--medical-card);
+  border-radius: var(--medical-radius-lg);
+  box-shadow: var(--medical-shadow-lg);
+  padding: 3rem 2.5rem;
+  max-width: 600px;
+  width: 100%;
+  border: 1px solid var(--medical-border);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.question-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--medical-primary), var(--medical-secondary));
+}
+
+/* Welcome Card Special Styling */
+.question-card.welcome {
+  text-align: center;
+  padding: 4rem 3rem;
+  background: linear-gradient(135deg, var(--medical-card) 0%, #f0f9ff 100%);
+}
+
+.question-card.welcome h1 {
+  color: var(--medical-primary);
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+.question-card.welcome p {
+  color: var(--medical-text-secondary);
+  font-size: 1.125rem;
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Typography */
+.question-card h2 {
+  color: var(--medical-text);
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.question-card p {
+  color: var(--medical-text-secondary);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+/* Progress Bar - Simplified for top */
+.progress-bar {
+  width: 100%;
+  max-width: 600px;
+  height: 6px;
+  background: var(--medical-border);
+  border-radius: 3px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress {
+  height: 100%;
+  background: linear-gradient(90deg, var(--medical-primary), var(--medical-secondary));
+  border-radius: 3px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.progress::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Progress Timeline - New Section Below Question Card */
+.progress-timeline {
+  width: 100%;
+  max-width: 800px;
+  background: var(--medical-card);
+  border-radius: var(--medical-radius-lg);
+  box-shadow: var(--medical-shadow);
+  padding: 2rem;
+  border: 1px solid var(--medical-border);
+  margin-top: 1rem;
+}
+
+.timeline-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.timeline-header h3 {
+  color: var(--medical-text);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.timeline-header p {
+  color: var(--medical-text-secondary);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.timeline-container {
+  position: relative;
+  padding: 1rem 0;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--medical-border);
+  transform: translateX(-50%);
+}
+
+.timeline-line::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--timeline-progress, 0%);
+  background: linear-gradient(180deg, var(--medical-primary), var(--medical-secondary));
+  transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.timeline-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.timeline-item {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 0 1rem;
+}
+
+.timeline-item:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+.timeline-item:nth-child(even) .timeline-content {
+  text-align: right;
+}
+
+.timeline-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 3px solid var(--medical-border);
+  background: var(--medical-card);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.timeline-item.completed .timeline-dot {
+  border-color: var(--medical-success);
+  background: var(--medical-success);
+}
+
+.timeline-item.current .timeline-dot {
+  border-color: var(--medical-primary);
+  background: var(--medical-primary);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(37, 99, 235, 0.1);
+  }
+}
+
+.timeline-content {
+  flex: 1;
+  max-width: calc(50% - 2rem);
+  background: var(--medical-background);
+  padding: 1rem 1.25rem;
+  border-radius: var(--medical-radius);
+  border: 1px solid var(--medical-border);
+  transition: all 0.3s ease;
+}
+
+.timeline-item.completed .timeline-content {
+  background: rgba(16, 185, 129, 0.05);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.timeline-item.current .timeline-content {
+  background: rgba(37, 99, 235, 0.05);
+  border-color: rgba(37, 99, 235, 0.2);
+  box-shadow: var(--medical-shadow);
+}
+
+.timeline-content h4 {
+  color: var(--medical-text);
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.timeline-content p {
+  color: var(--medical-text-secondary);
+  font-size: 0.75rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.timeline-item.completed .timeline-content h4 {
+  color: var(--medical-success);
+}
+
+.timeline-item.current .timeline-content h4 {
+  color: var(--medical-primary);
+}
+
+/* Question Stats */
+.question-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--medical-border);
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--medical-primary);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--medical-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 0.25rem;
+}
+
+/* Form Inputs */
+.input-group {
+  margin-bottom: 2rem;
+}
+
+.input-group label {
+  display: block;
+  color: var(--medical-text);
+  font-weight: 500;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.input-group input,
+.input-group textarea,
+.input-group select {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: 2px solid var(--medical-border);
+  border-radius: var(--medical-radius);
+  background: var(--medical-card);
+  color: var(--medical-text);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.input-group input:focus,
+.input-group textarea:focus,
+.input-group select:focus {
+  border-color: var(--medical-border-focus);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  transform: translateY(-1px);
+}
+
+.input-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Buttons */
+.typeform-btn {
+  background: linear-gradient(135deg, var(--medical-primary), var(--medical-primary-dark));
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: var(--medical-radius);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--medical-shadow);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+  overflow: hidden;
+}
+
+.typeform-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
+}
+
+.typeform-btn:active {
+  transform: translateY(0);
+}
+
+.typeform-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.typeform-btn:hover::before {
+  left: 100%;
+}
+
+.back-btn {
+  background: transparent;
+  color: var(--medical-text-secondary);
+  border: 2px solid var(--medical-border);
+  padding: 1rem 2rem;
+  border-radius: var(--medical-radius);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-right: 1rem;
+}
+
+.back-btn:hover {
+  color: var(--medical-primary);
+  border-color: var(--medical-primary);
+  background: rgba(37, 99, 235, 0.05);
+}
+
+/* Button Groups */
+.button-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Option Groups */
+.options-group {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.typeform-option {
+  padding: 1.25rem 1.5rem;
+  border: 2px solid var(--medical-border);
+  border-radius: var(--medical-radius);
+  background: var(--medical-card);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+  font-size: 1rem;
+  color: var(--medical-text);
+  position: relative;
+}
+
+.typeform-option:hover {
+  border-color: var(--medical-primary);
+  background: rgba(37, 99, 235, 0.02);
+  transform: translateY(-1px);
+  box-shadow: var(--medical-shadow);
+}
+
+.typeform-option.selected {
+  border-color: var(--medical-primary);
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(6, 182, 212, 0.05));
+  color: var(--medical-primary);
+  font-weight: 500;
+}
+
+.typeform-option.selected::before {
+  content: '✓';
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--medical-success);
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+/* Yes/No Special Styling */
+.typeform-option.yes {
+  border-color: var(--medical-success);
+}
+
+.typeform-option.yes:hover,
+.typeform-option.yes.selected {
+  border-color: var(--medical-success);
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--medical-success);
+}
+
+.typeform-option.no {
+  border-color: var(--medical-error);
+}
+
+.typeform-option.no:hover,
+.typeform-option.no.selected {
+  border-color: var(--medical-error);
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--medical-error);
+}
+
+/* Status States */
+.question-card.processing {
+  text-align: center;
+  padding: 4rem 3rem;
+}
+
+.question-card.processing h2 {
+  color: var(--medical-primary);
+  margin-bottom: 2rem;
+}
+
+.question-card.success {
+  text-align: center;
+  padding: 4rem 3rem;
+  border-left: 4px solid var(--medical-success);
+}
+
+.question-card.success h2 {
+  color: var(--medical-success);
+  margin-bottom: 1rem;
+}
+
+.question-card.thank-you {
+  text-align: center;
+  padding: 4rem 3rem;
+  background: linear-gradient(135deg, var(--medical-card) 0%, #f0fdf4 100%);
+}
+
+.question-card.thank-you h1 {
+  color: var(--medical-success);
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Loading Animation */
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--medical-border);
+  border-top: 4px solid var(--medical-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 2rem auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Hide timeline on welcome and completion screens */
+.question-card.welcome ~ .progress-timeline,
+.question-card.processing ~ .progress-timeline,
+.question-card.success ~ .progress-timeline,
+.question-card.thank-you ~ .progress-timeline {
+  display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .nutrition-form-container {
+    padding: 1rem;
+  }
+  
+  .question-card {
+    padding: 2rem 1.5rem;
+    margin: 1rem 0;
+  }
+  
+  .question-card.welcome {
+    padding: 3rem 2rem;
+  }
+  
+  .question-card.welcome h1 {
+    font-size: 2rem;
+  }
+  
+  .progress-timeline {
+    padding: 1.5rem;
+    margin-top: 1rem;
+  }
+  
+  .timeline-container {
+    padding: 0.5rem 0;
+  }
+  
+  .timeline-line {
+    left: 2rem;
+  }
+  
+  .timeline-item {
+    flex-direction: row !important;
+    padding-left: 4rem;
+  }
+  
+  .timeline-item .timeline-content {
+    text-align: left !important;
+    max-width: none;
+  }
+  
+  .timeline-dot {
+    left: 2rem !important;
+    transform: translateX(-50%);
+  }
+  
+  .question-stats {
+    gap: 1rem;
+  }
+  
+  .button-group {
+    flex-direction: column;
+  }
+  
+  .typeform-btn,
+  .back-btn {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .question-card {
+    padding: 1.5rem 1rem;
+  }
+  
+  .question-card h2 {
+    font-size: 1.5rem;
+  }
+  
+  .progress-timeline {
+    padding: 1rem;
+  }
+  
+  .timeline-content {
+    padding: 0.75rem 1rem;
+  }
+  
+  .typeform-btn,
+  .back-btn {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Accessibility Improvements */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.question-card:focus-within {
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Print Styles */
+@media print {
+  .nutrition-form-container {
+    background: white;
+  }
+  
+  .question-card {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+  
+  .progress-timeline {
+    display: none;
+  }
+  
+  .typeform-btn,
+  .back-btn {
+    display: none;
+  }
+}
