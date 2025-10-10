@@ -17,16 +17,16 @@ if (!isSupabaseConfigured) {
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-// Test database connectivity (only in development)
-if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+// Test database connectivity (only in development and when configured)
+if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development' && isSupabaseConfigured) {
   supabase.auth.getSession().then(({ data, error }) => {
     if (error) {
-      console.error('Supabase connection test failed:', error);
+      console.log('Supabase connection test failed:', error.message);
     } else {
       console.log('✅ Supabase connection test successful');
     }
   }).catch((error) => {
-    console.error('Supabase connection test error:', error);
+    console.log('Supabase connection test error:', error.message);
   });
 }
 

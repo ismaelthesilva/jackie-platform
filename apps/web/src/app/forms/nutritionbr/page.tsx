@@ -1,8 +1,28 @@
 'use client'
-// NutritionBR.tsx
+
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import emailjs from '@emailjs/browser';
-import './Forms.css';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { 
+  CheckCircle, 
+  ArrowLeft, 
+  ArrowRight, 
+  Heart, 
+  Target,
+  Clock,
+  FileText,
+  User,
+  Activity,
+  Brain,
+  Utensils
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 // Type definitions
 interface QuestionCondition {
@@ -55,7 +75,7 @@ interface EmailParams {
   [key: string]: string;
 }
 
-const NutritionBR: React.FC = () => {
+export default function NutritionBRPage() {
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   const [answers, setAnswers] = useState<Answers>({});
   const [formCompleted, setFormCompleted] = useState<boolean>(false);
@@ -450,15 +470,15 @@ const NutritionBR: React.FC = () => {
       console.log('Building email body...');
       let emailBody = '<h1>Nutrition Assessment</h1>';
       emailBody += '<h2>Client Details</h2>';
-      emailBody += `<p><strong>Name:</strong> ${answers.name || 'N/A'}</p>`;
-      emailBody += `<p><strong>Age:</strong> ${answers.age || 'N/A'} years</p>`;
-      emailBody += `<p><strong>Height:</strong> ${answers.height || 'N/A'} cm</p>`;
-      emailBody += `<p><strong>Weight:</strong> ${answers.weight || 'N/A'} kg</p>`;
-      emailBody += `<p><strong>Main Goal:</strong> ${answers.goal || 'N/A'}</p>`;
+      emailBody += `<p><strong>Name:</strong> ${answers.nome_completo || 'N/A'}</p>`;
+      emailBody += `<p><strong>Age:</strong> ${answers.idade || 'N/A'} years</p>`;
+      emailBody += `<p><strong>Height:</strong> ${answers.altura || 'N/A'} cm</p>`;
+      emailBody += `<p><strong>Weight:</strong> ${answers.peso || 'N/A'} kg</p>`;
+      emailBody += `<p><strong>Main Goal:</strong> ${answers.objetivo_principal || 'N/A'}</p>`;
       emailBody += '<h2>Questionnaire Responses</h2>';
       questions.forEach((question) => {
         if (question.type === 'welcome' || question.type === 'thank_you' || 
-            ['name', 'age', 'height', 'weight', 'goal', 'email'].includes(question.id)) {
+            ['nome_completo', 'idade', 'altura', 'peso', 'objetivo_principal', 'email'].includes(question.id)) {
           return;
         }
         if (!shouldDisplayQuestion(question)) {
@@ -476,7 +496,7 @@ const NutritionBR: React.FC = () => {
 
       const templateParams: EmailParams = {
         to_email: 'jacksouto7@gmail.com',
-        client_name: answers.name as string || 'Client',
+        client_name: answers.nome_completo as string || 'Client',
         client_email: clientEmail || 'N/A',
         email_body: emailBody
       };
@@ -517,66 +537,78 @@ const NutritionBR: React.FC = () => {
 
     // Sample timeline data - customize based on your question structure
     const timelineSteps = [
-      { id: 1, title: "Dados Iniciais", description: "Informações básicas" },
-      { id: 2, title: "Objetivo e Histórico", description: "Seus objetivos e histórico" },
-      { id: 3, title: "Saúde e Digestão", description: "Informações sobre saúde" },
-      { id: 4, title: "Comportamento Alimentar", description: "Seus hábitos alimentares" },
-      { id: 5, title: "Preferências Alimentares", description: "Seus gostos e aversões" },
-      { id: 6, title: "Refeições Livres", description: "Preferências para refeições livres" },
-      { id: 7, title: "Macronutrientes", description: "Organização dos macronutrientes" },
-      { id: 8, title: "Treino e Estilo de Vida", description: "Atividades físicas e rotina" },
-      { id: 9, title: "Sono e Estresse", description: "Qualidade do sono e estresse" },
-      { id: 10, title: "Considerações Finais", description: "Informações adicionais" },
+      { id: 1, title: "Informações Pessoais", description: "Dados básicos" },
+      { id: 2, title: "Histórico de Saúde", description: "Informações médicas" },
+      { id: 3, title: "Objetivos", description: "Metas nutricionais" },
+      { id: 4, title: "Experiência", description: "Histórico alimentar" },
+      { id: 5, title: "Preferências", description: "Estilo alimentar" },
+      { id: 6, title: "Estilo de Vida", description: "Hábitos diários" },
+      { id: 7, title: "Informações Adicionais", description: "Detalhes finais" },
     ];
 
     return (
-      <div 
-        className="progress-timeline"
-        style={{ '--timeline-progress': `${timelineProgress}%` } as React.CSSProperties}
-      >
-        <div className="timeline-header">
-          <h3>Seu Progresso</h3>
-          <p>Acompanhe o preenchimento do seu formulário</p>
-        </div>
-        
-        <div className="timeline-container">
-          <div className="timeline-line"></div>
-          <div className="timeline-items">
-            {timelineSteps.map((step, index) => {
-              const isCompleted = index < Math.floor(currentQuestion / (totalQuestions / timelineSteps.length));
-              const isCurrent = index === Math.floor(currentQuestion / (totalQuestions / timelineSteps.length));
-              
-              return (
-                <div 
-                  key={step.id} 
-                  className={`timeline-item ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''}`}
-                >
-                  <div className="timeline-dot"></div>
-                  <div className="timeline-content">
-                    <h4>{step.title}</h4>
-                    <p>{step.description}</p>
+      <Card className="w-full max-w-4xl mx-auto mb-8">
+        <CardContent className="p-6">
+          <div className="text-center mb-6">
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Seu Progresso</h3>
+            <p className="text-gray-600">Acompanhe o preenchimento da avaliação nutricional</p>
+          </div>
+          
+          <div className="mb-6">
+            <Progress value={(answeredQuestions / totalQuestions) * 100} className="h-3" />
+          </div>
+          
+          <div className="relative mb-6">
+            <div className="flex justify-between items-center">
+              {timelineSteps.map((step, index) => {
+                const isCompleted = index < Math.floor(currentQuestion / (totalQuestions / timelineSteps.length));
+                const isCurrent = index === Math.floor(currentQuestion / (totalQuestions / timelineSteps.length));
+                
+                return (
+                  <div key={step.id} className="flex flex-col items-center relative">
+                    <div className={cn(
+                      "w-10 h-10 rounded-full flex items-center justify-center mb-2 transition-colors",
+                      isCompleted ? "bg-emerald-600 text-white" : 
+                      isCurrent ? "bg-emerald-100 text-emerald-600 ring-2 ring-emerald-600" : 
+                      "bg-gray-200 text-gray-400"
+                    )}>
+                      {isCompleted ? (
+                        <CheckCircle className="h-5 w-5" />
+                      ) : (
+                        <Utensils className="h-5 w-5" />
+                      )}
+                    </div>
+                    <div className="text-center">
+                      <h4 className={cn(
+                        "text-sm font-medium",
+                        isCompleted || isCurrent ? "text-gray-900" : "text-gray-500"
+                      )}>
+                        {step.title}
+                      </h4>
+                      <p className="text-xs text-gray-500">{step.description}</p>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
-        
-        <div className="question-stats">
-          <div className="stat-item">
-            <span className="stat-number">{answeredQuestions}</span>
-            <span className="stat-label">Respondidas</span>
+          
+          <div className="grid grid-cols-3 gap-4 text-center">
+            <div className="p-3 bg-emerald-50 rounded-lg">
+              <span className="block text-2xl font-bold text-emerald-600">{answeredQuestions}</span>
+              <span className="text-sm text-gray-600">Respondidas</span>
+            </div>
+            <div className="p-3 bg-gray-50 rounded-lg">
+              <span className="block text-2xl font-bold text-gray-600">{totalQuestions - answeredQuestions}</span>
+              <span className="text-sm text-gray-600">Restantes</span>
+            </div>
+            <div className="p-3 bg-green-50 rounded-lg">
+              <span className="block text-2xl font-bold text-green-600">{Math.round((answeredQuestions / totalQuestions) * 100)}%</span>
+              <span className="text-sm text-gray-600">Completo</span>
+            </div>
           </div>
-          <div className="stat-item">
-            <span className="stat-number">{totalQuestions - answeredQuestions}</span>
-            <span className="stat-label">Restantes</span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-number">{Math.round((answeredQuestions / totalQuestions) * 100)}%</span>
-            <span className="stat-label">Completo</span>
-          </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     );
   };
 
@@ -601,254 +633,316 @@ const NutritionBR: React.FC = () => {
 
     if (currentQ.type === 'welcome') {
       return (
-        <div className="question-card welcome">
-          <h1>{currentQ.title}</h1>
-          <p>{currentQ.description}</p>
-          <button 
-            className="typeform-btn"
-            onClick={() => setCurrentQuestion(getNextQuestion(currentQuestion))}
-          >
-            {currentQ.buttonText}
-          </button>
-        </div>
+        <Card className="w-full max-w-2xl mx-auto bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-200 shadow-xl">
+          <CardContent className="p-8 text-center">
+            <div className="mb-6">
+              <div className="mx-auto w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                <Utensils className="h-8 w-8 text-emerald-600" />
+              </div>
+              <h1 className="text-3xl font-bold text-emerald-800 mb-2">{currentQ.title}</h1>
+              <p className="text-emerald-600 text-lg">{currentQ.description}</p>
+            </div>
+            <Button 
+              size="lg"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3"
+              onClick={() => setCurrentQuestion(getNextQuestion(currentQuestion))}
+            >
+              {currentQ.buttonText}
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </CardContent>
+        </Card>
       );
     }
 
     if (currentQ.type === 'thank_you') {
       return (
-        <div className="question-card thank-you">
-          <h1>{currentQ.title}</h1>
-          <p>{currentQ.description}</p>
-          {isLoading && <p className="processing">Processando suas respostas...</p>}
-          {emailSent && <p className="success">Enviado com sucesso! Verifique seu e-mail em breve.</p>}
-        </div>
+        <Card className="w-full max-w-2xl mx-auto bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-200 shadow-xl">
+          <CardContent className="p-8 text-center">
+            <div className="mb-6">
+              <div className="mx-auto w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                <CheckCircle className="h-8 w-8 text-emerald-600" />
+              </div>
+              <h1 className="text-3xl font-bold text-emerald-800 mb-2">{currentQ.title}</h1>
+              <p className="text-emerald-600 text-lg">{currentQ.description}</p>
+            </div>
+            {isLoading && (
+              <div className="flex items-center justify-center gap-2 text-emerald-600">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-600"></div>
+                <span>Processando suas respostas...</span>
+              </div>
+            )}
+            {emailSent && (
+              <div className="bg-emerald-100 text-emerald-800 p-4 rounded-lg">
+                <CheckCircle className="h-5 w-5 inline mr-2" />
+                Enviado com sucesso! Verifique seu e-mail em breve.
+              </div>
+            )}
+          </CardContent>
+        </Card>
       );
     }
 
     return (
-      <div className="question-card" ref={formRef}>
-        <h2>{currentQ.title}</h2>
-        {currentQ.description && <p className="description">{currentQ.description}</p>}
-
-        {['text', 'number', 'email'].includes(currentQ.type) && (
-          <div className="input-group">
-            <input
-              type={currentQ.type as 'text' | 'number' | 'email'}
-              placeholder="Digite sua resposta..."
-              value={answers[currentQ.id] as string || ''}
-              onChange={(e) => setAnswers(prev => ({ ...prev, [currentQ.id]: e.target.value }))}
-              onKeyPress={(e) => handleKeyPress(e, answers[currentQ.id])}
-              required={currentQ.required}
-              autoFocus
-            />
-            <div className="button-group">
-              {currentQuestion > 0 && (
-                <button 
-                  className="typeform-btn back-btn"
-                  onClick={handleBack}
-                >
-                  Voltar
-                </button>
-              )}
-              <button 
-                className="typeform-btn"
-                onClick={() => handleAnswer(currentQ.id, answers[currentQ.id] || '')}
-                disabled={currentQ.required && !answers[currentQ.id]}
-              >
-                Próximo
-              </button>
-            </div>
-          </div>
-        )}
-
-        {currentQ.type === 'textarea' && (
-          <div className="input-group">
-            <textarea
-              placeholder="Digite sua resposta..."
-              value={answers[currentQ.id] as string || ''}
-              onChange={(e) => setAnswers(prev => ({ ...prev, [currentQ.id]: e.target.value }))}
-              onKeyPress={(e) => handleKeyPress(e, answers[currentQ.id])}
-              required={currentQ.required}
-              autoFocus
-            />
-            <div className="button-group">
-              {currentQuestion > 0 && (
-                <button 
-                  className="typeform-btn back-btn"
-                  onClick={handleBack}
-                >
-                  Voltar
-                </button>
-              )}
-              <button 
-                className="typeform-btn"
-                onClick={() => handleAnswer(currentQ.id, answers[currentQ.id] || '')}
-                disabled={currentQ.required && !answers[currentQ.id]}
-              >
-                Próximo
-              </button>
-            </div>
-          </div>
-        )}
-
-        {currentQ.type === 'yes_no' && (
-          <div className="input-group">
-            <div className="options-group">
-              <button
-                className={`typeform-option ${answers[currentQ.id] === 'Yes' ? 'selected' : ''}`}
-                onClick={() => handleAnswer(currentQ.id, 'Yes')}
-              >
-                Sim
-              </button>
-              <button
-                className={`typeform-option ${answers[currentQ.id] === 'No' ? 'selected' : ''}`}
-                onClick={() => handleAnswer(currentQ.id, 'No')}
-              >
-                Não
-              </button>
-            </div>
-            <div className="button-group">
-              {currentQuestion > 0 && (
-                <button 
-                  className="typeform-btn back-btn"
-                  onClick={handleBack}
-                >
-                  Voltar
-                </button>
-              )}
-            </div>
-          </div>
-        )}
-
-        {currentQ.type === 'multiple_choice' && 'options' in currentQ && (
-          <div className="input-group">
-            <div className="options-group">
-              {currentQ.options.map((option) => (
-                <button
-                  key={option}
-                  className={`typeform-option ${answers[currentQ.id] === option ? 'selected' : ''}`}
-                  onClick={() => handleAnswer(currentQ.id, option)}
-                >
-                  {option}
-                </button>
-              ))}
-            </div>
-            <div className="button-group">
-              {currentQuestion > 0 && (
-                <button 
-                  className="typeform-btn back-btn"
-                  onClick={handleBack}
-                >
-                  Voltar
-                </button>
-              )}
-            </div>
-          </div>
-        )}
-
-        {currentQ.type === 'multiple_select' && 'options' in currentQ && (
-          <div className="options-group">
-            {currentQ.options.map((option) => (
-              <button
-                key={option}
-                className={`typeform-option ${
-                  (answers[currentQ.id] as string[])?.includes(option) ? 'selected' : ''
-                }`}
-                onClick={() => {
-                  const currentSelection = (answers[currentQ.id] as string[]) || [];
-                  const newSelection = currentSelection.includes(option)
-                    ? currentSelection.filter(item => item !== option)
-                    : [...currentSelection, option];
-                  setAnswers(prev => ({ ...prev, [currentQ.id]: newSelection }));
-                }}
-              >
-                {option}
-              </button>
-            ))}
-            <div className="button-group">
-              {currentQuestion > 0 && (
-                <button 
-                  className="typeform-btn back-btn"
-                  onClick={handleBack}
-                >
-                  Voltar
-                </button>
-              )}
-              <button
-                className="typeform-btn"
-                onClick={() => handleAnswer(currentQ.id, answers[currentQ.id] || [])}
-                disabled={currentQ.required && (!answers[currentQ.id] || (answers[currentQ.id] as string[]).length === 0)}
-              >
-                Próximo
-              </button>
-            </div>
-          </div>
-        )}
-
-        {currentQ.type === 'checkbox' && 'options' in currentQ && (
-          <div className="input-group">
-            <div className="options-group">
-              {currentQ.options.map((option) => (
-                <button
-                  key={option}
-                  className={`typeform-option ${
-                    (answers[currentQ.id] as string[])?.includes(option) ? 'selected' : ''
-                  }`}
-                  onClick={() => {
-                    const currentSelection = (answers[currentQ.id] as string[]) || [];
-                    const newSelection = currentSelection.includes(option)
-                      ? currentSelection.filter(item => item !== option)
-                      : [...currentSelection, option];
-                    setAnswers(prev => ({ ...prev, [currentQ.id]: newSelection }));
-                  }}
-                >
-                  {option}
-                </button>
-              ))}
-            </div>
-            <div className="button-group">
-              <div className="button-left">
+      <Card className="w-full max-w-2xl mx-auto bg-white shadow-xl border-gray-200" ref={formRef}>
+        <CardHeader className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white">
+          <CardTitle className="text-xl">{currentQ.title}</CardTitle>
+          {currentQ.description && (
+            <p className="text-emerald-50 opacity-90">{currentQ.description}</p>
+          )}
+        </CardHeader>
+        <CardContent className="p-6">
+          {['text', 'number', 'email'].includes(currentQ.type) && (
+            <div className="space-y-4">
+              <Input
+                type={currentQ.type as 'text' | 'number' | 'email'}
+                placeholder="Digite sua resposta..."
+                value={answers[currentQ.id] as string || ''}
+                onChange={(e) => setAnswers(prev => ({ ...prev, [currentQ.id]: e.target.value }))}
+                onKeyPress={(e) => handleKeyPress(e, answers[currentQ.id])}
+                className="text-lg p-3"
+                autoFocus
+              />
+              <div className="flex justify-between gap-3">
                 {currentQuestion > 0 && (
-                  <button 
-                    className="typeform-btn back-btn"
+                  <Button 
+                    variant="outline"
                     onClick={handleBack}
+                    className="flex items-center gap-2"
                   >
+                    <ArrowLeft className="h-4 w-4" />
                     Voltar
-                  </button>
+                  </Button>
                 )}
-              </div>
-              <div className="button-right">
-                <button
-                  className="typeform-btn"
-                  onClick={() => handleAnswer(currentQ.id, answers[currentQ.id] || [])}
+                <Button 
+                  onClick={() => handleAnswer(currentQ.id, answers[currentQ.id] || '')}
+                  disabled={currentQ.required && !answers[currentQ.id]}
+                  className="bg-emerald-600 hover:bg-emerald-700 ml-auto flex items-center gap-2"
                 >
                   Próximo
-                </button>
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
               </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+
+          {currentQ.type === 'textarea' && (
+            <div className="space-y-4">
+              <Textarea
+                placeholder="Digite sua resposta..."
+                value={answers[currentQ.id] as string || ''}
+                onChange={(e) => setAnswers(prev => ({ ...prev, [currentQ.id]: e.target.value }))}
+                onKeyPress={(e) => handleKeyPress(e, answers[currentQ.id])}
+                className="min-h-[100px] text-lg p-3"
+                autoFocus
+              />
+              <div className="flex justify-between gap-3">
+                {currentQuestion > 0 && (
+                  <Button 
+                    variant="outline"
+                    onClick={handleBack}
+                    className="flex items-center gap-2"
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                    Voltar
+                  </Button>
+                )}
+                <Button 
+                  onClick={() => handleAnswer(currentQ.id, answers[currentQ.id] || '')}
+                  disabled={currentQ.required && !answers[currentQ.id]}
+                  className="bg-emerald-600 hover:bg-emerald-700 ml-auto flex items-center gap-2"
+                >
+                  Próximo
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {currentQ.type === 'yes_no' && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <Button
+                  variant={answers[currentQ.id] === 'Yes' ? 'default' : 'outline'}
+                  className={`h-16 text-lg ${
+                    answers[currentQ.id] === 'Yes' 
+                      ? 'bg-emerald-600 hover:bg-emerald-700' 
+                      : 'hover:bg-emerald-50 hover:border-emerald-300'
+                  }`}
+                  onClick={() => handleAnswer(currentQ.id, 'Yes')}
+                >
+                  Sim
+                </Button>
+                <Button
+                  variant={answers[currentQ.id] === 'No' ? 'default' : 'outline'}
+                  className={`h-16 text-lg ${
+                    answers[currentQ.id] === 'No' 
+                      ? 'bg-emerald-600 hover:bg-emerald-700' 
+                      : 'hover:bg-emerald-50 hover:border-emerald-300'
+                  }`}
+                  onClick={() => handleAnswer(currentQ.id, 'No')}
+                >
+                  Não
+                </Button>
+              </div>
+              {currentQuestion > 0 && (
+                <Button 
+                  variant="outline"
+                  onClick={handleBack}
+                  className="flex items-center gap-2"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  Voltar
+                </Button>
+              )}
+            </div>
+          )}
+
+          {currentQ.type === 'multiple_choice' && 'options' in currentQ && (
+            <div className="space-y-4">
+              <div className="grid gap-3">
+                {currentQ.options.map((option) => (
+                  <Button
+                    key={option}
+                    variant={answers[currentQ.id] === option ? 'default' : 'outline'}
+                    className={`h-auto p-4 text-left justify-start text-wrap ${
+                      answers[currentQ.id] === option 
+                        ? 'bg-emerald-600 hover:bg-emerald-700' 
+                        : 'hover:bg-emerald-50 hover:border-emerald-300'
+                    }`}
+                    onClick={() => handleAnswer(currentQ.id, option)}
+                  >
+                    {option}
+                  </Button>
+                ))}
+              </div>
+              {currentQuestion > 0 && (
+                <Button 
+                  variant="outline"
+                  onClick={handleBack}
+                  className="flex items-center gap-2"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  Voltar
+                </Button>
+              )}
+            </div>
+          )}
+
+          {currentQ.type === 'multiple_select' && 'options' in currentQ && (
+            <div className="space-y-4">
+              <div className="grid gap-3">
+                {currentQ.options.map((option) => (
+                  <Button
+                    key={option}
+                    variant={(answers[currentQ.id] as string[])?.includes(option) ? 'default' : 'outline'}
+                    className={`h-auto p-4 text-left justify-start text-wrap ${
+                      (answers[currentQ.id] as string[])?.includes(option)
+                        ? 'bg-emerald-600 hover:bg-emerald-700' 
+                        : 'hover:bg-emerald-50 hover:border-emerald-300'
+                    }`}
+                    onClick={() => {
+                      const currentSelection = (answers[currentQ.id] as string[]) || [];
+                      const newSelection = currentSelection.includes(option)
+                        ? currentSelection.filter(item => item !== option)
+                        : [...currentSelection, option];
+                      setAnswers(prev => ({ ...prev, [currentQ.id]: newSelection }));
+                    }}
+                  >
+                    {option}
+                  </Button>
+                ))}
+              </div>
+              <div className="flex justify-between gap-3">
+                {currentQuestion > 0 && (
+                  <Button 
+                    variant="outline"
+                    onClick={handleBack}
+                    className="flex items-center gap-2"
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                    Voltar
+                  </Button>
+                )}
+                <Button
+                  onClick={() => handleAnswer(currentQ.id, answers[currentQ.id] || [])}
+                  disabled={currentQ.required && (!answers[currentQ.id] || (answers[currentQ.id] as string[]).length === 0)}
+                  className="bg-emerald-600 hover:bg-emerald-700 ml-auto flex items-center gap-2"
+                >
+                  Próximo
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {currentQ.type === 'checkbox' && 'options' in currentQ && (
+            <div className="space-y-4">
+              <div className="grid gap-3">
+                {currentQ.options.map((option) => (
+                  <Button
+                    key={option}
+                    variant={(answers[currentQ.id] as string[])?.includes(option) ? 'default' : 'outline'}
+                    className={`h-auto p-4 text-left justify-start text-wrap ${
+                      (answers[currentQ.id] as string[])?.includes(option)
+                        ? 'bg-emerald-600 hover:bg-emerald-700' 
+                        : 'hover:bg-emerald-50 hover:border-emerald-300'
+                    }`}
+                    onClick={() => {
+                      const currentSelection = (answers[currentQ.id] as string[]) || [];
+                      const newSelection = currentSelection.includes(option)
+                        ? currentSelection.filter(item => item !== option)
+                        : [...currentSelection, option];
+                      setAnswers(prev => ({ ...prev, [currentQ.id]: newSelection }));
+                    }}
+                  >
+                    {option}
+                  </Button>
+                ))}
+              </div>
+              <div className="flex justify-between gap-3">
+                {currentQuestion > 0 && (
+                  <Button 
+                    variant="outline"
+                    onClick={handleBack}
+                    className="flex items-center gap-2"
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                    Voltar
+                  </Button>
+                )}
+                <Button
+                  onClick={() => handleAnswer(currentQ.id, answers[currentQ.id] || [])}
+                  className="bg-emerald-600 hover:bg-emerald-700 ml-auto flex items-center gap-2"
+                >
+                  Próximo
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     );
   };
 
   return (
-    <div className="nutrition-form-container">
-      <div className="form-content-wrapper">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 py-8 px-4">
+      <div className="max-w-4xl mx-auto space-y-8">
         {/* Progress bar at top */}
         {currentQuestion > 1 && !isLoading && !emailSent && (
-          <div className="progress-bar">
+          <div className="w-full bg-white rounded-full h-2 shadow-sm">
             <div
-              className="progress"
+              className="bg-emerald-600 h-2 rounded-full transition-all duration-300 ease-out"
               style={{
                 width: `${((currentQuestion - 1) / (questions.length - 1)) * 100}%`,
               }}
-            ></div>
+            />
           </div>
         )}
         
         {/* Main question card - centered */}
-        <div className="question-card">
+        <div className="flex justify-center items-center">
           {renderQuestion()}
         </div>
         
@@ -857,6 +951,4 @@ const NutritionBR: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default NutritionBR;
+}

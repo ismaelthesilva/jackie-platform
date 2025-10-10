@@ -3,8 +3,8 @@
 
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
-import AdminDashboard from '@/pages/admin/AdminDashboard';
-import UserDashboard from '@/pages/client/UserDashboard';
+import AdminDashboard from './dashboards/AdminDashboard';
+import UserDashboard from './dashboards/UserDashboard';
 import Auth from './Auth';
 
 interface DashboardRouterProps {

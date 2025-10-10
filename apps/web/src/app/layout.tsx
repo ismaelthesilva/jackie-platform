@@ -20,7 +20,7 @@ export default function RootLayout({
         <link rel="icon" type="image/png" href="/jackie-favicon.png" />
       </head>
       <body suppressHydrationWarning={true}>
-        <ThemeProvider defaultTheme="system" storageKey="dr-jackie-theme">
+        <ThemeProvider defaultTheme="light" storageKey="dr-jackie-theme">
           <LanguageProvider>
             <AuthProvider>
               {children}

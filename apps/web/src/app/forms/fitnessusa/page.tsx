@@ -1,7 +1,16 @@
 'use client'
+
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import emailjs from '@emailjs/browser';
-import './Forms.css';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { CheckCircle, Circle, Loader2, ArrowLeft, ArrowRight, Dumbbell, Target, Heart, User, Activity, Brain, Zap, Trophy, Clock, FileText } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 // TypeScript interfaces
 interface Question {
@@ -30,7 +39,7 @@ interface EmailTemplateParams {
   [key: string]: unknown;
 }
 
-const FitnessUSA: React.FC = () => {
+export default function FitnessUSAPage() {
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   const [answers, setAnswers] = useState<Answers>({});
   const [formCompleted, setFormCompleted] = useState<boolean>(false);
@@ -458,53 +467,68 @@ const FitnessUSA: React.FC = () => {
     ];
 
     return (
-      <div 
-        className="progress-timeline"
-        style={{ '--timeline-progress': `${timelineProgress}%` } as React.CSSProperties}
-      >
-        <div className="timeline-header">
-          <h3>Your Progress</h3>
-          <p>Track your form completion</p>
-        </div>
-        
-        <div className="timeline-container">
-          <div className="timeline-line"></div>
-          <div className="timeline-items">
-            {timelineSteps.map((step, index) => {
-              const isCompleted = index < Math.floor(currentQuestion / (totalQuestions / timelineSteps.length));
-              const isCurrent = index === Math.floor(currentQuestion / (totalQuestions / timelineSteps.length));
-              
-              return (
-                <div 
-                  key={step.id} 
-                  className={`timeline-item ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''}`}
-                >
-                  <div className="timeline-dot"></div>
-                  <div className="timeline-content">
-                    <h4>{step.title}</h4>
-                    <p>{step.description}</p>
+      <Card className="w-full max-w-4xl mx-auto mb-8">
+        <CardContent className="p-6">
+          <div className="text-center mb-6">
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Your Progress</h3>
+            <p className="text-gray-600">Track your fitness assessment completion</p>
+          </div>
+          
+          <div className="mb-6">
+            <Progress value={(answeredQuestions / totalQuestions) * 100} className="h-3" />
+          </div>
+          
+          <div className="relative mb-6">
+            <div className="flex justify-between items-center">
+              {timelineSteps.map((step, index) => {
+                const isCompleted = index < Math.floor(currentQuestion / (totalQuestions / timelineSteps.length));
+                const isCurrent = index === Math.floor(currentQuestion / (totalQuestions / timelineSteps.length));
+                
+                return (
+                  <div key={step.id} className="flex flex-col items-center relative">
+                    <div className={cn(
+                      "w-10 h-10 rounded-full flex items-center justify-center mb-2 transition-colors",
+                      isCompleted ? "bg-emerald-600 text-white" : 
+                      isCurrent ? "bg-emerald-100 text-emerald-600 ring-2 ring-emerald-600" : 
+                      "bg-gray-200 text-gray-400"
+                    )}>
+                      {isCompleted ? (
+                        <CheckCircle className="h-5 w-5" />
+                      ) : (
+                        <Dumbbell className="h-5 w-5" />
+                      )}
+                    </div>
+                    <div className="text-center">
+                      <h4 className={cn(
+                        "text-sm font-medium",
+                        isCompleted || isCurrent ? "text-gray-900" : "text-gray-500"
+                      )}>
+                        {step.title}
+                      </h4>
+                      <p className="text-xs text-gray-500">{step.description}</p>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
-        
-        <div className="question-stats">
-          <div className="stat-item">
-            <span className="stat-number">{answeredQuestions}</span>
-            <span className="stat-label">Answered</span>
+          
+          <div className="grid grid-cols-3 gap-4 text-center">
+            <div className="p-3 bg-emerald-50 rounded-lg">
+              <span className="block text-2xl font-bold text-emerald-600">{answeredQuestions}</span>
+              <span className="text-sm text-gray-600">Answered</span>
+            </div>
+            <div className="p-3 bg-gray-50 rounded-lg">
+              <span className="block text-2xl font-bold text-gray-600">{totalQuestions - answeredQuestions}</span>
+              <span className="text-sm text-gray-600">Remaining</span>
+            </div>
+            <div className="p-3 bg-green-50 rounded-lg">
+              <span className="block text-2xl font-bold text-green-600">{Math.round((answeredQuestions / totalQuestions) * 100)}%</span>
+              <span className="text-sm text-gray-600">Complete</span>
+            </div>
           </div>
-          <div className="stat-item">
-            <span className="stat-number">{totalQuestions - answeredQuestions}</span>
-            <span className="stat-label">Remaining</span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-number">{Math.round((answeredQuestions / totalQuestions) * 100)}%</span>
-            <span className="stat-label">Complete</span>
-          </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     );
   };
 
@@ -529,38 +553,81 @@ const FitnessUSA: React.FC = () => {
 
     if (currentQ.type === 'welcome') {
       return (
-        <div className="question-card welcome">
-          <h1>{currentQ.title}</h1>
-          <p>{currentQ.description}</p>
-          <button 
-            className="typeform-btn"
-            onClick={() => setCurrentQuestion(getNextQuestion(currentQuestion))}
-          >
-            {currentQ.buttonText}
-          </button>
-        </div>
+        <Card className="w-full max-w-2xl mx-auto bg-gradient-to-br from-emerald-50 to-teal-100 dark:from-emerald-950 dark:to-teal-900 border-emerald-200 dark:border-emerald-800">
+          <CardHeader className="text-center pb-6">
+            <div className="mx-auto w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+              <Dumbbell className="h-8 w-8 text-emerald-600" />
+            </div>
+            <CardTitle className="text-3xl font-bold text-emerald-900 dark:text-emerald-100 mb-3">
+              {currentQ.title}
+            </CardTitle>
+            <CardDescription className="text-lg text-emerald-700 dark:text-emerald-200">
+              {currentQ.description}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex justify-center">
+            <Button 
+              size="lg"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 text-lg font-semibold"
+              onClick={() => setCurrentQuestion(getNextQuestion(currentQuestion))}
+            >
+              {currentQ.buttonText}
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </CardContent>
+        </Card>
       );
     }
 
     if (currentQ.type === 'thank_you') {
       return (
-        <div className="question-card thank-you">
-          <h1>{currentQ.title}</h1>
-          <p>{currentQ.description}</p>
-          {isLoading && <p className="processing">Processing your responses...</p>}
-          {emailSent && <p className="success">Successfully submitted! Check your email soon.</p>}
-        </div>
+        <Card className="w-full max-w-2xl mx-auto bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-950 dark:to-emerald-900 border-green-200 dark:border-green-800">
+          <CardHeader className="text-center pb-6">
+            <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+              <CheckCircle className="h-8 w-8 text-green-600" />
+            </div>
+            <CardTitle className="text-3xl font-bold text-green-900 dark:text-green-100 mb-3">
+              {currentQ.title}
+            </CardTitle>
+            <CardDescription className="text-lg text-green-700 dark:text-green-200">
+              {currentQ.description}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-center space-y-4">
+            {isLoading && (
+              <div className="flex items-center justify-center space-x-2 text-emerald-600">
+                <Loader2 className="h-5 w-5 animate-spin" />
+                <span className="text-lg">Processing your responses...</span>
+              </div>
+            )}
+            {emailSent && (
+              <div className="flex items-center justify-center space-x-2 text-green-600">
+                <CheckCircle className="h-6 w-6" />
+                <span className="text-lg font-semibold">Successfully submitted! Check your email soon.</span>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       );
     }
 
     return (
-      <div className="question-card" ref={formRef}>
-        <h2>{currentQ.title}</h2>
-        {currentQ.description && <p className="description">{currentQ.description}</p>}
+      <Card className="w-full max-w-2xl mx-auto" ref={formRef}>
+        <CardHeader className="pb-6">
+          <CardTitle className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            {currentQ.title}
+          </CardTitle>
+          {currentQ.description && (
+            <CardDescription className="text-base text-gray-600 dark:text-gray-400 mt-2">
+              {currentQ.description}
+            </CardDescription>
+          )}
+        </CardHeader>
+        <CardContent className="space-y-6">
 
         {['text', 'number', 'email'].includes(currentQ.type) && (
-          <div className="input-group">
-            <input
+          <div className="space-y-6">
+            <Input
               type={currentQ.type}
               placeholder="Type your answer..."
               value={String(answers[currentQ.id] || '')}
@@ -568,215 +635,290 @@ const FitnessUSA: React.FC = () => {
               onKeyPress={(e) => handleKeyPress(e, answers[currentQ.id])}
               required={currentQ.required}
               autoFocus
+              className="text-lg py-3"
             />
-            <div className="button-group">
-              {currentQuestion > 0 && (
-                <button 
-                  className="typeform-btn back-btn"
+            <div className="flex justify-between items-center">
+              {currentQuestion > 0 ? (
+                <Button 
+                  variant="outline"
                   onClick={handleBack}
+                  className="px-6"
                 >
+                  <ArrowLeft className="mr-2 h-4 w-4" />
                   Back
-                </button>
+                </Button>
+              ) : (
+                <div></div>
               )}
-              <button 
-                className="typeform-btn"
+              <Button 
                 onClick={() => handleAnswer(currentQ.id, answers[currentQ.id] || '')}
                 disabled={currentQ.required && !answers[currentQ.id]}
+                className="px-6 bg-emerald-600 hover:bg-emerald-700"
               >
                 Next
-              </button>
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
             </div>
           </div>
         )}
 
         {currentQ.type === 'textarea' && (
-          <div className="input-group">
-            <textarea
+          <div className="space-y-6">
+            <Textarea
               placeholder="Type your answer..."
               value={String(answers[currentQ.id] || '')}
               onChange={(e) => setAnswers(prev => ({ ...prev, [currentQ.id]: e.target.value }))}
               onKeyPress={(e) => handleKeyPress(e, answers[currentQ.id])}
               required={currentQ.required}
               autoFocus
+              className="min-h-24 text-base"
+              rows={4}
             />
-            <div className="button-group">
-              {currentQuestion > 0 && (
-                <button 
-                  className="typeform-btn back-btn"
+            <div className="flex justify-between items-center">
+              {currentQuestion > 0 ? (
+                <Button 
+                  variant="outline"
                   onClick={handleBack}
+                  className="px-6"
                 >
+                  <ArrowLeft className="mr-2 h-4 w-4" />
                   Back
-                </button>
+                </Button>
+              ) : (
+                <div></div>
               )}
-              <button 
-                className="typeform-btn"
+              <Button 
                 onClick={() => handleAnswer(currentQ.id, answers[currentQ.id] || '')}
                 disabled={currentQ.required && !answers[currentQ.id]}
+                className="px-6 bg-emerald-600 hover:bg-emerald-700"
               >
                 Next
-              </button>
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
             </div>
           </div>
         )}
 
         {currentQ.type === 'yes_no' && (
-          <div className="input-group">
-            <div className="options-group">
-              <button
-                className={`typeform-option ${answers[currentQ.id] === 'Yes' ? 'selected' : ''}`}
+          <div className="space-y-6">
+            <div className="grid grid-cols-2 gap-4">
+              <Button
+                variant={answers[currentQ.id] === 'Yes' ? 'default' : 'outline'}
+                size="lg"
+                className={cn(
+                  "h-16 text-lg font-semibold transition-all",
+                  answers[currentQ.id] === 'Yes' && "bg-emerald-600 hover:bg-emerald-700"
+                )}
                 onClick={() => handleAnswer(currentQ.id, 'Yes')}
               >
                 Yes
-              </button>
-              <button
-                className={`typeform-option ${answers[currentQ.id] === 'No' ? 'selected' : ''}`}
+              </Button>
+              <Button
+                variant={answers[currentQ.id] === 'No' ? 'default' : 'outline'}
+                size="lg"
+                className={cn(
+                  "h-16 text-lg font-semibold transition-all",
+                  answers[currentQ.id] === 'No' && "bg-emerald-600 hover:bg-emerald-700"
+                )}
                 onClick={() => handleAnswer(currentQ.id, 'No')}
               >
                 No
-              </button>
+              </Button>
             </div>
-            <div className="button-group">
+            <div className="flex justify-start">
               {currentQuestion > 0 && (
-                <button 
-                  className="typeform-btn back-btn"
+                <Button 
+                  variant="outline"
                   onClick={handleBack}
+                  className="px-6"
                 >
+                  <ArrowLeft className="mr-2 h-4 w-4" />
                   Back
-                </button>
+                </Button>
               )}
             </div>
           </div>
         )}
 
         {currentQ.type === 'multiple_choice' && (
-          <div className="input-group">
-            <div className="options-group">
+          <div className="space-y-6">
+            <div className="space-y-3">
               {currentQ.options?.map((option) => (
-                <button
+                <Button
                   key={option}
-                  className={`typeform-option ${answers[currentQ.id] === option ? 'selected' : ''}`}
+                  variant={answers[currentQ.id] === option ? 'default' : 'outline'}
+                  size="lg"
+                  className={cn(
+                    "w-full h-auto p-4 text-left justify-start text-wrap whitespace-normal text-base font-medium",
+                    answers[currentQ.id] === option && "bg-emerald-600 hover:bg-emerald-700"
+                  )}
                   onClick={() => handleAnswer(currentQ.id, option)}
                 >
-                  {option}
-                </button>
+                  <div className="flex items-center space-x-3">
+                    {answers[currentQ.id] === option ? (
+                      <CheckCircle className="h-5 w-5 flex-shrink-0" />
+                    ) : (
+                      <Circle className="h-5 w-5 flex-shrink-0" />
+                    )}
+                    <span>{option}</span>
+                  </div>
+                </Button>
               ))}
             </div>
-            <div className="button-group">
+            <div className="flex justify-start">
               {currentQuestion > 0 && (
-                <button 
-                  className="typeform-btn back-btn"
+                <Button 
+                  variant="outline"
                   onClick={handleBack}
+                  className="px-6"
                 >
+                  <ArrowLeft className="mr-2 h-4 w-4" />
                   Back
-                </button>
+                </Button>
               )}
             </div>
           </div>
         )}
 
         {currentQ.type === 'multiple_select' && (
-          <div className="options-group">
-            {currentQ.options?.map((option) => (
-              <button
-                key={option}
-                className={`typeform-option ${
-                  Array.isArray(answers[currentQ.id]) && (answers[currentQ.id] as string[]).includes(option) ? 'selected' : ''
-                }`}
-                onClick={() => {
-                  const currentSelection = (answers[currentQ.id] as string[]) || [];
-                  const newSelection = currentSelection.includes(option)
-                    ? currentSelection.filter(item => item !== option)
-                    : [...currentSelection, option];
-                  setAnswers(prev => ({ ...prev, [currentQ.id]: newSelection }));
-                }}
-              >
-                {option}
-              </button>
-            ))}
-            <div className="button-group">
-              {currentQuestion > 0 && (
-                <button 
-                  className="typeform-btn back-btn"
+          <div className="space-y-6">
+            <div className="space-y-3">
+              {currentQ.options?.map((option) => {
+                const isSelected = Array.isArray(answers[currentQ.id]) && (answers[currentQ.id] as string[]).includes(option);
+                return (
+                  <Button
+                    key={option}
+                    variant={isSelected ? 'default' : 'outline'}
+                    size="lg"
+                    className={cn(
+                      "w-full h-auto p-4 text-left justify-start text-wrap whitespace-normal text-base font-medium",
+                      isSelected && "bg-emerald-600 hover:bg-emerald-700"
+                    )}
+                    onClick={() => {
+                      const currentSelection = (answers[currentQ.id] as string[]) || [];
+                      const newSelection = currentSelection.includes(option)
+                        ? currentSelection.filter(item => item !== option)
+                        : [...currentSelection, option];
+                      setAnswers(prev => ({ ...prev, [currentQ.id]: newSelection }));
+                    }}
+                  >
+                    <div className="flex items-center space-x-3">
+                      {isSelected ? (
+                        <CheckCircle className="h-5 w-5 flex-shrink-0" />
+                      ) : (
+                        <Circle className="h-5 w-5 flex-shrink-0" />
+                      )}
+                      <span>{option}</span>
+                    </div>
+                  </Button>
+                );
+              })}
+            </div>
+            <div className="flex justify-between items-center">
+              {currentQuestion > 0 ? (
+                <Button 
+                  variant="outline"
                   onClick={handleBack}
+                  className="px-6"
                 >
+                  <ArrowLeft className="mr-2 h-4 w-4" />
                   Back
-                </button>
+                </Button>
+              ) : (
+                <div></div>
               )}
-              <button
-                className="typeform-btn"
+              <Button
                 onClick={() => handleAnswer(currentQ.id, answers[currentQ.id] || [])}
                 disabled={currentQ.required && (!answers[currentQ.id] || (Array.isArray(answers[currentQ.id]) && (answers[currentQ.id] as string[]).length === 0))}
+                className="px-6 bg-emerald-600 hover:bg-emerald-700"
               >
                 Next
-              </button>
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
             </div>
           </div>
         )}
 
         {currentQ.type === 'checkbox' && (
-          <div className="input-group">
-            <div className="options-group">
-              {currentQ.options?.map((option) => (
-                <button
-                  key={option}
-                  className={`typeform-option ${
-                    Array.isArray(answers[currentQ.id]) && (answers[currentQ.id] as string[]).includes(option) ? 'selected' : ''
-                  }`}
-                  onClick={() => {
-                    const currentSelection = (answers[currentQ.id] as string[]) || [];
-                    const newSelection = currentSelection.includes(option)
-                      ? currentSelection.filter(item => item !== option)
-                      : [...currentSelection, option];
-                    setAnswers(prev => ({ ...prev, [currentQ.id]: newSelection }));
-                  }}
-                >
-                  {option}
-                </button>
-              ))}
-            </div>
-            <div className="button-group">
-              <div className="button-left">
-                {currentQuestion > 0 && (
-                  <button 
-                    className="typeform-btn back-btn"
-                    onClick={handleBack}
+          <div className="space-y-6">
+            <div className="space-y-3">
+              {currentQ.options?.map((option) => {
+                const isChecked = Array.isArray(answers[currentQ.id]) && (answers[currentQ.id] as string[]).includes(option);
+                return (
+                  <Button
+                    key={option}
+                    variant={isChecked ? 'default' : 'outline'}
+                    size="lg"
+                    className={cn(
+                      "w-full h-auto p-4 text-left justify-start text-wrap whitespace-normal text-base font-medium",
+                      isChecked && "bg-emerald-600 hover:bg-emerald-700"
+                    )}
+                    onClick={() => {
+                      const currentSelection = (answers[currentQ.id] as string[]) || [];
+                      const newSelection = isChecked
+                        ? currentSelection.filter(item => item !== option)
+                        : [...currentSelection, option];
+                      setAnswers(prev => ({ ...prev, [currentQ.id]: newSelection }));
+                    }}
                   >
-                    Back
-                  </button>
-                )}
-              </div>
-              <div className="button-right">
-                <button
-                  className="typeform-btn"
-                  onClick={() => handleAnswer(currentQ.id, answers[currentQ.id] || [])}
+                    <div className="flex items-center space-x-3">
+                      {isChecked ? (
+                        <CheckCircle className="h-5 w-5 flex-shrink-0" />
+                      ) : (
+                        <Circle className="h-5 w-5 flex-shrink-0" />
+                      )}
+                      <span>{option}</span>
+                    </div>
+                  </Button>
+                );
+              })}
+            </div>
+            <div className="flex justify-between items-center">
+              {currentQuestion > 0 ? (
+                <Button 
+                  variant="outline"
+                  onClick={handleBack}
+                  className="px-6"
                 >
-                  Next
-                </button>
-              </div>
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Back
+                </Button>
+              ) : (
+                <div></div>
+              )}
+              <Button
+                onClick={() => handleAnswer(currentQ.id, answers[currentQ.id] || [])}
+                disabled={currentQ.required && (!answers[currentQ.id] || (Array.isArray(answers[currentQ.id]) && (answers[currentQ.id] as string[]).length === 0))}
+                className="px-6 bg-emerald-600 hover:bg-emerald-700"
+              >
+                Next
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
             </div>
           </div>
         )}
-      </div>
+        </CardContent>
+      </Card>
     );
   };
 
   return (
-    <div className="nutrition-form-container">
-      <div className="form-content-wrapper">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 py-8 px-4">
+      <div className="max-w-4xl mx-auto space-y-8">
         {/* Progress bar at top */}
         {currentQuestion > 1 && !isLoading && !emailSent && (
-          <div className="progress-bar">
+          <div className="w-full bg-white rounded-full h-2 shadow-sm">
             <div
-              className="progress"
+              className="bg-emerald-600 h-2 rounded-full transition-all duration-300 ease-out"
               style={{
                 width: `${((currentQuestion - 1) / (questions.length - 1)) * 100}%`,
               }}
-            ></div>
+            />
           </div>
         )}
         
         {/* Main question card - centered */}
-        <div className="question-card">
+        <div className="flex justify-center items-center">
           {renderQuestion()}
         </div>
         
@@ -787,4 +929,4 @@ const FitnessUSA: React.FC = () => {
   );
 };
 
-export default FitnessUSA;
+
