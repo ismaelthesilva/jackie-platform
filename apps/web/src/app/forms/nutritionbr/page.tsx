@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import emailjs from '@emailjs/browser';
+import { submitFormToDatabase } from '@/services/formSubmissionService';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -465,62 +466,40 @@ export default function NutritionBRPage() {
 
   const generatePDFAndSendEmail = useCallback(async (): Promise<void> => {
     setIsLoading(true);
-    console.log('Starting generatePDFAndSendEmail...');
+    console.log('🔄 Starting form submission to database...');
+    
     try {
-      console.log('Building email body...');
-      let emailBody = '<h1>Nutrition Assessment</h1>';
-      emailBody += '<h2>Client Details</h2>';
-      emailBody += `<p><strong>Name:</strong> ${answers.nome_completo || 'N/A'}</p>`;
-      emailBody += `<p><strong>Age:</strong> ${answers.idade || 'N/A'} years</p>`;
-      emailBody += `<p><strong>Height:</strong> ${answers.altura || 'N/A'} cm</p>`;
-      emailBody += `<p><strong>Weight:</strong> ${answers.peso || 'N/A'} kg</p>`;
-      emailBody += `<p><strong>Main Goal:</strong> ${answers.objetivo_principal || 'N/A'}</p>`;
-      emailBody += '<h2>Questionnaire Responses</h2>';
-      questions.forEach((question) => {
-        if (question.type === 'welcome' || question.type === 'thank_you' || 
-            ['nome_completo', 'idade', 'altura', 'peso', 'objetivo_principal', 'email'].includes(question.id)) {
-          return;
-        }
-        if (!shouldDisplayQuestion(question)) {
-          return;
-        }
-        if (!answers[question.id] && answers[question.id] !== 0) {
-          return;
-        }
-        let answerText = answers[question.id];
-        if (Array.isArray(answerText)) {
-          answerText = answerText.join(', ');
-        }
-        emailBody += `<p><strong>${question.title}</strong><br>${answerText}</p>`;
-      });
-
-      const templateParams: EmailParams = {
-        to_email: 'jacksouto7@gmail.com',
-        client_name: answers.nome_completo as string || 'Client',
-        client_email: clientEmail || 'N/A',
-        email_body: emailBody
+      // Prepare form submission data
+      const formData = {
+        clientName: answers.nome_completo as string || 'Client',
+        clientEmail: clientEmail || '',
+        formType: 'nutrition_br' as const,
+        responses: answers
       };
-      console.log('Email params prepared:', templateParams);
 
-      console.log('Sending email via EmailJS...');
-      const response = await emailjs.send(
-        'service_28v1fvr',   // Service ID
-        'template_wj6zu2c',  // Template ID
-        templateParams,
-        'ezbPPmM_lDMistyGT' // Public Key
-      );
-      console.log('EmailJS response:', response);
-
-      setEmailSent(true);
-      console.log('Email sent successfully, state updated');
+      console.log('📋 Submitting form data:', formData.clientName, formData.clientEmail);
+      
+      // Submit to database with new service
+      const result = await submitFormToDatabase(formData);
+      
+      if (result.success) {
+        setEmailSent(true);
+        console.log('✅ Form submitted successfully:', result.message);
+      } else {
+        console.warn('⚠️ Form submission had issues:', result.message);
+        setEmailSent(true); // Still show success to user since fallback email was sent
+        if (result.error) {
+          console.error('Error details:', result.error);
+        }
+      }
     } catch (error) {
-      console.error('Error in generatePDFAndSendEmail:', error);
-      alert('Failed to send email. Please check the console for details and try again.');
+      console.error('❌ Error in form submission:', error);
+      alert('Houve um problema ao enviar o formulário. Por favor, tente novamente ou entre em contato conosco.');
     } finally {
       setIsLoading(false);
       console.log('Process completed, loading state reset');
     }
-  }, [answers, clientEmail, questions, shouldDisplayQuestion]);
+  }, [answers, clientEmail]);
 
   useEffect(() => {
     if (formCompleted) {
