@@ -36,6 +36,11 @@ const nextConfig = {
         source: '/professional-consultation',
         destination: '/forms/professional-consultation',
       },
+      // Client diet view
+      {
+        source: '/diet-view',
+        destination: '/client/diet-view',
+      },
       {
         source: '/nzcoachonline',
         destination: '/pten/nzcoachonline',

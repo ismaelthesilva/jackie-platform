@@ -87,15 +87,15 @@ const Home: React.FC = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12 animate-slide-in-up" style={{animationDelay: '0.4s'}}>
               {selectedRegion === 'brazil' ? (
                 <>
-                  <Button asChild size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-2xl transform hover:scale-105 transition-all duration-300">
+                  <Button asChild size="lg" className="bg-emerald-600 hover:bg-emerald-700 dark:bg-black dark:hover:bg-gray-900 text-white shadow-2xl transform hover:scale-105 transition-all duration-300">
                     <Link href="/contact" className="flex items-center gap-2 px-8 py-4">
                       <Dumbbell className="h-5 w-5" />
                       {t('home.hero.brazil.buttons.primary')}
                       <ArrowRight className="h-4 w-4" />
                     </Link>
                   </Button>
-                  <Button asChild variant="outline" size="lg" className="border-white/40 text-white hover:bg-white/10 backdrop-blur-sm shadow-2xl px-8 py-4">
-                    <Link href="/nzcoachonline" className="flex items-center gap-2">
+                  <Button asChild size="lg" className="bg-emerald-600 hover:bg-emerald-700 dark:bg-black dark:hover:bg-gray-900 text-white shadow-2xl transform hover:scale-105 transition-all duration-300">
+                    <Link href="/nzcoachonline" className="flex items-center gap-2 px-8 py-4">
                       <Heart className="h-5 w-5" />
                       {t('home.hero.brazil.buttons.secondary')}
                     </Link>
@@ -103,15 +103,15 @@ const Home: React.FC = () => {
                 </>
               ) : (
                 <>
-                  <Button asChild size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-2xl transform hover:scale-105 transition-all duration-300">
+                  <Button asChild size="lg" className="bg-emerald-600 hover:bg-emerald-700 dark:bg-black dark:hover:bg-gray-900 text-white shadow-2xl transform hover:scale-105 transition-all duration-300">
                     <Link href="/contact" className="flex items-center gap-2 px-8 py-4">
                       <Dumbbell className="h-5 w-5" />
                       {t('home.hero.newzealand.buttons.primary')}
                       <ArrowRight className="h-4 w-4" />
                     </Link>
                   </Button>
-                  <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-green-600">
-                    <Link href="/nzcoachonline" className="flex items-center gap-2">
+                  <Button asChild size="lg" className="bg-emerald-600 hover:bg-emerald-700 dark:bg-black dark:hover:bg-gray-900 text-white shadow-2xl transform hover:scale-105 transition-all duration-300">
+                    <Link href="/nzcoachonline" className="flex items-center gap-2 px-8 py-4">
                       <Heart className="h-5 w-5" />
                       {t(`home.hero.newzealand.buttons.secondary`)}
                     </Link>
@@ -624,13 +624,13 @@ const Home: React.FC = () => {
             <div className="flex flex-col gap-4 min-[400px]:flex-row justify-center">
               {/* Update the final CTA section buttons to link to contact*/}
               <div className="flex flex-col gap-4 min-[400px]:flex-row justify-center">
-                <Button asChild size="lg" variant="secondary" className="bg-white text-green-600 hover:bg-gray-100">
+                <Button asChild size="lg" className="bg-white hover:bg-gray-100 text-green-600 dark:bg-black dark:hover:bg-gray-900 dark:text-white">
                   <Link href="/contact" className="flex items-center gap-2">
                     {t(`home.cta.${selectedRegion}.buttons.primary`)}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-green-600">
+                <Button asChild size="lg" className="bg-white hover:bg-gray-100 text-green-600 dark:bg-black dark:hover:bg-gray-900 dark:text-white">
                   <Link href="/contact" className="flex items-center gap-2">
                     {t(`home.cta.${selectedRegion}.buttons.secondary`)}
                   </Link>
