@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import emailjs from '@emailjs/browser';
+import { submitFormToDatabase } from '@/services/formSubmissionService';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -382,71 +382,57 @@ export default function FitnessUSAPage() {
     }
   }, [currentQuestion, getNextQuestion, questions]);
 
-  const generatePDFAndSendEmail = useCallback(async (): Promise<void> => {
+  const submitFormData = useCallback(async (): Promise<void> => {
     setIsLoading(true);
-    console.log('Starting generatePDFAndSendEmail...');
+    console.log('Starting AI-powered form submission...');
+
     try {
-      console.log('Building email body...');
-      let emailBody = '<h1>Fitness Assessment USA</h1>';
-      emailBody += '<h2>Client Details</h2>';
-      emailBody += `<p><strong>Name:</strong> ${answers.nome_completo || 'N/A'}</p>`;
-      emailBody += `<p><strong>Birth Date:</strong> ${answers.data_nascimento || 'N/A'}</p>`;
-      emailBody += `<p><strong>Height:</strong> ${answers.altura || 'N/A'} cm</p>`;
-      emailBody += `<p><strong>Weight:</strong> ${answers.peso || 'N/A'} kg</p>`;
-      emailBody += `<p><strong>Main Goal:</strong> ${answers.objetivo_principal || 'N/A'}</p>`;
-      emailBody += '<h2>Questionnaire Responses</h2>';
-      
-      questions.forEach((question) => {
-        if (question.type === 'welcome' || question.type === 'thank_you' || 
-            ['nome_completo', 'data_nascimento', 'altura', 'peso', 'objetivo_principal', 'email'].includes(question.id)) {
-          return;
-        }
-        if (!shouldDisplayQuestion(question)) {
-          return;
-        }
-        if (!answers[question.id] && answers[question.id] !== 0) {
-          return;
-        }
-        let answerText = answers[question.id];
-        if (Array.isArray(answerText)) {
-          answerText = answerText.join(', ');
-        }
-        emailBody += `<p><strong>${question.title}</strong><br>${answerText}</p>`;
-      });
-
-      const templateParams: EmailTemplateParams = {
-        to_email: 'jacksouto7@gmail.com',
-        client_name: String(answers.nome_completo || 'Client'),
-        client_email: clientEmail || 'N/A',
-        email_body: emailBody
+      // Prepare form data for AI workflow
+      const formData = {
+        clientName: String(answers.nome_completo || ''),
+        clientEmail: clientEmail || '',
+        formType: 'fitness_usa' as const,
+        responses: answers
       };
-      console.log('Email params prepared:', templateParams);
 
-      console.log('Sending email via EmailJS...');
-      const response = await emailjs.send(
-        'service_28v1fvr',   // Service ID
-        'template_48ud7sn',  // Template ID
-        templateParams,
-        'ezbPPmM_lDMistyGT' // Public Key
-      );
-      console.log('EmailJS response:', response);
+      console.log('Submitting form to AI workflow...');
+      const result = await submitFormToDatabase(formData);
 
-      setEmailSent(true);
-      console.log('Email sent successfully, state updated');
+      if (result.success) {
+        setEmailSent(true);
+        
+        // Show success message
+        alert(`✅ Success! Your assessment has been submitted successfully!
+
+Dr. Jackie will personally analyze your information and create your personalized diet plan for you.
+
+🔑 NEXT STEP: Create your client account at jackiesouto.com/login to access unlimited diet plans!
+
+Use your email (${formData.clientEmail}) to create your account and get unlimited access to all your diet plans.
+
+You'll receive an email notification when your diet is ready for access.`);
+        
+        console.log('Form submitted successfully:', result);
+      } else {
+        throw new Error(result.error || 'Submission failed');
+      }
     } catch (error) {
-      console.error('Error in generatePDFAndSendEmail:', error);
-      alert('Failed to send email. Please check the console for details and try again.');
+      console.error('Error in form submission:', error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      alert(`Error submitting assessment: ${errorMessage}. 
+      
+Please try again or contact us if the problem persists.`);
     } finally {
       setIsLoading(false);
       console.log('Process completed, loading state reset');
     }
-  }, [answers, clientEmail, questions, shouldDisplayQuestion]);
+  }, [answers, clientEmail]);
 
   useEffect(() => {
     if (formCompleted) {
-      generatePDFAndSendEmail();
+      submitFormData();
     }
-  }, [formCompleted, generatePDFAndSendEmail]);
+  }, [formCompleted, submitFormData]);
 
   const renderProgressTimeline = () => {
     if (currentQuestion === 1 || isLoading || emailSent) return null;

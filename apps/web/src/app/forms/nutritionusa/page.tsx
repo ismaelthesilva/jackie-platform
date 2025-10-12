@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import emailjs from '@emailjs/browser';
+import { submitFormToDatabase } from '@/services/formSubmissionService';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -453,126 +453,46 @@ export default function NutritionUSAPage() {
     }
   }, [currentQuestion, getNextQuestion, questions]);
 
-  const generatePDFAndSendEmail = useCallback(async (): Promise<void> => {
+  const submitFormData = useCallback(async (): Promise<void> => {
     setIsLoading(true);
-    console.log('Starting AI diet plan generation and notification...');
-    
-    try {
-      // Step 1: Generate AI Diet Plan
-      console.log('Generating personalized diet plan...');
-      const dietGenerator = new DietPlanGenerator();
-      const dietPlan = dietGenerator.generatePlan(answers);
-      
-      // Step 2: Save draft for Dr. Jackie's review
-      console.log('Saving diet plan for Dr. Jackie review...');
-      const storage = new DietPlanStorage();
-      storage.saveDraftPlan({
-        ...dietPlan,
-        clientProfile: {
-          ...dietPlan.clientProfile,
-          email: clientEmail || ''
-        }
-      });
-      
-      console.log(`Diet plan saved for client: ${dietPlan.clientProfile.name}`);
-      
-      // Step 3: Send notification to Dr. Jackie
-      console.log('Building notification email for Dr. Jackie...');
-      const notificationBody = `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h1 style="color: #10b981;">🍎 New Diet Plan Ready for Review</h1>
-          
-          <div style="background-color: #f0f9ff; border-left: 4px solid #10b981; padding: 16px; margin: 20px 0;">
-            <h2 style="margin: 0; color: #1f2937;">Client Information</h2>
-            <p><strong>Name:</strong> ${dietPlan.clientProfile.name}</p>
-            <p><strong>Email:</strong> ${clientEmail}</p>
-            <p><strong>Goal:</strong> ${dietPlan.clientProfile.mainGoal}</p>
-            <p><strong>Age:</strong> ${dietPlan.clientProfile.age} years</p>
-            <p><strong>Weight:</strong> ${dietPlan.clientProfile.weight} kg</p>
-            <p><strong>Activity Level:</strong> ${dietPlan.clientProfile.activityLevel}</p>
-          </div>
-          
-          ${dietPlan.clientProfile.intolerances ? `
-          <div style="background-color: #fef2f2; border-left: 4px solid #ef4444; padding: 16px; margin: 20px 0;">
-            <h3 style="margin: 0; color: #dc2626;">⚠️ Important: Food Intolerances</h3>
-            <p style="color: #dc2626; font-weight: bold;">${dietPlan.clientProfile.intolerances}</p>
-          </div>
-          ` : ''}
-          
-          ${dietPlan.clientProfile.healthConditions ? `
-          <div style="background-color: #fffbeb; border-left: 4px solid #f59e0b; padding: 16px; margin: 20px 0;">
-            <h3 style="margin: 0; color: #d97706;">🏥 Health Conditions</h3>
-            <p style="color: #d97706;">${dietPlan.clientProfile.healthConditions}</p>
-          </div>
-          ` : ''}
-          
-          <div style="background-color: #f9fafb; border-radius: 8px; padding: 20px; margin: 20px 0;">
-            <h3 style="color: #374151;">📊 Generated Plan Summary</h3>
-            <ul style="color: #6b7280;">
-              <li><strong>Daily Calories:</strong> ${dietPlan.plan[0]?.totalCalories || 'N/A'} kcal</li>
-              <li><strong>Protein:</strong> ${dietPlan.plan[0]?.macros.protein || 'N/A'}g daily</li>
-              <li><strong>Carbs:</strong> ${dietPlan.plan[0]?.macros.carbs || 'N/A'}g daily</li>
-              <li><strong>Fats:</strong> ${dietPlan.plan[0]?.macros.fats || 'N/A'}g daily</li>
-              <li><strong>Plan Duration:</strong> 30 days</li>
-              <li><strong>Guidelines:</strong> ${dietPlan.guidelines.length} personalized tips</li>
-            </ul>
-          </div>
-          
-          <div style="background-color: #ecfdf5; border-radius: 8px; padding: 20px; margin: 20px 0;">
-            <h3 style="color: #065f46;">🍽️ Sample Meals (First 3 Days)</h3>
-            ${dietPlan.plan.slice(0, 3).map(day => `
-              <div style="margin-bottom: 16px; padding: 12px; background-color: white; border-radius: 6px; border: 1px solid #d1fae5;">
-                <h4 style="color: #047857; margin: 0 0 8px 0;">Day ${day.day}</h4>
-                <ul style="margin: 0; padding-left: 20px; color: #374151;">
-                  <li><strong>Breakfast:</strong> ${day.meals.breakfast.name}</li>
-                  <li><strong>Lunch:</strong> ${day.meals.lunch.name}</li>
-                  <li><strong>Dinner:</strong> ${day.meals.dinner.name}</li>
-                  ${day.meals.snack1 ? `<li><strong>Snack:</strong> ${day.meals.snack1.name}</li>` : ''}
-                </ul>
-              </div>
-            `).join('')}
-          </div>
-          
-          <div style="background-color: #dbeafe; border-radius: 8px; padding: 20px; margin: 30px 0; text-align: center;">
-            <h3 style="color: #1e40af; margin: 0 0 10px 0;">👩‍⚕️ Action Required</h3>
-            <p style="color: #1e40af; margin: 0 0 15px 0;">Please review and approve this diet plan</p>
-            <a href="${typeof window !== 'undefined' ? window.location.origin : 'https://jackiesouto.com'}/admin/diet-plans" 
-               style="background-color: #3b82f6; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
-              Review Diet Plan →
-            </a>
-          </div>
-          
-          <hr style="margin: 30px 0; border: none; border-top: 1px solid #e5e7eb;">
-          <p style="color: #9ca3af; font-size: 14px; text-align: center;">
-            Generated by Jackie Platform AI Diet System<br>
-            Plan ID: ${dietPlan.id}
-          </p>
-        </div>
-      `;
+    console.log('Starting AI-powered form submission...');
 
-      // Step 4: Send notification to Dr. Jackie
-      const templateParams: EmailParams = {
-        to_email: 'jacksouto7@gmail.com',
-        client_name: dietPlan.clientProfile.name,
-        client_email: clientEmail || 'N/A',
-        email_body: notificationBody
+    try {
+      // Prepare form data for AI workflow
+      const formData = {
+        clientName: String(answers.nome_completo || ''),
+        clientEmail: clientEmail || '',
+        formType: 'nutrition_usa' as const,
+        responses: answers
       };
 
-      console.log('Sending notification email to Dr. Jackie...');
-      const response = await emailjs.send(
-        'service_28v1fvr',   // Service ID
-        'template_wj6zu2c',  // Template ID
-        templateParams,
-        'ezbPPmM_lDMistyGT' // Public Key
-      );
-      console.log('EmailJS response:', response);
+      console.log('Submitting form to AI workflow...');
+      const result = await submitFormToDatabase(formData);
 
-      setEmailSent(true);
-      console.log('✅ AI Diet plan generated and Dr. Jackie notified successfully!');
-      
+      if (result.success) {
+        setEmailSent(true);
+        
+        // Show success message
+        alert(`✅ Success! Your assessment has been submitted successfully!
+
+Dr. Jackie will personally analyze your information and create your personalized diet plan for you.
+
+🔑 NEXT STEP: Create your client account at jackiesouto.com/login to access unlimited diet plans!
+
+Use your email (${formData.clientEmail}) to create your account and get unlimited access to all your diet plans.
+
+You'll receive an email notification when your diet is ready for access.`);
+        
+        console.log('Form submitted successfully:', result);
+      } else {
+        throw new Error(result.error || 'Submission failed');
+      }
     } catch (error) {
-      console.error('❌ Error in AI diet generation:', error);
-      alert('Failed to generate diet plan. Please check the console for details and try again.');
+      console.error('Error in form submission:', error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      alert(`Error submitting assessment: ${errorMessage}. 
+      
+Please try again or contact us if the problem persists.`);
     } finally {
       setIsLoading(false);
       console.log('Process completed, loading state reset');
@@ -581,9 +501,9 @@ export default function NutritionUSAPage() {
 
   useEffect(() => {
     if (formCompleted) {
-      generatePDFAndSendEmail();
+      submitFormData();
     }
-  }, [formCompleted, generatePDFAndSendEmail]);
+  }, [formCompleted, submitFormData]);
 
   const renderQuestion = () => {
     const currentQ = questions[currentQuestion];

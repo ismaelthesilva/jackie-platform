@@ -484,6 +484,18 @@ export default function NutritionBRPage() {
       
       if (result.success) {
         setEmailSent(true);
+        
+        // Show success message
+        alert(`✅ Sucesso! Sua avaliação foi enviada com sucesso!
+
+A Dra. Jackie irá pessoalmente analisar suas informações e criar seu plano alimentar personalizado para você.
+
+🔑 PRÓXIMO PASSO: Crie sua conta de cliente em jackiesouto.com/login para acessar planos alimentares ilimitados!
+
+Use seu email (${formData.clientEmail}) para criar sua conta e ter acesso ilimitado a todos os seus planos alimentares.
+
+Você receberá uma notificação por email quando sua dieta estiver pronta para acesso.`);
+        
         console.log('✅ Form submitted successfully:', result.message);
       } else {
         console.warn('⚠️ Form submission had issues:', result.message);
