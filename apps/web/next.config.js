@@ -36,6 +36,10 @@ const nextConfig = {
         source: '/professional-consultation',
         destination: '/forms/professional-consultation',
       },
+       {
+        source: '/test-ai',
+        destination: '/forms/test-ai',
+      },
       // Client diet view
       {
         source: '/diet-view',

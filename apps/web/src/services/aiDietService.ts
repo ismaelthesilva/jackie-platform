@@ -69,6 +69,11 @@ export const generateAIDiet = async (
   try {
     console.log('🤖 Starting AI diet generation for form:', formResponseId);
     
+    // Handle test form with minimal AI usage
+    if (formType === 'test_ai') {
+      return await generateTestAIResponse(formResponseId, formData, startTime);
+    }
+    
     // Extract client information
     const clientData = extractClientData(formData, formType);
     
@@ -121,8 +126,93 @@ export const generateAIDiet = async (
     
   } catch (error) {
     console.error('❌ AI diet generation failed:', error);
-    throw new Error(`AI diet generation failed: ${error.message}`);
+    throw new Error(`AI diet generation failed: ${(error as Error).message}`);
   }
+};
+
+const generateTestAIResponse = async (
+  formResponseId: string,
+  formData: FormResponse,
+  startTime: number
+): Promise<{ diet: AIGeneratedDiet; usage: any }> => {
+  console.log('🧪 Generating test AI response with minimal tokens...');
+  
+  const mathAnswer = formData.math_question as number;
+  const userName = formData.name as string;
+  
+  // Simple AI call just to test the workflow
+  const completion = await openai.chat.completions.create({
+    model: "gpt-4-turbo-preview",
+    messages: [
+      {
+        role: "system", 
+        content: "You are Dr. Jackie. Respond with a simple JSON analysis of a math test."
+      },
+      {
+        role: "user",
+        content: `Analyze this test: ${userName} answered that 1+1 = ${mathAnswer}. Create a brief analysis with a simple diet recommendation. Keep it very short to minimize tokens.`
+      }
+    ],
+    temperature: 0.3,
+    max_tokens: 300, // Very low to minimize cost
+    response_format: { type: "json_object" }
+  });
+
+  const generationTime = Date.now() - startTime;
+  const aiResponse = JSON.parse(completion.choices[0].message.content || '{}');
+  
+  // Create a simple structured diet for testing
+  const testDiet: AIGeneratedDiet = {
+    overview: {
+      duration: "Test Analysis",
+      totalCalories: mathAnswer === 2 ? 2000 : 1500,
+      macros: { protein: 100, carbs: 200, fats: 60 },
+      goals: [mathAnswer === 2 ? "Math Genius Diet" : "Learning Support Diet"],
+      clientSummary: aiResponse.analysis || `${userName} answered ${mathAnswer} for 1+1. ${mathAnswer === 2 ? 'Perfect!' : 'Needs support.'}`
+    },
+    weeks: [
+      {
+        weekNumber: 1,
+        theme: "Test Week",
+        days: [
+          {
+            day: 1,
+            meals: [
+              {
+                type: 'breakfast' as const,
+                name: "Smart Start Breakfast",
+                ingredients: [
+                  { item: "Eggs", quantity: "2 large", calories: 140 },
+                  { item: "Toast", quantity: "1 slice", calories: 80 }
+                ],
+                instructions: "Cook eggs, serve with toast",
+                calories: 220,
+                macros: { protein: 14, carbs: 16, fats: 10 },
+                timing: "8:00 AM"
+              }
+            ],
+            totalCalories: 220,
+            waterIntake: "2L",
+            exercise: "Light walk"
+          }
+        ]
+      }
+    ],
+    recommendations: {
+      supplements: ["Vitamin D"],
+      tips: [mathAnswer === 2 ? "Keep up the good work!" : "Practice makes perfect!"],
+      warnings: ["This is a test analysis"]
+    }
+  };
+
+  return {
+    diet: testDiet,
+    usage: {
+      model_used: completion.model,
+      total_tokens: completion.usage?.total_tokens || 0,
+      generation_time_ms: generationTime
+    }
+  };
 };
 
 const extractClientData = (formData: FormResponse, formType: string) => {
@@ -179,7 +269,7 @@ const calculateNutritionNeeds = (clientData: any) => {
     muito_ativo: 1.9
   };
 
-  const multiplier = activityMultipliers[clientData.activityLevel.toLowerCase()] || 1.55;
+  const multiplier = activityMultipliers[clientData.activityLevel.toLowerCase() as keyof typeof activityMultipliers] || 1.55;
   let totalCalories = Math.round(bmr * multiplier);
 
   // Adjust for goals
@@ -415,7 +505,7 @@ export const storeAIDietInDatabase = async (
         total_cost: 0,
         generation_time_ms: usage?.generation_time_ms || 0,
         success: false,
-        error_message: error.message
+        error_message: (error as Error).message
       });
     
     throw error;
