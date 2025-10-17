@@ -94,7 +94,7 @@ const Home: React.FC = () => {
                       <ArrowRight className="h-4 w-4" />
                     </Link>
                   </Button>
-                  <Button asChild size="lg" className="bg-emerald-600 hover:bg-emerald-700 dark:bg-black dark:hover:bg-gray-900 text-white shadow-2xl transform hover:scale-105 transition-all duration-300">
+                  <Button asChild size="lg" className="bg-transparent hover:bg-white/10 text-white border-2 border-white shadow-2xl transform hover:scale-105 transition-all duration-300">
                     <Link href="/nzcoachonline" className="flex items-center gap-2 px-8 py-4">
                       <Heart className="h-5 w-5" />
                       {t('home.hero.brazil.buttons.secondary')}
@@ -110,7 +110,7 @@ const Home: React.FC = () => {
                       <ArrowRight className="h-4 w-4" />
                     </Link>
                   </Button>
-                  <Button asChild size="lg" className="bg-emerald-600 hover:bg-emerald-700 dark:bg-black dark:hover:bg-gray-900 text-white shadow-2xl transform hover:scale-105 transition-all duration-300">
+                  <Button asChild size="lg" className="bg-transparent hover:bg-white/10 text-white border-2 border-white shadow-2xl transform hover:scale-105 transition-all duration-300">
                     <Link href="/nzcoachonline" className="flex items-center gap-2 px-8 py-4">
                       <Heart className="h-5 w-5" />
                       {t(`home.hero.newzealand.buttons.secondary`)}

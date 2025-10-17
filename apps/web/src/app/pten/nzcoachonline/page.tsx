@@ -230,7 +230,7 @@ export default function NZCoachOnlinePage() {
                 <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
                   <Trophy className="h-6 w-6 text-yellow-600" />
                 </div>
-                <span className="text-gray-800">Coach to the BJJ National Champion of New Zealand</span>
+                <span className="text-gray-800">Coach to the BJJ World Champion</span>
               </div>
               <div className="flex items-center space-x-4 p-4 bg-purple-50 rounded-lg">
                 <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
@@ -267,15 +267,15 @@ export default function NZCoachOnlinePage() {
             <CardContent className="p-0">
               <img 
                 src="/jackie-images/isma-champ.jpg" 
-                alt="BJJ National Champion" 
+                alt="BJJ World Champion" 
                 className="w-full h-64 object-cover" 
               />
               <div className="p-4">
                 <Badge className="bg-yellow-100 text-yellow-800 mb-2">
                   <Trophy className="h-4 w-4 mr-1" />
-                  National Champion
+                  World Champion
                 </Badge>
-                <p className="font-semibold text-gray-900">New Zealand BJJ National Champion</p>
+                <p className="font-semibold text-gray-900">BJJ World Champion (Double Gold)</p>
                 <p className="text-sm text-gray-600 mt-1">Trained by Jackie Souto</p>
               </div>
             </CardContent>
