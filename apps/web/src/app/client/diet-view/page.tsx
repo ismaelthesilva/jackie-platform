@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -49,7 +49,7 @@ interface DayPlan {
   evening_snack: MealSelection[];
 }
 
-export default function ClientDietViewerPage() {
+function ClientDietViewContent() {
   const searchParams = useSearchParams();
   const [publishedDiet, setPublishedDiet] = useState<PublishedDiet | null>(null);
   const [loading, setLoading] = useState(true);
@@ -359,5 +359,14 @@ export default function ClientDietViewerPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Wrap in Suspense to handle useSearchParams
+export default function ClientDietViewPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <ClientDietViewContent />
+    </Suspense>
   );
 }

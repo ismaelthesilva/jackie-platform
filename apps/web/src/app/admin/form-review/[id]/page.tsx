@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import { calculateNutritionNeeds } from '@/services/formSubmissionService';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -54,6 +53,56 @@ interface NutritionNeeds {
   recommendedCarbs: number;
   recommendedFats: number;
 }
+
+// Helper function to calculate nutrition needs based on form responses
+const calculateNutritionNeeds = (responses: any): NutritionNeeds => {
+  const weight = parseFloat(responses.weight) || 70;
+  const height = parseFloat(responses.height) || 170;
+  const age = parseInt(responses.age) || 30;
+  const gender = responses.gender || 'male';
+  const activityLevel = responses.activity_level || 'moderate';
+  const goal = responses.goal || 'maintain';
+
+  // Calculate BMR using Mifflin-St Jeor Equation
+  let bmr;
+  if (gender === 'male') {
+    bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+  } else {
+    bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+  }
+
+  // Activity multipliers
+  const activityMultipliers: { [key: string]: number } = {
+    sedentary: 1.2,
+    light: 1.375,
+    moderate: 1.55,
+    active: 1.725,
+    very_active: 1.9
+  };
+
+  const tdee = bmr * (activityMultipliers[activityLevel] || 1.55);
+
+  // Adjust calories based on goal
+  let targetCalories = tdee;
+  if (goal === 'lose_weight') {
+    targetCalories = tdee - 500;
+  } else if (goal === 'gain_muscle') {
+    targetCalories = tdee + 300;
+  }
+
+  // Calculate macros (protein: 30%, carbs: 40%, fats: 30%)
+  const protein = (targetCalories * 0.30) / 4;
+  const carbs = (targetCalories * 0.40) / 4;
+  const fats = (targetCalories * 0.30) / 9;
+
+  return {
+    bmr: Math.round(bmr),
+    totalCalories: Math.round(targetCalories),
+    recommendedProtein: Math.round(protein),
+    recommendedCarbs: Math.round(carbs),
+    recommendedFats: Math.round(fats)
+  };
+};
 
 export default function FormReviewPage() {
   const params = useParams();

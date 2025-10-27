@@ -1,13 +1,14 @@
 interface FormSubmissionData {
   clientName: string;
   clientEmail: string;
-  formType: 'test_ai' | 'diet_form' | 'pre_signup';
-  responses: Record<string, string | number>;
+  formType: 'test_ai' | 'diet_form' | 'pre_signup' | 'fitness_br' | 'fitness_usa' | 'nutrition_br' | 'nutrition_usa';
+  responses: Record<string, string | number | string[]>;
 }
 
 interface SubmissionResult {
   success: boolean;
   error?: string;
+  message?: string;
   dietPlanId?: string;
 }
 
