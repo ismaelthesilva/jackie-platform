@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
@@ -97,7 +97,7 @@ const Footer: React.FC = () => {
               {quickLinks.map((link, index) => (
                 <li key={index}>
                   <Link 
-                    to={link.href}
+                    href={link.href}
                     className="text-muted-foreground hover:text-foreground transition-colors hover:translate-x-1 transform duration-200 inline-block"
                   >
                     {link.name}
@@ -165,19 +165,19 @@ const Footer: React.FC = () => {
           
           <div className="flex flex-wrap gap-6 text-sm">
             <Link 
-              to="/privacy-policy" 
+              href="/privacy-policy" 
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
               Privacy Policy
             </Link>
             <Link 
-              to="/terms-of-service" 
+              href="/terms-of-service" 
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
               Terms of Service
             </Link>
             <Link 
-              to="/cookie-policy" 
+              href="/cookie-policy" 
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
               Cookie Policy
