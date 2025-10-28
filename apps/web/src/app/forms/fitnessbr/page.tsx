@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { submitFormToDatabase } from '@/services/formSubmissionService';
+import emailjs from '@emailjs/browser';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -386,38 +386,70 @@ export default function FitnessBRPage() {
 
   const submitFormData = useCallback(async (): Promise<void> => {
     setIsLoading(true);
-    console.log('Starting AI-powered form submission...');
+    console.log('Starting form submission via EmailJS...');
 
     try {
-      // Prepare form data for AI workflow
-      const formData = {
-        clientName: String(answers.nome_completo || ''),
-        clientEmail: clientEmail || '',
-        formType: 'fitness_br' as const,
-        responses: answers
+      // Build email body HTML
+      let emailBody = '<h1>Fitness Assessment BR</h1>';
+      emailBody += '<h2>Detalhes do Cliente</h2>';
+      emailBody += `<p><strong>Nome:</strong> ${answers.nome_completo || 'N/A'}</p>`;
+      emailBody += `<p><strong>Data de Nascimento:</strong> ${answers.data_nascimento || 'N/A'}</p>`;
+      emailBody += `<p><strong>Altura:</strong> ${answers.altura || 'N/A'} cm</p>`;
+      emailBody += `<p><strong>Peso:</strong> ${answers.peso || 'N/A'} kg</p>`;
+      emailBody += `<p><strong>Objetivo Principal:</strong> ${answers.objetivo_principal || 'N/A'}</p>`;
+      emailBody += '<h2>Respostas do Questionário</h2>';
+      
+      questions.forEach((question) => {
+        if (question.type === 'welcome' || question.type === 'thank_you' || 
+            ['nome_completo', 'data_nascimento', 'altura', 'peso', 'objetivo_principal', 'email'].includes(question.id)) {
+          return;
+        }
+        if (!shouldDisplayQuestion(question)) {
+          return;
+        }
+        if (!answers[question.id] && answers[question.id] !== 0) {
+          return;
+        }
+        let answerText = answers[question.id];
+        if (Array.isArray(answerText)) {
+          answerText = answerText.join(', ');
+        }
+        emailBody += `<p><strong>${question.title}</strong><br>${answerText}</p>`;
+      });
+
+      const templateParams = {
+        to_email: 'jacksouto7@gmail.com',
+        client_name: String(answers.nome_completo || 'Cliente'),
+        client_email: clientEmail || 'N/A',
+        email_body: emailBody
       };
+      console.log('Email params prepared:', templateParams);
 
-      console.log('Submitting form to AI workflow...');
-      const result = await submitFormToDatabase(formData);
+      console.log('Sending email via EmailJS...');
+      const response = await emailjs.send(
+        'service_28v1fvr',   // Service ID
+        'template_48ud7sn',  // Template ID - same as FitnessUSA
+        templateParams,
+        'ezbPPmM_lDMistyGT' // Public Key
+      );
+      console.log('EmailJS response:', response);
 
-      if (result.success) {
-        setEmailSent(true);
-        
-        // Show success message
-        alert(`✅ Sucesso! Sua avaliação foi enviada com sucesso!
+      setEmailSent(true);
+      console.log('Email sent successfully, state updated');
+      
+      // Show success message
+      alert(`✅ Sucesso! Sua avaliação foi enviada com sucesso!
 
-A Dra. Jackie irá pessoalmente analisar suas informações e criar seu plano alimentar personalizado para você.
+A Dra. Jackie recebeu suas informações e entrará em contato em breve.
 
-🔑 PRÓXIMO PASSO: Crie sua conta de cliente em jackiesouto.com/login para acessar planos alimentares ilimitados!
+Sua avaliação foi enviada diretamente para a Dra. Jackie, que irá revisar pessoalmente e criar seu plano personalizado.
 
-Use seu email (${formData.clientEmail}) para criar sua conta e ter acesso ilimitado a todos os seus planos alimentares.
+📧 Email de confirmação: Você receberá uma confirmação no email ${clientEmail}
 
-Você receberá uma notificação por email quando sua dieta estiver pronta para acesso.`);
-        
-        console.log('Form submitted successfully:', result);
-      } else {
-        throw new Error(result.error || 'Submission failed');
-      }
+⏰ Prazo: A Dra. Jackie responderá dentro de 24-48 horas.
+
+Obrigado por confiar no trabalho da Dra. Jackie!`);
+
     } catch (error) {
       console.error('Error in form submission:', error);
       const errorMessage = error instanceof Error ? error.message : String(error);

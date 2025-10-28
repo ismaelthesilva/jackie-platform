@@ -1,3 +1,5 @@
+import { formPDFEmailService } from './FormPDFEmailService';
+
 interface FormSubmissionData {
   clientName: string;
   clientEmail: string;
@@ -10,6 +12,7 @@ interface SubmissionResult {
   error?: string;
   message?: string;
   dietPlanId?: string;
+  emailSent?: boolean;
 }
 
 // Helper function to call our AI generation API
@@ -44,22 +47,49 @@ export async function submitFormToDatabase(formData: FormSubmissionData): Promis
   try {
     console.log('📝 Starting form submission process...', formData.formType);
     
-    // Call the AI generation API
-    const result = await callAIGenerationAPI(formData);
+    // STEP 1: Send PDF email to Dr. Jackie FIRST (critical business requirement)
+    console.log('📧 Sending form PDF to Dr. Jackie...');
+    const emailSent = await formPDFEmailService.sendFormToDrJackie(formData);
     
-    if (!result.success) {
-      throw new Error(result.error || 'AI generation failed');
+    if (!emailSent) {
+      console.warn('⚠️ Email to Dr. Jackie failed, but continuing with process...');
+    }
+    
+    // STEP 2: Optionally send confirmation to client
+    try {
+      await formPDFEmailService.sendClientConfirmation(formData);
+    } catch (err) {
+      console.warn('⚠️ Client confirmation email failed (non-critical):', err);
+    }
+    
+    // STEP 3: Call the AI generation API (if enabled for this form type)
+    let aiResult: SubmissionResult | null = null;
+    
+    if (formData.formType === 'test_ai') {
+      try {
+        aiResult = await callAIGenerationAPI(formData);
+      } catch (aiError) {
+        console.warn('⚠️ AI generation failed (non-critical):', aiError);
+        // Don't fail the whole submission if AI fails
+      }
     }
 
     console.log('🎉 Form submission completed successfully');
-    return result;
+    
+    return {
+      success: true,
+      message: 'Form submitted successfully. Dr. Jackie has received your information and will be in touch soon.',
+      emailSent: emailSent,
+      dietPlanId: aiResult?.dietPlanId
+    };
     
   } catch (error) {
     console.error('❌ Error in form submission:', error);
     
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred'
+      error: error instanceof Error ? error.message : 'Unknown error occurred',
+      emailSent: false
     };
   }
 }

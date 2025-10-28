@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import emailjs from '@emailjs/browser';
-import { submitFormToDatabase } from '@/services/formSubmissionService';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -469,41 +468,67 @@ export default function NutritionBRPage() {
     console.log('🔄 Starting form submission to database...');
     
     try {
-      // Prepare form submission data
-      const formData = {
-        clientName: answers.nome_completo as string || 'Client',
-        clientEmail: clientEmail || '',
-        formType: 'nutrition_br' as const,
-        responses: answers
-      };
-
-      console.log('📋 Submitting form data:', formData.clientName, formData.clientEmail);
+      // Build email body HTML
+      let emailBody = '<h1>Nutrition Assessment BR</h1>';
+      emailBody += '<h2>Detalhes do Cliente</h2>';
+      emailBody += `<p><strong>Nome:</strong> ${answers.nome_completo || 'N/A'}</p>`;
+      emailBody += `<p><strong>Idade:</strong> ${answers.idade || 'N/A'} anos</p>`;
+      emailBody += `<p><strong>Altura:</strong> ${answers.altura || 'N/A'} cm</p>`;
+      emailBody += `<p><strong>Peso:</strong> ${answers.peso || 'N/A'} kg</p>`;
+      emailBody += `<p><strong>Objetivo Principal:</strong> ${answers.objetivo || 'N/A'}</p>`;
+      emailBody += '<h2>Respostas do Questionário</h2>';
       
-      // Submit to database with new service
-      const result = await submitFormToDatabase(formData);
-      
-      if (result.success) {
-        setEmailSent(true);
-        
-        // Show success message
-        alert(`✅ Sucesso! Sua avaliação foi enviada com sucesso!
-
-A Dra. Jackie irá pessoalmente analisar suas informações e criar seu plano alimentar personalizado para você.
-
-🔑 PRÓXIMO PASSO: Crie sua conta de cliente em jackiesouto.com/login para acessar planos alimentares ilimitados!
-
-Use seu email (${formData.clientEmail}) para criar sua conta e ter acesso ilimitado a todos os seus planos alimentares.
-
-Você receberá uma notificação por email quando sua dieta estiver pronta para acesso.`);
-        
-        console.log('✅ Form submitted successfully:', result.message);
-      } else {
-        console.warn('⚠️ Form submission had issues:', result.message);
-        setEmailSent(true); // Still show success to user since fallback email was sent
-        if (result.error) {
-          console.error('Error details:', result.error);
+      questions.forEach((question) => {
+        if (question.type === 'welcome' || question.type === 'thank_you' || 
+            ['nome_completo', 'idade', 'altura', 'peso', 'objetivo', 'email'].includes(question.id)) {
+          return;
         }
-      }
+        if (!shouldDisplayQuestion(question)) {
+          return;
+        }
+        if (!answers[question.id] && answers[question.id] !== 0) {
+          return;
+        }
+        let answerText = answers[question.id];
+        if (Array.isArray(answerText)) {
+          answerText = answerText.join(', ');
+        }
+        emailBody += `<p><strong>${question.title}</strong><br>${answerText}</p>`;
+      });
+
+      const templateParams = {
+        to_email: 'jacksouto7@gmail.com',
+        client_name: answers.nome_completo as string || 'Cliente',
+        client_email: clientEmail || 'N/A',
+        email_body: emailBody
+      };
+      console.log('Email params prepared:', templateParams);
+
+      console.log('Sending email via EmailJS...');
+      const response = await emailjs.send(
+        'service_28v1fvr',   // Service ID
+        'template_wj6zu2c',  // Template ID - same as NutritionBR in vite
+        templateParams,
+        'ezbPPmM_lDMistyGT' // Public Key
+      );
+      console.log('EmailJS response:', response);
+
+      setEmailSent(true);
+      console.log('Email sent successfully, state updated');
+      
+      // Show success message
+      alert(`✅ Sucesso! Sua avaliação foi enviada com sucesso!
+
+A Dra. Jackie recebeu suas informações e entrará em contato em breve.
+
+Sua avaliação foi enviada diretamente para a Dra. Jackie, que irá revisar pessoalmente e criar seu plano personalizado.
+
+📧 Email de confirmação: Você receberá uma confirmação no email ${clientEmail}
+
+⏰ Prazo: A Dra. Jackie responderá dentro de 24-48 horas.
+
+Obrigado por confiar no trabalho da Dra. Jackie!`);
+
     } catch (error) {
       console.error('❌ Error in form submission:', error);
       alert('Houve um problema ao enviar o formulário. Por favor, tente novamente ou entre em contato conosco.');
