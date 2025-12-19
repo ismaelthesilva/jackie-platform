@@ -26,6 +26,7 @@ import {
   Leaf,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import CloudflareTurnstile from "@/components/CloudflareTurnstile";
 import DietPlanGenerator from "../../../services/DietPlanGenerator";
 import DietPlanStorage from "../../../services/DietPlanStorage";
 
@@ -92,6 +93,7 @@ export default function NutritionUSAPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [emailSent, setEmailSent] = useState<boolean>(false);
   const [clientEmail, setClientEmail] = useState<string>("");
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
   const formRef = useRef<HTMLDivElement>(null);
 
   const questions = useMemo<Question[]>(
@@ -1185,6 +1187,11 @@ export default function NutritionUSAPage() {
   );
 
   const submitFormData = useCallback(async (): Promise<void> => {
+    if (!turnstileToken) {
+      alert("Please complete the verification before submitting.");
+      return;
+    }
+
     setIsLoading(true);
     console.log("Starting AI-powered form submission...");
 
@@ -1452,6 +1459,23 @@ Please try again or contact us if the problem persists.`);
                 autoFocus
                 className="text-base p-3"
               />
+
+              {/* Show Turnstile only for email field */}
+              {currentQ.type === "email" && answers[currentQ.id] && (
+                <div className="mt-4">
+                  <p className="text-sm text-gray-600 mb-2">
+                    Please verify you're human to continue
+                  </p>
+                  <CloudflareTurnstile
+                    onSuccess={setTurnstileToken}
+                    onError={() => {
+                      setTurnstileToken("");
+                      alert("Verification failed. Please try again.");
+                    }}
+                  />
+                </div>
+              )}
+
               <div className="flex justify-between items-center">
                 {currentQuestion > 0 ? (
                   <Button
@@ -1469,7 +1493,10 @@ Please try again or contact us if the problem persists.`);
                   onClick={() =>
                     handleAnswer(currentQ.id, answers[currentQ.id] || "")
                   }
-                  disabled={currentQ.required && !answers[currentQ.id]}
+                  disabled={
+                    (currentQ.required && !answers[currentQ.id]) ||
+                    (currentQ.type === "email" && !turnstileToken)
+                  }
                   className="px-6 bg-emerald-600 hover:bg-emerald-700"
                 >
                   Next
