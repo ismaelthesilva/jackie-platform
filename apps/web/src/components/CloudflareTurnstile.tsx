@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
 
 interface CloudflareTurnstileProps {
@@ -15,6 +15,7 @@ export default function CloudflareTurnstile({
   className = "",
 }: CloudflareTurnstileProps) {
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  const [error, setError] = useState<string | null>(null);
 
   if (!siteKey) {
     console.error("NEXT_PUBLIC_TURNSTILE_SITE_KEY is not configured");
@@ -25,17 +26,43 @@ export default function CloudflareTurnstile({
     );
   }
 
+  const handleError = (error?: Error | any) => {
+    console.error("Turnstile error:", error);
+    setError("Verification failed. Please refresh the page and try again.");
+    onError?.();
+  };
+
   return (
     <div className={className}>
       <Turnstile
         siteKey={siteKey}
-        onSuccess={onSuccess}
-        onError={onError}
+        onSuccess={(token) => {
+          setError(null);
+          onSuccess(token);
+        }}
+        onError={handleError}
+        onExpire={() => {
+          console.warn("Turnstile token expired");
+          setError("Verification expired. Please try again.");
+        }}
         options={{
           theme: "light",
           size: "normal",
+          appearance: "always",
+          retry: "auto",
+          "retry-interval": 8000,
+          "refresh-expired": "auto",
+        }}
+        scriptOptions={{
+          defer: true,
+          appendTo: "body",
         }}
       />
+      {error && (
+        <div className="text-red-600 text-sm mt-2 p-2 border border-red-300 rounded bg-red-50">
+          {error}
+        </div>
+      )}
     </div>
   );
 }
