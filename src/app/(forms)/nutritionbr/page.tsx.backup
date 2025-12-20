@@ -28,6 +28,7 @@ import {
 import { cn } from "@/lib/utils";
 import DietPlanGenerator from "../../../services/DietPlanGenerator";
 import DietPlanStorage from "../../../services/DietPlanStorage";
+import CloudflareTurnstile from "@/components/CloudflareTurnstile";
 
 // Type definitions
 interface QuestionCondition {
@@ -85,13 +86,14 @@ interface EmailParams {
   [key: string]: string;
 }
 
-export default function NutritionUSAPage() {
+export default function NutritionBRPage() {
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   const [answers, setAnswers] = useState<Answers>({});
   const [formCompleted, setFormCompleted] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [emailSent, setEmailSent] = useState<boolean>(false);
   const [clientEmail, setClientEmail] = useState<string>("");
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
   const formRef = useRef<HTMLDivElement>(null);
 
   const questions = useMemo<Question[]>(
@@ -99,87 +101,88 @@ export default function NutritionUSAPage() {
       {
         id: "welcome",
         type: "welcome",
-        title: "Professional Nutrition Questionnaire",
-        description: "Smart Version with Branching Logic",
-        buttonText: "Start",
+        title: "Questionário Nutricional Profissional",
+        description: "Versão Inteligente com Lógica Ramificada",
+        buttonText: "Começar",
       },
 
-      // 1. Initial Data
+      // 1. Dados Iniciais
       {
         id: "section1_header",
         type: "welcome",
-        title: "1. Basic Information",
-        description: "Let's start with some basic information about you.",
-        buttonText: "Continue",
+        title: "1. Informações Básicas",
+        description:
+          "Vamos começar com algumas informações básicas sobre você.",
+        buttonText: "Continuar",
       },
       {
         id: "nome_completo",
         type: "text",
-        title: "Full name:",
+        title: "Nome completo:",
         required: true,
       },
       {
         id: "email",
         type: "email",
         title:
-          "Please provide your email to receive your personalized nutrition plan",
+          "Por favor, forneça seu e-mail para receber seu plano nutricional personalizado",
         required: true,
       },
-      { id: "idade", type: "number", title: "Age:", required: true },
-      { id: "altura", type: "number", title: "Height (cm):", required: true },
+      { id: "idade", type: "number", title: "Idade:", required: true },
+      { id: "altura", type: "number", title: "Altura (cm):", required: true },
       {
         id: "peso",
         type: "number",
-        title: "Current weight (kg):",
+        title: "Peso atual (kg):",
         required: true,
       },
       {
         id: "acompanhamento_anterior",
         type: "yes_no",
         title:
-          "Have you previously worked with a nutritionist or personal trainer?",
+          "Já realizou acompanhamento com nutricionista ou personal trainer?",
         required: true,
       },
       {
         id: "tempo_acompanhamento",
         type: "text",
-        title: "For how long?",
+        title: "Por quanto tempo?",
         condition: { id: "acompanhamento_anterior", value: "Yes" },
         required: true,
       },
       {
         id: "dieta_anterior",
         type: "yes_no",
-        title: "Have you followed a diet before?",
+        title: "Já fez dieta antes?",
         required: true,
       },
       {
         id: "tempo_seguiu_plano",
         type: "text",
-        title: "How long were you able to follow the plan?",
+        title: "Por quanto tempo conseguiu seguir o plano?",
         condition: { id: "dieta_anterior", value: "Yes" },
         required: true,
       },
 
-      // 2. Goal and History
+      // 2. Objetivo e Histórico
       {
         id: "section2_header",
         type: "welcome",
-        title: "2. Goals and History",
-        description: "Let's understand your goals and background.",
-        buttonText: "Continue",
+        title: "2. Objetivos e Histórico",
+        description: "Vamos entender seus objetivos e histórico.",
+        buttonText: "Continuar",
       },
       {
         id: "objetivo_principal",
         type: "multiple_choice",
-        title: "What is your main goal?",
+        title: "Qual é o seu objetivo principal?",
         options: [
-          "Weight loss",
-          "Muscle gain",
-          "Body recomposition",
-          "Aesthetics (shape/definition)",
-          "Athletic performance",
-          "Dietary reeducation",
+          "Emagrecimento",
+          "Ganho de massa muscular",
+          "Recomposição corporal",
+          "Estética (shape/definição)",
+          "Performance atlética",
+          "Reeducação alimentar",
         ],
         required: true,
       },
@@ -187,97 +190,97 @@ export default function NutritionUSAPage() {
         id: "meta_especifica",
         type: "textarea",
         title:
-          "Do you have a specific weight goal, body fat percentage, or deadline to achieve your goal?",
+          "Tem meta de peso, percentual de gordura ou prazo específico para alcançar seu objetivo?",
         required: false,
       },
       {
         id: "competicoes",
         type: "yes_no",
         title:
-          "Have you participated or plan to participate in competitions (e.g., bodybuilding)?",
+          "Já participou ou pretende participar de competições (ex: fisiculturismo)?",
         required: true,
       },
       {
         id: "categoria_competicao",
         type: "text",
-        title: "Which category?",
+        title: "Qual categoria?",
         condition: { id: "competicoes", value: "Yes" },
         required: true,
       },
       {
         id: "data_competicao",
         type: "text",
-        title: "When was or will be the competition?",
+        title: "Quando foi ou será a competição?",
         condition: { id: "competicoes", value: "Yes" },
         required: true,
       },
 
-      // 3. Health and Digestion
+      // 3. Saúde e Digestão
       {
         id: "section3_header",
         type: "welcome",
-        title: "3. Health and Digestion",
-        description: "Information about your health and digestive system.",
-        buttonText: "Continue",
+        title: "3. Saúde e Digestão",
+        description: "Informações sobre sua saúde e sistema digestivo.",
+        buttonText: "Continuar",
       },
       {
         id: "condicoes_saude",
         type: "textarea",
         title:
-          "Do you have any health conditions? (e.g., PCOS, hypothyroidism, dysbiosis, gastritis, insulin resistance, etc.)",
+          "Possui alguma condição de saúde? (ex: SOP, hipotireoidismo, disbiose, gastrite, resistência à insulina, etc.)",
         required: false,
       },
       {
         id: "medicamentos",
         type: "yes_no",
-        title: "Do you take any medications or supplements?",
+        title: "Faz uso de medicamentos ou suplementos?",
         required: true,
       },
       {
         id: "quais_medicamentos",
         type: "textarea",
-        title: "Which ones? Dosages? Schedules?",
+        title: "Quais? Doses? Horários?",
         condition: { id: "medicamentos", value: "Yes" },
         required: true,
       },
       {
         id: "intolerancias",
         type: "yes_no",
-        title: "Do you have any food intolerances or allergies?",
+        title: "Possui intolerâncias ou alergias alimentares?",
         required: true,
       },
       {
         id: "quais_intolerancias",
         type: "textarea",
-        title: "Which ones?",
+        title: "Quais?",
         condition: { id: "intolerancias", value: "Yes" },
         required: true,
       },
       {
         id: "dificuldade_digestao",
         type: "yes_no",
-        title: "Do you have difficulty digesting any foods?",
+        title: "Tem dificuldade de digerir algum alimento?",
         required: true,
       },
       {
         id: "quais_dificuldade_digestao",
         type: "textarea",
-        title: "Which one(s)?",
+        title: "Qual(is)?",
         condition: { id: "dificuldade_digestao", value: "Yes" },
         required: true,
       },
 
-      // Digestive symptoms
+      // Sintomas digestivos
       {
         id: "inchaço_abdominal",
         type: "yes_no",
-        title: "Do you often experience abdominal bloating?",
+        title: "Costuma apresentar inchaço abdominal?",
         required: true,
       },
       {
         id: "inchaço_detalhes",
         type: "textarea",
-        title: "At what time of day and after which foods?",
+        title: "Em que horário e após quais alimentos?",
         condition: { id: "inchaço_abdominal", value: "Yes" },
         required: true,
       },
@@ -285,13 +288,13 @@ export default function NutritionUSAPage() {
       {
         id: "azia",
         type: "yes_no",
-        title: "Do you often experience heartburn?",
+        title: "Costuma apresentar azia?",
         required: true,
       },
       {
         id: "azia_detalhes",
         type: "textarea",
-        title: "How frequently and in what situations?",
+        title: "Com que frequência e em que situações?",
         condition: { id: "azia", value: "Yes" },
         required: true,
       },
@@ -299,13 +302,13 @@ export default function NutritionUSAPage() {
       {
         id: "gases",
         type: "yes_no",
-        title: "Do you often experience gas/burping?",
+        title: "Costuma apresentar gases/arrotos?",
         required: true,
       },
       {
         id: "gases_detalhes",
         type: "textarea",
-        title: "At what times of the day?",
+        title: "Em que momentos do dia?",
         condition: { id: "gases", value: "Yes" },
         required: true,
       },
@@ -313,13 +316,13 @@ export default function NutritionUSAPage() {
       {
         id: "desconforto_refeicoes",
         type: "yes_no",
-        title: "Do you often experience discomfort after meals?",
+        title: "Costuma apresentar desconforto após refeições?",
         required: true,
       },
       {
         id: "desconforto_detalhes",
         type: "textarea",
-        title: "How frequently and after what types of meals?",
+        title: "Com que frequência e após quais tipos de refeições?",
         condition: { id: "desconforto_refeicoes", value: "Yes" },
         required: true,
       },
@@ -327,13 +330,13 @@ export default function NutritionUSAPage() {
       {
         id: "sonolencia_refeicoes",
         type: "yes_no",
-        title: "Do you feel drowsy after meals?",
+        title: "Sente sonolência após as refeições?",
         required: true,
       },
       {
         id: "sonolencia_detalhes",
         type: "textarea",
-        title: "Which meals and how often?",
+        title: "Em quais refeições e com que frequência?",
         condition: { id: "sonolencia_refeicoes", value: "Yes" },
         required: true,
       },
@@ -342,13 +345,13 @@ export default function NutritionUSAPage() {
         id: "queda_energia",
         type: "yes_no",
         title:
-          "Do you feel a lack of energy or decreased physical/cognitive performance after eating?",
+          "Sente falta de energia ou queda de rendimento físico/cognitivo após comer?",
         required: true,
       },
       {
         id: "queda_energia_detalhes",
         type: "textarea",
-        title: "After which meals or types of food?",
+        title: "Após quais refeições ou tipos de alimentos?",
         condition: { id: "queda_energia", value: "Yes" },
         required: true,
       },
@@ -356,47 +359,47 @@ export default function NutritionUSAPage() {
       {
         id: "exames_recentes",
         type: "yes_no",
-        title: "Have you had recent lab tests?",
+        title: "Já realizou exames laboratoriais recentes?",
         required: true,
       },
       {
         id: "exames_resultados",
         type: "textarea",
-        title: "Can you share the main results?",
+        title: "Pode compartilhar os principais resultados?",
         condition: { id: "exames_recentes", value: "Yes" },
         required: true,
       },
 
-      // 4. Eating Behavior and Routine
+      // 4. Comportamento e Rotina Alimentar
       {
         id: "section4_header",
         type: "welcome",
-        title: "4. Eating Behavior and Routine",
-        description: "Information about your daily eating habits.",
-        buttonText: "Continue",
+        title: "4. Comportamento e Rotina Alimentar",
+        description: "Informações sobre seus hábitos alimentares diários.",
+        buttonText: "Continuar",
       },
       {
         id: "quantidade_refeicoes",
         type: "text",
-        title: "How many meals do you typically have per day?",
+        title: "Quantas refeições costuma fazer por dia?",
         required: true,
       },
       {
         id: "refeicoes_frequentes",
         type: "textarea",
-        title: "Which meals do you have most frequently?",
+        title: "Quais refeições realiza com mais frequência?",
         required: true,
       },
       {
         id: "horarios_fixos",
         type: "yes_no",
-        title: "Do you have fixed meal times?",
+        title: "Tem horários fixos para comer?",
         required: true,
       },
       {
         id: "quais_horarios",
         type: "textarea",
-        title: "What times?",
+        title: "Quais horários?",
         condition: { id: "horarios_fixos", value: "Yes" },
         required: true,
       },
@@ -404,13 +407,13 @@ export default function NutritionUSAPage() {
       {
         id: "pula_refeicoes",
         type: "yes_no",
-        title: "Do you often skip meals?",
+        title: "Costuma pular refeições?",
         required: true,
       },
       {
         id: "quais_pula_refeicoes",
         type: "textarea",
-        title: "Which meals do you skip and why?",
+        title: "Quais refeições costuma pular e por quê?",
         condition: { id: "pula_refeicoes", value: "Yes" },
         required: true,
       },
@@ -418,13 +421,13 @@ export default function NutritionUSAPage() {
       {
         id: "faz_jejum",
         type: "yes_no",
-        title: "Do you practice fasting?",
+        title: "Costuma fazer jejum?",
         required: true,
       },
       {
         id: "detalhes_jejum",
         type: "textarea",
-        title: "What type? How many hours? How often?",
+        title: "Qual tipo? Quantas horas? Com que frequência?",
         condition: { id: "faz_jejum", value: "Yes" },
         required: true,
       },
@@ -432,20 +435,20 @@ export default function NutritionUSAPage() {
       {
         id: "horario_fome",
         type: "text",
-        title: "At what time of day do you feel most hungry?",
+        title: "Em qual horário sente mais fome?",
         required: true,
       },
 
       {
         id: "belisca",
         type: "yes_no",
-        title: "Do you snack between meals?",
+        title: "Belisca entre refeições?",
         required: true,
       },
       {
         id: "detalhes_beliscar",
         type: "textarea",
-        title: "What? How often?",
+        title: "O quê? Com que frequência?",
         condition: { id: "belisca", value: "Yes" },
         required: true,
       },
@@ -453,13 +456,13 @@ export default function NutritionUSAPage() {
       {
         id: "compulsao",
         type: "yes_no",
-        title: "Do you experience episodes of binge eating?",
+        title: "Tem episódios de compulsão alimentar?",
         required: true,
       },
       {
         id: "detalhes_compulsao",
         type: "textarea",
-        title: "In what situations and with which foods?",
+        title: "Em quais momentos e com quais alimentos?",
         condition: { id: "compulsao", value: "Yes" },
         required: true,
       },
@@ -467,13 +470,13 @@ export default function NutritionUSAPage() {
       {
         id: "fome_emocional",
         type: "yes_no",
-        title: "Do you experience episodes of emotional eating?",
+        title: "Tem episódios de fome emocional?",
         required: true,
       },
       {
         id: "detalhes_fome_emocional",
         type: "textarea",
-        title: "How often and in what context?",
+        title: "Com que frequência e em que contexto?",
         condition: { id: "fome_emocional", value: "Yes" },
         required: true,
       },
@@ -481,13 +484,13 @@ export default function NutritionUSAPage() {
       {
         id: "bebe_refeicoes",
         type: "yes_no",
-        title: "Do you typically drink liquids during meals?",
+        title: "Costuma beber líquidos durante as refeições?",
         required: true,
       },
       {
         id: "detalhes_bebe_refeicoes",
         type: "textarea",
-        title: "Which beverages? In what quantity?",
+        title: "Quais bebidas? Em que quantidade?",
         condition: { id: "bebe_refeicoes", value: "Yes" },
         required: true,
       },
@@ -496,27 +499,27 @@ export default function NutritionUSAPage() {
         id: "bebidas_adocadas",
         type: "yes_no",
         title:
-          "Do you consume sweetened drinks like juices, sodas, or energy drinks?",
+          "Costuma consumir bebidas adoçadas como sucos, refrigerantes ou energéticos?",
         required: true,
       },
       {
         id: "quais_bebidas_adocadas",
         type: "textarea",
-        title: "Which specific drinks?",
+        title: "Quais bebidas específicas?",
         condition: { id: "bebidas_adocadas", value: "Yes" },
         required: true,
       },
       {
         id: "frequencia_bebidas_adocadas",
         type: "text",
-        title: "How often per week?",
+        title: "Com que frequência por semana?",
         condition: { id: "bebidas_adocadas", value: "Yes" },
         required: true,
       },
       {
         id: "quantidade_bebidas_adocadas",
         type: "text",
-        title: "In what quantity (ml or cans)?",
+        title: "Em que quantidade (ml ou latas)?",
         condition: { id: "bebidas_adocadas", value: "Yes" },
         required: true,
       },
@@ -525,13 +528,13 @@ export default function NutritionUSAPage() {
         id: "bebidas_zero",
         type: "yes_no",
         title:
-          "Do you consume zero-calorie drinks (diet soda, teas sweetened with stevia, etc.)?",
+          "Costuma consumir bebidas zero (refrigerante zero, chás adoçados com estévia, etc.)?",
         required: true,
       },
       {
         id: "detalhes_bebidas_zero",
         type: "textarea",
-        title: "Which ones and how often?",
+        title: "Quais e com que frequência?",
         condition: { id: "bebidas_zero", value: "Yes" },
         required: true,
       },
@@ -539,27 +542,27 @@ export default function NutritionUSAPage() {
       {
         id: "cafe",
         type: "yes_no",
-        title: "Do you drink coffee?",
+        title: "Costuma consumir café?",
         required: true,
       },
       {
         id: "frequencia_cafe",
         type: "text",
-        title: "How many times per day?",
+        title: "Quantas vezes por dia?",
         condition: { id: "cafe", value: "Yes" },
         required: true,
       },
       {
         id: "quantidade_cafe",
         type: "text",
-        title: "Quantity each time (ml or cups)?",
+        title: "Quantidade por vez (ml ou xícaras)?",
         condition: { id: "cafe", value: "Yes" },
         required: true,
       },
       {
         id: "tipo_cafe",
         type: "text",
-        title: "With sugar, sweetener, milk, or black?",
+        title: "Com açúcar, adoçante, leite ou puro?",
         condition: { id: "cafe", value: "Yes" },
         required: true,
       },
@@ -568,13 +571,13 @@ export default function NutritionUSAPage() {
         id: "estimulantes",
         type: "yes_no",
         title:
-          "Do you use other stimulants (pre-workouts, thermogenics, energy drinks)?",
+          "Usa outros estimulantes (pré-treinos, termogênicos, energéticos)?",
         required: true,
       },
       {
         id: "detalhes_estimulantes",
         type: "textarea",
-        title: "Which ones? At what time?",
+        title: "Quais? Em que horário?",
         condition: { id: "estimulantes", value: "Yes" },
         required: true,
       },
@@ -582,27 +585,27 @@ export default function NutritionUSAPage() {
       {
         id: "alcool",
         type: "yes_no",
-        title: "Do you consume alcohol?",
+        title: "Consome álcool?",
         required: true,
       },
       {
         id: "frequencia_alcool",
         type: "text",
-        title: "How often?",
+        title: "Com que frequência?",
         condition: { id: "alcool", value: "Yes" },
         required: true,
       },
       {
         id: "quantidade_alcool",
         type: "text",
-        title: "In what quantity (glasses, cans, cups)?",
+        title: "Em que quantidade (taças, latas, copos)?",
         condition: { id: "alcool", value: "Yes" },
         required: true,
       },
       {
         id: "tipo_alcool",
         type: "text",
-        title: "Which brands and types? (wine, beer, gin, spirits, etc.)",
+        title: "Quais marcas e tipos? (vinho, cerveja, gin, destilados, etc.)",
         condition: { id: "alcool", value: "Yes" },
         required: true,
       },
@@ -610,13 +613,13 @@ export default function NutritionUSAPage() {
       {
         id: "cigarro",
         type: "yes_no",
-        title: "Do you smoke cigarettes?",
+        title: "Fuma cigarro?",
         required: true,
       },
       {
         id: "detalhes_cigarro",
         type: "text",
-        title: "For how long? How many per day?",
+        title: "Há quanto tempo? Quantos por dia?",
         condition: { id: "cigarro", value: "Yes" },
         required: true,
       },
@@ -624,13 +627,13 @@ export default function NutritionUSAPage() {
       {
         id: "vape",
         type: "yes_no",
-        title: "Do you use e-cigarettes (vape)?",
+        title: "Usa cigarro eletrônico (vape)?",
         required: true,
       },
       {
         id: "detalhes_vape",
         type: "text",
-        title: "How often? For how long?",
+        title: "Com que frequência? Há quanto tempo?",
         condition: { id: "vape", value: "Yes" },
         required: true,
       },
@@ -638,56 +641,56 @@ export default function NutritionUSAPage() {
       {
         id: "charuto",
         type: "yes_no",
-        title: "Do you smoke cigars?",
+        title: "Fuma charuto?",
         required: true,
       },
       {
         id: "detalhes_charuto",
         type: "text",
-        title: "How often? For how long?",
+        title: "Com que frequência? Há quanto tempo?",
         condition: { id: "charuto", value: "Yes" },
         required: true,
       },
 
-      // 5. Food Preferences and Aversions
+      // 5. Preferências e Rejeições Alimentares
       {
         id: "section5_header",
         type: "welcome",
-        title: "5. Food Preferences and Aversions",
-        description: "Let's understand your food tastes and preferences.",
-        buttonText: "Continue",
+        title: "5. Preferências e Rejeições Alimentares",
+        description: "Vamos entender seus gostos e preferências alimentares.",
+        buttonText: "Continuar",
       },
       {
         id: "alimentos_gosta",
         type: "textarea",
         title:
-          "Which foods do you really like and would like to keep in your diet?",
+          "Quais alimentos você gosta muito e gostaria de manter na dieta?",
         required: true,
       },
       {
         id: "alimentos_evita",
         type: "textarea",
         title:
-          "Which foods do you avoid or don't tolerate (due to taste, texture, or ideology)?",
+          "Quais alimentos você evita ou não tolera (por sabor, textura ou ideologia)?",
         required: true,
       },
       {
         id: "cafe_manha_preferencia",
         type: "text",
-        title: "Do you prefer sweet or savory breakfast?",
+        title: "Prefere café da manhã doce ou salgado?",
         required: true,
       },
       {
         id: "frutas_vegetais_preferidos",
         type: "textarea",
-        title: "Which fruits and vegetables do you prefer?",
+        title: "Quais frutas e vegetais você prefere?",
         required: true,
       },
       {
         id: "aversao_texturas",
         type: "textarea",
         title:
-          "Do you have any aversion to certain textures or flavors (e.g. mint, coconut, cilantro, ginger)?",
+          "Tem aversão a alguma textura ou sabor (ex: hortelã, coco, coentro, gengibre)?",
         required: false,
       },
 
@@ -695,13 +698,13 @@ export default function NutritionUSAPage() {
         id: "paladar_alterado",
         type: "yes_no",
         title:
-          "Do you often experience altered taste, dry mouth, or bitter taste?",
+          "Costuma sentir o paladar alterado, boca seca ou gosto amargo com frequência?",
         required: true,
       },
       {
         id: "detalhes_paladar_alterado",
         type: "text",
-        title: "In what situations?",
+        title: "Em que situações?",
         condition: { id: "paladar_alterado", value: "Yes" },
         required: true,
       },
@@ -709,52 +712,52 @@ export default function NutritionUSAPage() {
       {
         id: "nivel_apetite",
         type: "multiple_choice",
-        title: "How would you rate your appetite:",
-        options: ["Low", "Normal", "Very high"],
+        title: "Como você avalia seu apetite:",
+        options: ["Baixo", "Normal", "Muito alto"],
         required: true,
       },
 
       {
         id: "consome_ovo",
         type: "yes_no",
-        title: "Do you eat eggs?",
+        title: "Consome ovos?",
         required: true,
       },
       {
         id: "consome_peixe",
         type: "yes_no",
-        title: "Do you eat fish?",
+        title: "Consome peixe?",
         required: true,
       },
       {
         id: "consome_carne_vermelha",
         type: "yes_no",
-        title: "Do you eat red meat?",
+        title: "Consome carne vermelha?",
         required: true,
       },
       {
         id: "consome_tofu",
         type: "yes_no",
-        title: "Do you eat tofu or plant-based protein?",
+        title: "Consome tofu ou proteína vegetal?",
         required: true,
       },
       {
         id: "consome_leite",
         type: "yes_no",
-        title: "Do you consume milk and dairy products?",
+        title: "Consome leite e derivados?",
         required: true,
       },
 
       {
         id: "preferencia_carne",
         type: "yes_no",
-        title: "Do you have a preference for any specific type of meat?",
+        title: "Tem preferência por algum tipo específico de carne?",
         required: true,
       },
       {
         id: "tipo_carne_preferido",
         type: "text",
-        title: "Which one?",
+        title: "Qual?",
         condition: { id: "preferencia_carne", value: "Yes" },
         required: true,
       },
@@ -762,7 +765,7 @@ export default function NutritionUSAPage() {
       {
         id: "dificuldade_carne_vermelha",
         type: "yes_no",
-        title: "Do you have difficulty digesting red meat?",
+        title: "Tem dificuldade para digerir carne vermelha?",
         required: true,
       },
 
@@ -770,20 +773,20 @@ export default function NutritionUSAPage() {
         id: "gordura_cozinhar",
         type: "text",
         title:
-          "What type of fat do you typically use for cooking? (olive oil, butter, soybean oil, lard, coconut oil, etc.)",
+          "Qual tipo de gordura costuma usar para cozinhar? (azeite, manteiga, óleo de soja, banha, óleo de coco, etc.)",
         required: true,
       },
 
       {
         id: "azeite",
         type: "yes_no",
-        title: "Do you use olive oil regularly?",
+        title: "Usa azeite de oliva regularmente?",
         required: true,
       },
       {
         id: "quantidade_azeite",
         type: "text",
-        title: "In what approximate amount per meal?",
+        title: "Em que quantidade aproximada por refeição?",
         condition: { id: "azeite", value: "Yes" },
         required: true,
       },
@@ -791,13 +794,13 @@ export default function NutritionUSAPage() {
       {
         id: "oleo_coco",
         type: "yes_no",
-        title: "Do you use coconut oil or coconut products?",
+        title: "Usa óleo de coco ou produtos com coco?",
         required: true,
       },
       {
         id: "frequencia_oleo_coco",
         type: "text",
-        title: "How often?",
+        title: "Com que frequência?",
         condition: { id: "oleo_coco", value: "Yes" },
         required: true,
       },
@@ -805,20 +808,20 @@ export default function NutritionUSAPage() {
       {
         id: "frituras",
         type: "yes_no",
-        title: "Do you eat fried foods?",
+        title: "Consome frituras?",
         required: true,
       },
       {
         id: "frequencia_frituras",
         type: "text",
-        title: "How often per week or per day?",
+        title: "Com que frequência por semana ou por dia?",
         condition: { id: "frituras", value: "Yes" },
         required: true,
       },
       {
         id: "alimentos_frituras",
         type: "text",
-        title: "Which foods?",
+        title: "Quais alimentos?",
         condition: { id: "frituras", value: "Yes" },
         required: true,
       },
@@ -828,33 +831,34 @@ export default function NutritionUSAPage() {
         id: "section6_header",
         type: "welcome",
         title: "6. Cheat Meals",
-        description: "Information about your preferences for cheat meals.",
-        buttonText: "Continue",
+        description:
+          "Informações sobre suas preferências para refeições livres.",
+        buttonText: "Continuar",
       },
       {
         id: "refeicoes_livres",
         type: "yes_no",
-        title: "Do you have cheat meals?",
+        title: "Você faz refeições livres (cheat meals)?",
         required: true,
       },
       {
         id: "frequencia_refeicoes_livres",
         type: "text",
-        title: "How often per week?",
+        title: "Quantas vezes por semana?",
         condition: { id: "refeicoes_livres", value: "Yes" },
         required: true,
       },
       {
         id: "dia_refeicao_livre",
         type: "text",
-        title: "On which day do you usually have it?",
+        title: "Em qual dia você costuma fazer?",
         condition: { id: "refeicoes_livres", value: "Yes" },
         required: true,
       },
       {
         id: "preferencia_refeicao_livre",
         type: "textarea",
-        title: "What do you like to eat during these meals?",
+        title: "O que você gosta de comer nessas refeições?",
         condition: { id: "refeicoes_livres", value: "Yes" },
         required: true,
       },
@@ -862,8 +866,8 @@ export default function NutritionUSAPage() {
         id: "preferencia_agendamento",
         type: "multiple_choice",
         title:
-          "Do you prefer to have your cheat meal scheduled or decide in the moment?",
-        options: ["Scheduled", "Decide in the moment"],
+          "Você prefere ter sua refeição livre programada ou decidir na hora?",
+        options: ["Programada", "Decidir na hora"],
         required: true,
       },
 
@@ -871,20 +875,21 @@ export default function NutritionUSAPage() {
       {
         id: "section7_header",
         type: "welcome",
-        title: "7. Macronutrients and Meal Composition",
-        description: "Information about how you organize your macronutrients.",
-        buttonText: "Continue",
+        title: "7. Macronutrientes e Composição das Refeições",
+        description:
+          "Informações sobre como você organiza seus macronutrientes.",
+        buttonText: "Continuar",
       },
       {
         id: "proteina_refeicoes",
         type: "yes_no",
-        title: "Do you include a protein source in all meals?",
+        title: "Você inclui uma fonte de proteína em todas as refeições?",
         required: true,
       },
       {
         id: "fontes_proteina",
         type: "textarea",
-        title: "What are your main sources?",
+        title: "Quais são suas principais fontes?",
         condition: { id: "proteina_refeicoes", value: "Yes" },
         required: true,
       },
@@ -892,14 +897,14 @@ export default function NutritionUSAPage() {
       {
         id: "gorduras_boas",
         type: "yes_no",
-        title: "Do you consume healthy fat sources?",
+        title: "Você consome fontes de gorduras saudáveis?",
         required: true,
       },
       {
         id: "quais_gorduras_boas",
         type: "textarea",
         title:
-          "Which ones (avocado, nuts, olive oil, egg yolk, coconut oil, etc.)",
+          "Quais (abacate, castanhas, azeite de oliva, gema de ovo, óleo de coco, etc.)",
         condition: { id: "gorduras_boas", value: "Yes" },
         required: true,
       },
@@ -908,20 +913,21 @@ export default function NutritionUSAPage() {
         id: "carboidratos_frequentes",
         type: "textarea",
         title:
-          "Which carbohydrates do you consume most frequently? Do you prefer whole grains or refined?",
+          "Quais carboidratos você consome com mais frequência? Você prefere integrais ou refinados?",
         required: true,
       },
 
       {
         id: "dieta_manipulacao_carbo",
         type: "yes_no",
-        title: "Have you used a diet with carb manipulation (e.g., cycling)?",
+        title:
+          "Você já utilizou alguma dieta com manipulação de carboidratos (ex: ciclagem)?",
         required: true,
       },
       {
         id: "modelo_dieta_carbo",
         type: "text",
-        title: "Which model?",
+        title: "Qual modelo?",
         condition: { id: "dieta_manipulacao_carbo", value: "Yes" },
         required: true,
       },
@@ -930,8 +936,8 @@ export default function NutritionUSAPage() {
         id: "preferencia_ciclo_carbo",
         type: "multiple_choice",
         title:
-          "Would you like to include carb cycling or maintain a linear pattern?",
-        options: ["Carb cycling", "Linear pattern"],
+          "Você gostaria de incluir ciclagem de carboidratos ou manter um padrão linear?",
+        options: ["Ciclagem de carboidratos", "Padrão linear"],
         required: true,
       },
 
@@ -939,50 +945,49 @@ export default function NutritionUSAPage() {
       {
         id: "section8_header",
         type: "welcome",
-        title: "8. Training and Lifestyle",
-        description: "Information about your physical activities and routine.",
-        buttonText: "Continue",
+        title: "8. Treino e Estilo de Vida",
+        description: "Informações sobre suas atividades físicas e rotina.",
+        buttonText: "Continuar",
       },
       {
         id: "pratica_atividade",
         type: "yes_no",
-        title: "Do you engage in physical activity?",
+        title: "Você pratica atividade física?",
         required: true,
       },
       {
         id: "modalidade_atividade",
         type: "text",
-        title: "Which modality?",
+        title: "Qual modalidade?",
         condition: { id: "pratica_atividade", value: "Yes" },
         required: true,
       },
       {
         id: "frequencia_atividade",
         type: "text",
-        title: "Weekly frequency?",
+        title: "Frequência semanal?",
         condition: { id: "pratica_atividade", value: "Yes" },
         required: true,
       },
       {
         id: "horario_atividade",
         type: "text",
-        title: "Usual training time?",
+        title: "Horário usual de treino?",
         condition: { id: "pratica_atividade", value: "Yes" },
         required: true,
       },
       {
         id: "tipo_treino",
         type: "text",
-        title:
-          "Type of training (e.g., weight lifting, running, functional...)",
+        title: "Tipo de treino (ex: musculação, corrida, funcional...)",
         condition: { id: "pratica_atividade", value: "Yes" },
         required: true,
       },
       {
         id: "nivel_treino",
         type: "multiple_choice",
-        title: "Level:",
-        options: ["Beginner", "Intermediate", "Advanced"],
+        title: "Nível:",
+        options: ["Iniciante", "Intermediário", "Avançado"],
         condition: { id: "pratica_atividade", value: "Yes" },
         required: true,
       },
@@ -990,13 +995,13 @@ export default function NutritionUSAPage() {
       {
         id: "faz_cardio",
         type: "yes_no",
-        title: "Do you do cardio?",
+        title: "Você faz cardio?",
         required: true,
       },
       {
         id: "detalhes_cardio",
         type: "text",
-        title: "What type and how often?",
+        title: "Qual tipo e com que frequência?",
         condition: { id: "faz_cardio", value: "Yes" },
         required: true,
       },
@@ -1004,13 +1009,13 @@ export default function NutritionUSAPage() {
       {
         id: "preferencia_alimentar_treino",
         type: "yes_no",
-        title: "Do you have food preferences for pre and post-workout?",
+        title: "Você tem preferência alimentar para pré e pós-treino?",
         required: true,
       },
       {
         id: "detalhes_alimentar_treino",
         type: "textarea",
-        title: "What do you like or usually consume?",
+        title: "O que você gosta ou costuma consumir?",
         condition: { id: "preferencia_alimentar_treino", value: "Yes" },
         required: true,
       },
@@ -1018,13 +1023,13 @@ export default function NutritionUSAPage() {
       {
         id: "usa_suplementos",
         type: "yes_no",
-        title: "Do you use any supplements?",
+        title: "Você usa algum suplemento?",
         required: true,
       },
       {
         id: "quais_suplementos",
         type: "textarea",
-        title: "Which ones?",
+        title: "Quais?",
         condition: { id: "usa_suplementos", value: "Yes" },
         required: true,
       },
@@ -1033,39 +1038,39 @@ export default function NutritionUSAPage() {
       {
         id: "section9_header",
         type: "welcome",
-        title: "9. Sleep and Stress",
-        description: "Information about your sleep and stress levels.",
-        buttonText: "Continue",
+        title: "9. Sono e Estresse",
+        description: "Informações sobre seu sono e níveis de estresse.",
+        buttonText: "Continuar",
       },
       {
         id: "horas_sono",
         type: "text",
-        title: "How many hours do you sleep per night?",
+        title: "Quantas horas você dorme por noite?",
         required: true,
       },
       {
         id: "dificuldade_dormir",
         type: "yes_no",
         title:
-          "Do you have difficulty falling asleep or wake up during the night?",
+          "Você tem dificuldade para pegar no sono ou acorda durante a noite?",
         required: true,
       },
       {
         id: "acorda_descansado",
         type: "yes_no",
-        title: "Do you wake up feeling rested?",
+        title: "Você acorda descansado(a)?",
         required: true,
       },
       {
         id: "estresse_elevado",
         type: "yes_no",
-        title: "Are you in a period of high stress?",
+        title: "Você está em um período de alto estresse?",
         required: true,
       },
       {
         id: "estresse_afeta_alimentacao",
         type: "yes_no",
-        title: "Does stress affect your eating or sleeping?",
+        title: "O estresse afeta sua alimentação ou sono?",
         required: true,
       },
 
@@ -1073,33 +1078,34 @@ export default function NutritionUSAPage() {
       {
         id: "section10_header",
         type: "welcome",
-        title: "10. Final Considerations",
-        description: "Last section for additional information.",
-        buttonText: "Continue",
+        title: "10. Considerações Finais",
+        description: "Última seção para informações adicionais.",
+        buttonText: "Continuar",
       },
       {
         id: "informacao_adicional",
         type: "textarea",
         title:
-          "Is there any information you consider important that has not been addressed?",
+          "Existe alguma informação que você considera importante e que não foi abordada?",
         required: false,
       },
       {
         id: "preferencia_plano",
         type: "multiple_choice",
         title:
-          "Would you prefer a plan with more freedom or more detailed structure?",
+          "Você prefere um plano com mais liberdade ou com estrutura mais detalhada?",
         options: [
-          "More freedom",
-          "More detailed structure",
-          "Balance between both",
+          "Mais liberdade",
+          "Estrutura mais detalhada",
+          "Equilíbrio entre ambos",
         ],
         required: true,
       },
       {
         id: "pesar_medir",
         type: "yes_no",
-        title: "Are you willing to weigh and measure your food if necessary?",
+        title:
+          "Você está disposto(a) a pesar e medir seus alimentos se necessário?",
         required: true,
       },
 
@@ -1107,7 +1113,7 @@ export default function NutritionUSAPage() {
       {
         id: "thankYou",
         type: "thank_you",
-        title: "Thank you for completing the questionnaire!",
+        title: "Obrigado por completar o questionário!",
         description:
           "We will analyze your responses and send your personalized nutrition plan soon.",
       },
@@ -1185,6 +1191,11 @@ export default function NutritionUSAPage() {
   );
 
   const submitFormData = useCallback(async (): Promise<void> => {
+    if (!turnstileToken) {
+      alert("Por favor, complete a verificação de segurança.");
+      return;
+    }
+
     setIsLoading(true);
     console.log("Starting AI-powered form submission...");
 
@@ -1198,16 +1209,14 @@ export default function NutritionUSAPage() {
       emailBody += `<p><strong>Age:</strong> ${
         answers.idade || "N/A"
       } years</p>`;
-      emailBody += `<p><strong>Height:</strong> ${
+      emailBody += `<p><strong>Altura:</strong> ${
         answers.altura || "N/A"
       } cm</p>`;
-      emailBody += `<p><strong>Weight:</strong> ${
-        answers.peso || "N/A"
-      } kg</p>`;
-      emailBody += `<p><strong>Main Goal:</strong> ${
+      emailBody += `<p><strong>Peso:</strong> ${answers.peso || "N/A"} kg</p>`;
+      emailBody += `<p><strong>Objetivo Principal:</strong> ${
         answers.objetivo_principal || "N/A"
       }</p>`;
-      emailBody += "<h2>Questionnaire Responses</h2>";
+      emailBody += "<h2>Respostas do Questionário</h2>";
 
       questions.forEach((question) => {
         if (
@@ -1260,9 +1269,9 @@ export default function NutritionUSAPage() {
       console.error("Error in form submission:", error);
       const errorMessage =
         error instanceof Error ? error.message : String(error);
-      alert(`Error submitting assessment: ${errorMessage}. 
+      alert(`Erro ao enviar avaliação: ${errorMessage}. 
       
-Please try again or contact us if the problem persists.`);
+Por favor, tente novamente ou entre em contato conosco se o problema persistir.`);
     } finally {
       setIsLoading(false);
       console.log("Process completed, loading state reset");
@@ -1343,7 +1352,7 @@ Please try again or contact us if the problem persists.`);
               <div className="flex items-center justify-center space-x-3 py-8">
                 <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-emerald-600"></div>
                 <p className="text-base text-emerald-600 font-medium">
-                  Processing your responses...
+                  Processando suas respostas...
                 </p>
               </div>
             )}
@@ -1356,11 +1365,11 @@ Please try again or contact us if the problem persists.`);
                     <CheckCircle className="h-6 w-6 text-green-600 flex-shrink-0 mt-0.5" />
                     <div>
                       <h3 className="text-lg font-semibold text-green-900 mb-1">
-                        Success! Your assessment has been submitted
+                        Sucesso! Sua avaliação foi enviada
                       </h3>
                       <p className="text-green-800">
-                        Dr. Jackie has received your information and will be in
-                        touch soon.
+                        Dra. Jackie recebeu suas informações e entrará em
+                        contato em breve.
                       </p>
                     </div>
                   </div>
@@ -1369,7 +1378,7 @@ Please try again or contact us if the problem persists.`);
                 {/* What Happens Next */}
                 <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-6">
                   <h3 className="text-lg font-semibold text-emerald-900 mb-3">
-                    What happens next?
+                    O que acontece agora?
                   </h3>
                   <ul className="space-y-3 text-emerald-800">
                     <li className="flex items-start space-x-3">
@@ -1377,8 +1386,8 @@ Please try again or contact us if the problem persists.`);
                         1.
                       </span>
                       <span>
-                        Your assessment was sent directly to Dr. Jackie, who
-                        will personally review it.
+                        Sua avaliação foi enviada diretamente para a Dra.
+                        Jackie, que irá revisá-la pessoalmente.
                       </span>
                     </li>
                     <li className="flex items-start space-x-3">
@@ -1386,8 +1395,8 @@ Please try again or contact us if the problem persists.`);
                         2.
                       </span>
                       <span>
-                        She will create your personalized nutrition plan based
-                        on your answers.
+                        Ela criará seu plano nutricional personalizado com base
+                        nas suas respostas.
                       </span>
                     </li>
                     <li className="flex items-start space-x-3">
@@ -1395,8 +1404,8 @@ Please try again or contact us if the problem persists.`);
                         3.
                       </span>
                       <span>
-                        Dr. Jackie will respond soon with your plan and next
-                        steps.
+                        A Dra. Jackie responderá em breve com seu plano e
+                        próximos passos.
                       </span>
                     </li>
                   </ul>
@@ -1408,11 +1417,12 @@ Please try again or contact us if the problem persists.`);
                     <Heart className="h-6 w-6 text-blue-600 flex-shrink-0 mt-0.5" />
                     <div>
                       <h3 className="text-base font-semibold text-blue-900 mb-1">
-                        Thank you for trusting Dr. Jackie's work!
+                        Obrigado por confiar no trabalho da Dra. Jackie!
                       </h3>
                       <p className="text-blue-800 text-sm">
-                        Your journey to better nutrition starts here. We're
-                        excited to help you achieve your goals!
+                        Sua jornada para uma melhor nutrição começa aqui.
+                        Estamos animados para ajudá-lo a alcançar seus
+                        objetivos!
                       </p>
                     </div>
                   </div>
@@ -1439,7 +1449,7 @@ Please try again or contact us if the problem persists.`);
             <div className="space-y-6">
               <Input
                 type={currentQ.type as "text" | "number" | "email"}
-                placeholder="Type your answer..."
+                placeholder="Digite sua resposta..."
                 value={(answers[currentQ.id] as string) || ""}
                 onChange={(e) =>
                   setAnswers((prev) => ({
@@ -1452,6 +1462,17 @@ Please try again or contact us if the problem persists.`);
                 autoFocus
                 className="text-base p-3"
               />
+              {/* Show Turnstile only for email field */}
+              {currentQ.type === "email" && (
+                <div className="flex justify-center">
+                  <CloudflareTurnstile
+                    onSuccess={setTurnstileToken}
+                    onError={() => {
+                      setTurnstileToken("");
+                    }}
+                  />
+                </div>
+              )}
               <div className="flex justify-between items-center">
                 {currentQuestion > 0 ? (
                   <Button
@@ -1460,7 +1481,7 @@ Please try again or contact us if the problem persists.`);
                     className="px-6"
                   >
                     <ArrowLeft className="mr-2 h-4 w-4" />
-                    Back
+                    Voltar
                   </Button>
                 ) : (
                   <div></div>
@@ -1469,10 +1490,13 @@ Please try again or contact us if the problem persists.`);
                   onClick={() =>
                     handleAnswer(currentQ.id, answers[currentQ.id] || "")
                   }
-                  disabled={currentQ.required && !answers[currentQ.id]}
+                  disabled={
+                    (currentQ.required && !answers[currentQ.id]) ||
+                    (currentQ.type === "email" && !turnstileToken)
+                  }
                   className="px-6 bg-emerald-600 hover:bg-emerald-700"
                 >
-                  Next
+                  Próximo
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
@@ -1482,7 +1506,7 @@ Please try again or contact us if the problem persists.`);
           {currentQ.type === "textarea" && (
             <div className="space-y-6">
               <Textarea
-                placeholder="Type your answer..."
+                placeholder="Digite sua resposta..."
                 value={(answers[currentQ.id] as string) || ""}
                 onChange={(e) =>
                   setAnswers((prev) => ({
@@ -1503,7 +1527,7 @@ Please try again or contact us if the problem persists.`);
                     className="px-6"
                   >
                     <ArrowLeft className="mr-2 h-4 w-4" />
-                    Back
+                    Voltar
                   </Button>
                 ) : (
                   <div></div>
@@ -1515,7 +1539,7 @@ Please try again or contact us if the problem persists.`);
                   disabled={currentQ.required && !answers[currentQ.id]}
                   className="px-6 bg-emerald-600 hover:bg-emerald-700"
                 >
-                  Next
+                  Próximo
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
@@ -1538,7 +1562,7 @@ Please try again or contact us if the problem persists.`);
                   onClick={() => handleAnswer(currentQ.id, "Yes")}
                 >
                   <CheckCircle className="mr-3 h-5 w-5" />
-                  Yes
+                  Sim
                 </Button>
                 <Button
                   variant={
@@ -1553,7 +1577,7 @@ Please try again or contact us if the problem persists.`);
                   onClick={() => handleAnswer(currentQ.id, "No")}
                 >
                   <Circle className="mr-3 h-5 w-5" />
-                  No
+                  Não
                 </Button>
               </div>
               <div className="flex justify-start">
@@ -1564,7 +1588,7 @@ Please try again or contact us if the problem persists.`);
                     className="px-6"
                   >
                     <ArrowLeft className="mr-2 h-4 w-4" />
-                    Back
+                    Voltar
                   </Button>
                 )}
               </div>
@@ -1607,7 +1631,7 @@ Please try again or contact us if the problem persists.`);
                     className="px-6"
                   >
                     <ArrowLeft className="mr-2 h-4 w-4" />
-                    Back
+                    Voltar
                   </Button>
                 )}
               </div>
@@ -1662,7 +1686,7 @@ Please try again or contact us if the problem persists.`);
                     className="px-6"
                   >
                     <ArrowLeft className="mr-2 h-4 w-4" />
-                    Back
+                    Voltar
                   </Button>
                 ) : (
                   <div></div>
@@ -1678,7 +1702,7 @@ Please try again or contact us if the problem persists.`);
                   }
                   className="px-6 bg-emerald-600 hover:bg-emerald-700"
                 >
-                  Next
+                  Próximo
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
@@ -1733,7 +1757,7 @@ Please try again or contact us if the problem persists.`);
                     className="px-6"
                   >
                     <ArrowLeft className="mr-2 h-4 w-4" />
-                    Back
+                    Voltar
                   </Button>
                 ) : (
                   <div></div>
@@ -1749,7 +1773,7 @@ Please try again or contact us if the problem persists.`);
                   }
                   className="px-6 bg-emerald-600 hover:bg-emerald-700"
                 >
-                  Next
+                  Próximo
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
@@ -1777,13 +1801,21 @@ Please try again or contact us if the problem persists.`);
 
     // Sample timeline data - customize based on your question structure
     const timelineSteps = [
-      { id: 1, title: "Personal Info", description: "Basic information" },
-      { id: 2, title: "Health History", description: "Medical background" },
-      { id: 3, title: "Goals", description: "Fitness objectives" },
-      { id: 4, title: "Experience", description: "Training background" },
-      { id: 5, title: "Preferences", description: "Training style" },
-      { id: 6, title: "Lifestyle", description: "Daily habits" },
-      { id: 7, title: "Additional Info", description: "Final details" },
+      {
+        id: 1,
+        title: "Informações Pessoais",
+        description: "Informações básicas",
+      },
+      { id: 2, title: "Histórico de Saúde", description: "Histórico médico" },
+      { id: 3, title: "Objetivos", description: "Objetivos nutricionais" },
+      { id: 4, title: "Experiência", description: "Histórico alimentar" },
+      { id: 5, title: "Preferências", description: "Estilo alimentar" },
+      { id: 6, title: "Estilo de Vida", description: "Hábitos diários" },
+      {
+        id: 7,
+        title: "Informações Adicionais",
+        description: "Detalhes finais",
+      },
     ];
 
     return (
@@ -1791,10 +1823,10 @@ Please try again or contact us if the problem persists.`);
         <CardContent className="p-6">
           <div className="text-center mb-6">
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              Your Progress
+              Seu Progresso
             </h3>
             <p className="text-gray-600">
-              Track your nutrition assessment completion
+              Acompanhe a conclusão da sua avaliação nutricional
             </p>
           </div>
 
