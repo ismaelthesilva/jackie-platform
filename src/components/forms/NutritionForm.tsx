@@ -1871,10 +1871,11 @@ Please try again or contact us if the problem persists.`);
         <CardContent className="p-6">
           <div className="text-center mb-6">
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              Your Progress
+              {t.progress?.title || "Your Progress"}
             </h3>
             <p className="text-gray-600">
-              Track your nutrition assessment completion
+              {t.progress?.description ||
+                "Track your nutrition assessment completion"}
             </p>
           </div>
 
@@ -1946,19 +1947,25 @@ Please try again or contact us if the problem persists.`);
               <span className="block text-2xl font-bold text-emerald-600">
                 {answeredQuestions}
               </span>
-              <span className="text-sm text-gray-600">Answered</span>
+              <span className="text-sm text-gray-600">
+                {t.progress?.answered || "Answered"}
+              </span>
             </div>
             <div className="p-3 bg-gray-50 rounded-lg">
               <span className="block text-2xl font-bold text-gray-600">
                 {totalQuestions - answeredQuestions}
               </span>
-              <span className="text-sm text-gray-600">Remaining</span>
+              <span className="text-sm text-gray-600">
+                {t.progress?.remaining || "Remaining"}
+              </span>
             </div>
             <div className="p-3 bg-green-50 rounded-lg">
               <span className="block text-2xl font-bold text-green-600">
                 {Math.round((answeredQuestions / totalQuestions) * 100)}%
               </span>
-              <span className="text-sm text-gray-600">Complete</span>
+              <span className="text-sm text-gray-600">
+                {t.progress?.complete || "Complete"}
+              </span>
             </div>
           </div>
         </CardContent>

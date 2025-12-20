@@ -110,15 +110,15 @@ test.describe("Nutrition USA Form", () => {
 
       if (await emailInput.isVisible()) {
         await emailInput.fill(String(testData.email));
-        
+
         // Wait for Turnstile to complete (test keys auto-pass)
         await page.waitForTimeout(2000);
-        
+
         // Wait for Next button to be enabled
         await page.waitForSelector('button:has-text("Next"):not([disabled])', {
           timeout: 10000,
         });
-        
+
         await page.click('button:has-text("Next")');
         return true;
       }
