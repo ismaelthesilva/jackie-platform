@@ -1,10 +1,16 @@
-'use client'
+"use client";
 
-import React from 'react';
-import ContactForm from '@/components/ContactForm';
+import React from "react";
+import ContactForm from "@/components/ContactForm";
+import Navbar from "@/components/Navbar";
 
 const Contact: React.FC = () => {
-  return <ContactForm />;
+  return (
+    <>
+      <Navbar />
+      <ContactForm />
+    </>
+  );
 };
 
 export default Contact;

@@ -217,7 +217,7 @@
         }
       },
       "experience": {
-        "number": "10+"
+        "number": "15+"
       },
       "success": {
         "number": "98%"
@@ -284,6 +284,93 @@
       "title": "Mensagem Enviada!",
       "description": "Obrigado por entrar em contato com a Dra. Jackie. Sua mensagem foi enviada com sucesso e você receberá uma resposta dentro de 24 horas.",
       "sendAnother": "Enviar Outra Mensagem"
+    }
+  },
+  "about": {
+    "hero": {
+      "badge": "Nutricionista Especialista & Coach de Fitness",
+      "title": "Conheça a Dra. Jackie Souto",
+      "subtitle": "Sua Parceira para Alcançar Objetivos de Saúde e Fitness Sustentáveis",
+      "description": "Com mais de uma década de experiência transformando vidas através de nutrição baseada em evidências e estratégias personalizadas de fitness, a Dra. Jackie combina expertise científica com cuidado genuíno para ajudá-lo a se tornar a versão mais saudável e forte de si mesmo.",
+      "nutritionButton": "Obtenha Seu Plano Nutricional",
+      "fitnessButton": "Explore Programas de Fitness",
+      "stats": {
+        "clients": "5.000+",
+        "clientsLabel": "Clientes Transformados",
+        "experience": "15+",
+        "experienceLabel": "Anos de Experiência",
+        "success": "98%",
+        "successLabel": "Taxa de Sucesso",
+        "rating": "4.9/5",
+        "ratingLabel": "Avaliação dos Clientes"
+      }
+    },
+    "whyChoose": {
+      "badge": "Por Que Dra. Jackie",
+      "title": "A Diferença Que Entrega Resultados",
+      "subtitle": "Não é apenas mais um plano de dieta ou rotina de exercícios. Uma abordagem abrangente e baseada em ciência, personalizada para suas necessidades únicas.",
+      "personalized": {
+        "title": "Abordagem Personalizada",
+        "description": "Sem planos genéricos. Cada estratégia de nutrição e fitness é adaptada ao seu tipo de corpo, estilo de vida, objetivos e condições de saúde. Você é único—seu plano também deve ser."
+      },
+      "evidenceBased": {
+        "title": "Métodos Baseados em Evidências",
+        "description": "Respaldado pela mais recente ciência nutricional e pesquisa em fisiologia do exercício. Sem modismos, sem truques—apenas estratégias comprovadas que funcionam para resultados sustentáveis a longo prazo."
+      },
+      "holistic": {
+        "title": "Foco em Saúde Holística",
+        "description": "Além de apenas perda de peso ou ganho muscular. Abordamos sono, estresse, digestão, hormônios e bem-estar mental para uma transformação completa por dentro e por fora."
+      },
+      "support": {
+        "title": "Suporte Contínuo",
+        "description": "Você nunca está sozinho nesta jornada. Orientação contínua, ajustes e responsabilização para garantir que você permaneça no caminho certo e supere quaisquer obstáculos que surjam."
+      },
+      "results": {
+        "title": "Resultados Reais e Duradouros",
+        "description": "Foco em mudanças de estilo de vida sustentáveis, não soluções rápidas. Construa hábitos que durem a vida toda e mantenha seus resultados muito depois do término do seu programa."
+      },
+      "trackRecord": {
+        "title": "Histórico Comprovado",
+        "description": "Mais de 5.000 transformações bem-sucedidas em diversos tipos de corpo, idades e níveis de condicionamento físico. Pessoas reais, resultados reais, depoimentos reais."
+      }
+    },
+    "credentials": {
+      "badge": "Qualificações & Expertise",
+      "title": "Credenciais Que Importam",
+      "pharmd": {
+        "title": "Doutora em Farmácia (Pharm.D.) & Ciências Nutricionais",
+        "description": "Treinamento clínico avançado em farmacologia, bioquímica e interações droga-nutriente. Expertise especializada em saúde metabólica e intervenções nutricionais baseadas em evidências."
+      },
+      "cissn": {
+        "title": "Nutricionista Esportiva Certificada (CISSN)",
+        "description": "Treinamento especializado em nutrição para atletas, melhoria de desempenho e estratégias de recuperação"
+      },
+      "nasm": {
+        "title": "NASM-CPT & Especialista em Força e Condicionamento",
+        "description": "Especialista em projetar programas de treino seguros e eficazes para todos os níveis de condicionamento físico"
+      },
+      "experience": {
+        "title": "Mais de 15 Anos de Experiência Clínica e Coaching",
+        "description": "Milhares de transformações bem-sucedidas de clientes, desde perda de peso até fisiculturismo competitivo"
+      }
+    },
+    "philosophy": {
+      "badge": "Minha Filosofia",
+      "title": "Saúde É uma Jornada, Não um Destino",
+      "p1": "Acredito que todos merecem se sentir confiantes, energizados e saudáveis em seu próprio corpo. Minha missão é cortar o ruído de tendências dietéticas conflitantes e modismos de fitness para fornecer orientação clara, acionável e baseada em ciência.",
+      "p2": "Ao longo dos anos, aprendi que a transformação sustentável não é sobre perfeição—é sobre progresso. É sobre encontrar uma abordagem que se encaixe no seu estilo de vida, honre suas preferências e faça você se sentir incrível tanto física quanto mentalmente.",
+      "p3": "Seja você procurando perder peso, ganhar músculos, melhorar seu desempenho atlético, gerenciar uma condição de saúde ou simplesmente se sentir melhor em sua vida diária, estou aqui para guiá-lo com expertise, empatia e suporte inabalável.",
+      "p4": "Seu sucesso é meu sucesso. Vamos fazer isso acontecer juntos.",
+      "name": "Dra. Jackie Souto",
+      "credentials": "Pharm.D., CISSN, NASM-CPT"
+    },
+    "cta": {
+      "title": "Pronto para Transformar Sua Saúde?",
+      "subtitle": "Junte-se a milhares de clientes que alcançaram seus objetivos com orientação personalizada da Dra. Jackie",
+      "nutritionButton": "Obtenha Seu Plano Nutricional",
+      "fitnessButton": "Explore Programas de Fitness",
+      "questionText": "Tem dúvidas? Vamos conversar!",
+      "contactButton": "Contate a Dra. Jackie"
     }
   }
 }

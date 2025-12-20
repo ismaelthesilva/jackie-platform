@@ -217,7 +217,7 @@
         }
       },
       "experience": {
-        "number": "10+"
+        "number": "15+"
       },
       "success": {
         "number": "98%"
@@ -284,6 +284,93 @@
       "title": "Message Sent!",
       "description": "Thank you for contacting Dr. Jackie. Your message has been sent successfully and you'll receive a response within 24 hours.",
       "sendAnother": "Send Another Message"
+    }
+  },
+  "about": {
+    "hero": {
+      "badge": "Expert Nutritionist & Fitness Coach",
+      "title": "Meet Dr. Jackie Souto",
+      "subtitle": "Your Partner in Achieving Sustainable Health & Fitness Goals",
+      "description": "With over a decade of experience transforming lives through evidence-based nutrition and personalized fitness strategies, Dr. Jackie combines scientific expertise with genuine care to help you become the healthiest, strongest version of yourself.",
+      "nutritionButton": "Get Your Nutrition Plan",
+      "fitnessButton": "Explore Fitness Programs",
+      "stats": {
+        "clients": "5,000+",
+        "clientsLabel": "Clients Transformed",
+        "experience": "15+",
+        "experienceLabel": "Years Experience",
+        "success": "98%",
+        "successLabel": "Success Rate",
+        "rating": "4.9/5",
+        "ratingLabel": "Client Rating"
+      }
+    },
+    "whyChoose": {
+      "badge": "Why Dr. Jackie",
+      "title": "The Difference That Delivers Results",
+      "subtitle": "Not just another diet plan or workout routine. A comprehensive, science-backed approach personalized to your unique needs.",
+      "personalized": {
+        "title": "Personalized Approach",
+        "description": "No cookie-cutter plans. Every nutrition and fitness strategy is tailored to your body type, lifestyle, goals, and health conditions. You're unique—your plan should be too."
+      },
+      "evidenceBased": {
+        "title": "Evidence-Based Methods",
+        "description": "Backed by the latest nutritional science and exercise physiology research. No fads, no gimmicks—just proven strategies that work for long-term sustainable results."
+      },
+      "holistic": {
+        "title": "Holistic Health Focus",
+        "description": "Beyond just weight loss or muscle gain. We address sleep, stress, digestion, hormones, and mental wellbeing for complete transformation inside and out."
+      },
+      "support": {
+        "title": "Continuous Support",
+        "description": "You're never alone on this journey. Ongoing guidance, adjustments, and accountability to ensure you stay on track and overcome any obstacles that arise."
+      },
+      "results": {
+        "title": "Real, Lasting Results",
+        "description": "Focus on sustainable lifestyle changes, not quick fixes. Build habits that last a lifetime and maintain your results long after your program ends."
+      },
+      "trackRecord": {
+        "title": "Proven Track Record",
+        "description": "Over 5,000 successful transformations across diverse body types, ages, and fitness levels. Real people, real results, real testimonials."
+      }
+    },
+    "credentials": {
+      "badge": "Qualifications & Expertise",
+      "title": "Credentials That Matter",
+      "pharmd": {
+        "title": "Doctor of Pharmacy (Pharm.D.) & Nutritional Sciences",
+        "description": "Advanced clinical training in pharmacology, biochemistry, and drug-nutrient interactions. Specialized expertise in metabolic health and evidence-based nutritional interventions."
+      },
+      "cissn": {
+        "title": "Certified Sports Nutritionist (CISSN)",
+        "description": "Specialized training in athlete nutrition, performance enhancement, and recovery strategies"
+      },
+      "nasm": {
+        "title": "NASM-CPT & Strength & Conditioning Specialist",
+        "description": "Expert in designing safe, effective workout programs for all fitness levels"
+      },
+      "experience": {
+        "title": "15+ Years Clinical & Coaching Experience",
+        "description": "Thousands of successful client transformations from weight loss to competitive bodybuilding"
+      }
+    },
+    "philosophy": {
+      "badge": "My Philosophy",
+      "title": "Health Is a Journey, Not a Destination",
+      "p1": "I believe that everyone deserves to feel confident, energized, and healthy in their own body. My mission is to cut through the noise of conflicting diet trends and fitness fads to provide you with clear, actionable, science-based guidance.",
+      "p2": "Over the years, I've learned that sustainable transformation isn't about perfection—it's about progress. It's about finding an approach that fits your lifestyle, honors your preferences, and makes you feel amazing both physically and mentally.",
+      "p3": "Whether you're looking to lose weight, build muscle, improve your athletic performance, manage a health condition, or simply feel better in your daily life, I'm here to guide you with expertise, empathy, and unwavering support.",
+      "p4": "Your success is my success. Let's make it happen together.",
+      "name": "Dr. Jackie Souto",
+      "credentials": "Pharm.D., CISSN, NASM-CPT"
+    },
+    "cta": {
+      "title": "Ready to Transform Your Health?",
+      "subtitle": "Join thousands of clients who've achieved their goals with personalized guidance from Dr. Jackie",
+      "nutritionButton": "Get Your Nutrition Plan",
+      "fitnessButton": "Explore Fitness Programs",
+      "questionText": "Have questions? Let's talk!",
+      "contactButton": "Contact Dr. Jackie"
     }
   }
 }
