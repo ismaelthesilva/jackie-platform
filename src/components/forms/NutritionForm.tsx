@@ -115,7 +115,7 @@ export default function NutritionForm({ locale }: NutritionFormProps) {
         buttonText: t.welcome.buttonText,
       },
 
-      // 1. Initial Data
+      // 1. 1. Basic Information
       {
         id: "section1_header",
         type: "welcome",
@@ -135,7 +135,12 @@ export default function NutritionForm({ locale }: NutritionFormProps) {
         title: t.questions.email,
         required: true,
       },
-      { id: "idade", type: "number", title: t.questions.idade, required: true },
+      {
+        id: "idade",
+        type: "number",
+        title: t.questions.idade,
+        required: true,
+      },
       {
         id: "altura",
         type: "number",
@@ -151,15 +156,17 @@ export default function NutritionForm({ locale }: NutritionFormProps) {
       {
         id: "acompanhamento_anterior",
         type: "yes_no",
-        title:
-          "Have you previously worked with a nutritionist or personal trainer?",
+        title: t.questions.acompanhamento_anterior,
         required: true,
       },
       {
         id: "tempo_acompanhamento",
         type: "text",
         title: t.questions.tempo_acompanhamento,
-        condition: { id: "acompanhamento_anterior", value: "Yes" },
+        condition: {
+          id: "acompanhamento_anterior",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
       {
@@ -172,964 +179,997 @@ export default function NutritionForm({ locale }: NutritionFormProps) {
         id: "tempo_seguiu_plano",
         type: "text",
         title: t.questions.tempo_seguiu_plano,
-        condition: { id: "dieta_anterior", value: "Yes" },
+        condition: {
+          id: "dieta_anterior",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
 
-      // 2. Goal and History
+      // 2. 2. Goals and History
       {
         id: "section2_header",
         type: "welcome",
         title: t.sections.section2.title,
         description: t.sections.section2.description,
-        buttonText: "Continue",
+        buttonText: t.buttons.continue,
       },
       {
         id: "objetivo_principal",
         type: "multiple_choice",
-        title: "What is your main goal?",
-        options: [
-          "Weight loss",
-          "Muscle gain",
-          "Body recomposition",
-          "Aesthetics (shape/definition)",
-          "Athletic performance",
-          "Dietary reeducation",
-        ],
+        title: t.questions.objetivo_principal,
+        options: t.options.objetivo_principal,
         required: true,
       },
       {
         id: "meta_especifica",
         type: "textarea",
-        title:
-          "Do you have a specific weight goal, body fat percentage, or deadline to achieve your goal?",
+        title: t.questions.meta_especifica,
         required: false,
       },
       {
         id: "competicoes",
         type: "yes_no",
-        title:
-          "Have you participated or plan to participate in competitions (e.g., bodybuilding)?",
+        title: t.questions.competicoes,
         required: true,
       },
       {
         id: "categoria_competicao",
         type: "text",
-        title: "Which category?",
-        condition: { id: "competicoes", value: "Yes" },
+        title: t.questions.categoria_competicao,
+        condition: {
+          id: "competicoes",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
       {
         id: "data_competicao",
         type: "text",
-        title: "When was or will be the competition?",
-        condition: { id: "competicoes", value: "Yes" },
+        title: t.questions.data_competicao,
+        condition: {
+          id: "competicoes",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
 
-      // 3. Health and Digestion
+      // 3. 3. Health and Digestion
       {
         id: "section3_header",
         type: "welcome",
         title: t.sections.section3.title,
         description: t.sections.section3.description,
-        buttonText: "Continue",
+        buttonText: t.buttons.continue,
       },
       {
         id: "condicoes_saude",
         type: "textarea",
-        title:
-          "Do you have any health conditions? (e.g., PCOS, hypothyroidism, dysbiosis, gastritis, insulin resistance, etc.)",
+        title: t.questions.condicoes_saude,
         required: false,
       },
       {
         id: "medicamentos",
         type: "yes_no",
-        title: "Do you take any medications or supplements?",
+        title: t.questions.medicamentos,
         required: true,
       },
       {
         id: "quais_medicamentos",
         type: "textarea",
-        title: "Which ones? Dosages? Schedules?",
-        condition: { id: "medicamentos", value: "Yes" },
+        title: t.questions.quais_medicamentos,
+        condition: {
+          id: "medicamentos",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
       {
         id: "intolerancias",
         type: "yes_no",
-        title: "Do you have any food intolerances or allergies?",
+        title: t.questions.intolerancias,
         required: true,
       },
       {
         id: "quais_intolerancias",
         type: "textarea",
-        title: "Which ones?",
-        condition: { id: "intolerancias", value: "Yes" },
+        title: t.questions.quais_intolerancias,
+        condition: {
+          id: "intolerancias",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
       {
         id: "dificuldade_digestao",
         type: "yes_no",
-        title: "Do you have difficulty digesting any foods?",
+        title: t.questions.dificuldade_digestao,
         required: true,
       },
       {
         id: "quais_dificuldade_digestao",
         type: "textarea",
-        title: "Which one(s)?",
-        condition: { id: "dificuldade_digestao", value: "Yes" },
+        title: t.questions.quais_dificuldade_digestao,
+        condition: {
+          id: "dificuldade_digestao",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
-
-      // Digestive symptoms
       {
         id: "inchaço_abdominal",
         type: "yes_no",
-        title: "Do you often experience abdominal bloating?",
+        title: t.questions.inchaço_abdominal,
         required: true,
       },
       {
         id: "inchaço_detalhes",
         type: "textarea",
-        title: "At what time of day and after which foods?",
-        condition: { id: "inchaço_abdominal", value: "Yes" },
+        title: t.questions.inchaço_detalhes,
+        condition: {
+          id: "inchaço_abdominal",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
-
       {
         id: "azia",
         type: "yes_no",
-        title: "Do you often experience heartburn?",
+        title: t.questions.azia,
         required: true,
       },
       {
         id: "azia_detalhes",
         type: "textarea",
-        title: "How frequently and in what situations?",
-        condition: { id: "azia", value: "Yes" },
+        title: t.questions.azia_detalhes,
+        condition: { id: "azia", value: locale === "pt" ? "Sim" : "Yes" },
         required: true,
       },
-
       {
         id: "gases",
         type: "yes_no",
-        title: "Do you often experience gas/burping?",
+        title: t.questions.gases,
         required: true,
       },
       {
         id: "gases_detalhes",
         type: "textarea",
-        title: "At what times of the day?",
-        condition: { id: "gases", value: "Yes" },
+        title: t.questions.gases_detalhes,
+        condition: { id: "gases", value: locale === "pt" ? "Sim" : "Yes" },
         required: true,
       },
-
       {
         id: "desconforto_refeicoes",
         type: "yes_no",
-        title: "Do you often experience discomfort after meals?",
+        title: t.questions.desconforto_refeicoes,
         required: true,
       },
       {
         id: "desconforto_detalhes",
         type: "textarea",
-        title: "How frequently and after what types of meals?",
-        condition: { id: "desconforto_refeicoes", value: "Yes" },
+        title: t.questions.desconforto_detalhes,
+        condition: {
+          id: "desconforto_refeicoes",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
-
       {
         id: "sonolencia_refeicoes",
         type: "yes_no",
-        title: "Do you feel drowsy after meals?",
+        title: t.questions.sonolencia_refeicoes,
         required: true,
       },
       {
         id: "sonolencia_detalhes",
         type: "textarea",
-        title: "Which meals and how often?",
-        condition: { id: "sonolencia_refeicoes", value: "Yes" },
+        title: t.questions.sonolencia_detalhes,
+        condition: {
+          id: "sonolencia_refeicoes",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
-
       {
         id: "queda_energia",
         type: "yes_no",
-        title:
-          "Do you feel a lack of energy or decreased physical/cognitive performance after eating?",
+        title: t.questions.queda_energia,
         required: true,
       },
       {
         id: "queda_energia_detalhes",
         type: "textarea",
-        title: "After which meals or types of food?",
-        condition: { id: "queda_energia", value: "Yes" },
+        title: t.questions.queda_energia_detalhes,
+        condition: {
+          id: "queda_energia",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
-
       {
         id: "exames_recentes",
         type: "yes_no",
-        title: "Have you had recent lab tests?",
+        title: t.questions.exames_recentes,
         required: true,
       },
       {
         id: "exames_resultados",
         type: "textarea",
-        title: "Can you share the main results?",
-        condition: { id: "exames_recentes", value: "Yes" },
+        title: t.questions.exames_resultados,
+        condition: {
+          id: "exames_recentes",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
 
-      // 4. Eating Behavior and Routine
+      // 4. 4. Eating Behavior and Routine
       {
         id: "section4_header",
         type: "welcome",
         title: t.sections.section4.title,
         description: t.sections.section4.description,
-        buttonText: "Continue",
+        buttonText: t.buttons.continue,
       },
       {
         id: "quantidade_refeicoes",
         type: "text",
-        title: "How many meals do you typically have per day?",
+        title: t.questions.quantidade_refeicoes,
         required: true,
       },
       {
         id: "refeicoes_frequentes",
         type: "textarea",
-        title: "Which meals do you have most frequently?",
+        title: t.questions.refeicoes_frequentes,
         required: true,
       },
       {
         id: "horarios_fixos",
         type: "yes_no",
-        title: "Do you have fixed meal times?",
+        title: t.questions.horarios_fixos,
         required: true,
       },
       {
         id: "quais_horarios",
         type: "textarea",
-        title: "What times?",
-        condition: { id: "horarios_fixos", value: "Yes" },
+        title: t.questions.quais_horarios,
+        condition: {
+          id: "horarios_fixos",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
-
       {
         id: "pula_refeicoes",
         type: "yes_no",
-        title: "Do you often skip meals?",
+        title: t.questions.pula_refeicoes,
         required: true,
       },
       {
         id: "quais_pula_refeicoes",
         type: "textarea",
-        title: "Which meals do you skip and why?",
-        condition: { id: "pula_refeicoes", value: "Yes" },
+        title: t.questions.quais_pula_refeicoes,
+        condition: {
+          id: "pula_refeicoes",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
-
       {
         id: "faz_jejum",
         type: "yes_no",
-        title: "Do you practice fasting?",
+        title: t.questions.faz_jejum,
         required: true,
       },
       {
         id: "detalhes_jejum",
         type: "textarea",
-        title: "What type? How many hours? How often?",
-        condition: { id: "faz_jejum", value: "Yes" },
+        title: t.questions.detalhes_jejum,
+        condition: { id: "faz_jejum", value: locale === "pt" ? "Sim" : "Yes" },
         required: true,
       },
-
       {
         id: "horario_fome",
         type: "text",
-        title: "At what time of day do you feel most hungry?",
+        title: t.questions.horario_fome,
         required: true,
       },
-
-      {
-        id: "belisca",
-        type: "yes_no",
-        title: "Do you snack between meals?",
-        required: true,
-      },
-      {
-        id: "detalhes_beliscar",
-        type: "textarea",
-        title: "What? How often?",
-        condition: { id: "belisca", value: "Yes" },
-        required: true,
-      },
-
-      {
-        id: "compulsao",
-        type: "yes_no",
-        title: "Do you experience episodes of binge eating?",
-        required: true,
-      },
-      {
-        id: "detalhes_compulsao",
-        type: "textarea",
-        title: "In what situations and with which foods?",
-        condition: { id: "compulsao", value: "Yes" },
-        required: true,
-      },
-
       {
         id: "fome_emocional",
         type: "yes_no",
-        title: "Do you experience episodes of emotional eating?",
+        title: t.questions.fome_emocional,
         required: true,
       },
       {
         id: "detalhes_fome_emocional",
         type: "textarea",
-        title: "How often and in what context?",
-        condition: { id: "fome_emocional", value: "Yes" },
+        title: t.questions.detalhes_fome_emocional,
+        condition: {
+          id: "fome_emocional",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
-
+      {
+        id: "belisca",
+        type: "yes_no",
+        title: t.questions.belisca,
+        required: true,
+      },
+      {
+        id: "detalhes_beliscar",
+        type: "textarea",
+        title: t.questions.detalhes_beliscar,
+        condition: { id: "belisca", value: locale === "pt" ? "Sim" : "Yes" },
+        required: true,
+      },
       {
         id: "bebe_refeicoes",
         type: "yes_no",
-        title: "Do you typically drink liquids during meals?",
+        title: t.questions.bebe_refeicoes,
         required: true,
       },
       {
         id: "detalhes_bebe_refeicoes",
         type: "textarea",
-        title: "Which beverages? In what quantity?",
-        condition: { id: "bebe_refeicoes", value: "Yes" },
+        title: t.questions.detalhes_bebe_refeicoes,
+        condition: {
+          id: "bebe_refeicoes",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
-
       {
         id: "bebidas_adocadas",
         type: "yes_no",
-        title:
-          "Do you consume sweetened drinks like juices, sodas, or energy drinks?",
+        title: t.questions.bebidas_adocadas,
         required: true,
       },
       {
         id: "quais_bebidas_adocadas",
         type: "textarea",
-        title: "Which specific drinks?",
-        condition: { id: "bebidas_adocadas", value: "Yes" },
+        title: t.questions.quais_bebidas_adocadas,
+        condition: {
+          id: "bebidas_adocadas",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
       {
         id: "frequencia_bebidas_adocadas",
         type: "text",
-        title: "How often per week?",
-        condition: { id: "bebidas_adocadas", value: "Yes" },
+        title: t.questions.frequencia_bebidas_adocadas,
+        condition: {
+          id: "bebidas_adocadas",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
       {
         id: "quantidade_bebidas_adocadas",
         type: "text",
-        title: "In what quantity (ml or cans)?",
-        condition: { id: "bebidas_adocadas", value: "Yes" },
+        title: t.questions.quantidade_bebidas_adocadas,
+        condition: {
+          id: "bebidas_adocadas",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
-
       {
         id: "bebidas_zero",
         type: "yes_no",
-        title:
-          "Do you consume zero-calorie drinks (diet soda, teas sweetened with stevia, etc.)?",
+        title: t.questions.bebidas_zero,
         required: true,
       },
       {
         id: "detalhes_bebidas_zero",
         type: "textarea",
-        title: "Which ones and how often?",
-        condition: { id: "bebidas_zero", value: "Yes" },
+        title: t.questions.detalhes_bebidas_zero,
+        condition: {
+          id: "bebidas_zero",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
-
       {
         id: "cafe",
         type: "yes_no",
-        title: "Do you drink coffee?",
+        title: t.questions.cafe,
         required: true,
       },
       {
         id: "frequencia_cafe",
         type: "text",
-        title: "How many times per day?",
-        condition: { id: "cafe", value: "Yes" },
+        title: t.questions.frequencia_cafe,
+        condition: { id: "cafe", value: locale === "pt" ? "Sim" : "Yes" },
         required: true,
       },
       {
         id: "quantidade_cafe",
         type: "text",
-        title: "Quantity each time (ml or cups)?",
-        condition: { id: "cafe", value: "Yes" },
+        title: t.questions.quantidade_cafe,
+        condition: { id: "cafe", value: locale === "pt" ? "Sim" : "Yes" },
         required: true,
       },
       {
         id: "tipo_cafe",
         type: "text",
-        title: "With sugar, sweetener, milk, or black?",
-        condition: { id: "cafe", value: "Yes" },
+        title: t.questions.tipo_cafe,
+        condition: { id: "cafe", value: locale === "pt" ? "Sim" : "Yes" },
         required: true,
       },
-
       {
         id: "estimulantes",
         type: "yes_no",
-        title:
-          "Do you use other stimulants (pre-workouts, thermogenics, energy drinks)?",
+        title: t.questions.estimulantes,
         required: true,
       },
       {
         id: "detalhes_estimulantes",
         type: "textarea",
-        title: "Which ones? At what time?",
-        condition: { id: "estimulantes", value: "Yes" },
+        title: t.questions.detalhes_estimulantes,
+        condition: {
+          id: "estimulantes",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
-
       {
         id: "alcool",
         type: "yes_no",
-        title: "Do you consume alcohol?",
+        title: t.questions.alcool,
         required: true,
       },
       {
         id: "frequencia_alcool",
         type: "text",
-        title: "How often?",
-        condition: { id: "alcool", value: "Yes" },
+        title: t.questions.frequencia_alcool,
+        condition: { id: "alcool", value: locale === "pt" ? "Sim" : "Yes" },
         required: true,
       },
       {
         id: "quantidade_alcool",
         type: "text",
-        title: "In what quantity (glasses, cans, cups)?",
-        condition: { id: "alcool", value: "Yes" },
+        title: t.questions.quantidade_alcool,
+        condition: { id: "alcool", value: locale === "pt" ? "Sim" : "Yes" },
         required: true,
       },
       {
         id: "tipo_alcool",
         type: "text",
-        title: "Which brands and types? (wine, beer, gin, spirits, etc.)",
-        condition: { id: "alcool", value: "Yes" },
+        title: t.questions.tipo_alcool,
+        condition: { id: "alcool", value: locale === "pt" ? "Sim" : "Yes" },
         required: true,
       },
-
       {
         id: "cigarro",
         type: "yes_no",
-        title: "Do you smoke cigarettes?",
+        title: t.questions.cigarro,
         required: true,
       },
       {
         id: "detalhes_cigarro",
         type: "text",
-        title: "For how long? How many per day?",
-        condition: { id: "cigarro", value: "Yes" },
+        title: t.questions.detalhes_cigarro,
+        condition: { id: "cigarro", value: locale === "pt" ? "Sim" : "Yes" },
         required: true,
       },
-
       {
         id: "vape",
         type: "yes_no",
-        title: "Do you use e-cigarettes (vape)?",
+        title: t.questions.vape,
         required: true,
       },
       {
         id: "detalhes_vape",
         type: "text",
-        title: "How often? For how long?",
-        condition: { id: "vape", value: "Yes" },
+        title: t.questions.detalhes_vape,
+        condition: { id: "vape", value: locale === "pt" ? "Sim" : "Yes" },
         required: true,
       },
-
       {
         id: "charuto",
         type: "yes_no",
-        title: "Do you smoke cigars?",
+        title: t.questions.charuto,
         required: true,
       },
       {
         id: "detalhes_charuto",
         type: "text",
-        title: "How often? For how long?",
-        condition: { id: "charuto", value: "Yes" },
+        title: t.questions.detalhes_charuto,
+        condition: { id: "charuto", value: locale === "pt" ? "Sim" : "Yes" },
         required: true,
       },
 
-      // 5. Food Preferences and Aversions
+      // 5. 5. Food Preferences and Aversions
       {
         id: "section5_header",
         type: "welcome",
         title: t.sections.section5.title,
         description: t.sections.section5.description,
-        buttonText: "Continue",
+        buttonText: t.buttons.continue,
       },
       {
         id: "alimentos_gosta",
         type: "textarea",
-        title:
-          "Which foods do you really like and would like to keep in your diet?",
+        title: t.questions.alimentos_gosta,
         required: true,
       },
       {
         id: "alimentos_evita",
         type: "textarea",
-        title:
-          "Which foods do you avoid or don't tolerate (due to taste, texture, or ideology)?",
+        title: t.questions.alimentos_evita,
         required: true,
       },
       {
         id: "cafe_manha_preferencia",
         type: "text",
-        title: "Do you prefer sweet or savory breakfast?",
+        title: t.questions.cafe_manha_preferencia,
         required: true,
       },
       {
         id: "frutas_vegetais_preferidos",
         type: "textarea",
-        title: "Which fruits and vegetables do you prefer?",
+        title: t.questions.frutas_vegetais_preferidos,
         required: true,
       },
       {
         id: "aversao_texturas",
         type: "textarea",
-        title:
-          "Do you have any aversion to certain textures or flavors (e.g. mint, coconut, cilantro, ginger)?",
+        title: t.questions.aversao_texturas,
         required: false,
       },
-
       {
         id: "paladar_alterado",
         type: "yes_no",
-        title:
-          "Do you often experience altered taste, dry mouth, or bitter taste?",
+        title: t.questions.paladar_alterado,
         required: true,
       },
       {
         id: "detalhes_paladar_alterado",
         type: "text",
-        title: "In what situations?",
-        condition: { id: "paladar_alterado", value: "Yes" },
+        title: t.questions.detalhes_paladar_alterado,
+        condition: {
+          id: "paladar_alterado",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
-
       {
         id: "nivel_apetite",
         type: "multiple_choice",
-        title: "How would you rate your appetite:",
-        options: ["Low", "Normal", "Very high"],
+        title: t.questions.nivel_apetite,
+        options: t.options.nivel_apetite,
         required: true,
       },
-
       {
         id: "consome_ovo",
         type: "yes_no",
-        title: "Do you eat eggs?",
+        title: t.questions.consome_ovo,
         required: true,
       },
       {
         id: "consome_peixe",
         type: "yes_no",
-        title: "Do you eat fish?",
+        title: t.questions.consome_peixe,
         required: true,
       },
       {
         id: "consome_carne_vermelha",
         type: "yes_no",
-        title: "Do you eat red meat?",
+        title: t.questions.consome_carne_vermelha,
         required: true,
       },
       {
         id: "consome_tofu",
         type: "yes_no",
-        title: "Do you eat tofu or plant-based protein?",
+        title: t.questions.consome_tofu,
         required: true,
       },
       {
         id: "consome_leite",
         type: "yes_no",
-        title: "Do you consume milk and dairy products?",
+        title: t.questions.consome_leite,
         required: true,
       },
-
       {
         id: "preferencia_carne",
         type: "yes_no",
-        title: "Do you have a preference for any specific type of meat?",
+        title: t.questions.preferencia_carne,
         required: true,
       },
       {
         id: "tipo_carne_preferido",
         type: "text",
-        title: "Which one?",
-        condition: { id: "preferencia_carne", value: "Yes" },
+        title: t.questions.tipo_carne_preferido,
+        condition: {
+          id: "preferencia_carne",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
-
       {
         id: "dificuldade_carne_vermelha",
         type: "yes_no",
-        title: "Do you have difficulty digesting red meat?",
+        title: t.questions.dificuldade_carne_vermelha,
         required: true,
       },
-
       {
         id: "gordura_cozinhar",
         type: "text",
-        title:
-          "What type of fat do you typically use for cooking? (olive oil, butter, soybean oil, lard, coconut oil, etc.)",
+        title: t.questions.gordura_cozinhar,
         required: true,
       },
-
       {
         id: "azeite",
         type: "yes_no",
-        title: "Do you use olive oil regularly?",
+        title: t.questions.azeite,
         required: true,
       },
       {
         id: "quantidade_azeite",
         type: "text",
-        title: "In what approximate amount per meal?",
-        condition: { id: "azeite", value: "Yes" },
+        title: t.questions.quantidade_azeite,
+        condition: { id: "azeite", value: locale === "pt" ? "Sim" : "Yes" },
         required: true,
       },
-
       {
         id: "oleo_coco",
         type: "yes_no",
-        title: "Do you use coconut oil or coconut products?",
+        title: t.questions.oleo_coco,
         required: true,
       },
       {
         id: "frequencia_oleo_coco",
         type: "text",
-        title: "How often?",
-        condition: { id: "oleo_coco", value: "Yes" },
+        title: t.questions.frequencia_oleo_coco,
+        condition: { id: "oleo_coco", value: locale === "pt" ? "Sim" : "Yes" },
         required: true,
       },
-
       {
         id: "frituras",
         type: "yes_no",
-        title: "Do you eat fried foods?",
+        title: t.questions.frituras,
         required: true,
       },
       {
         id: "frequencia_frituras",
         type: "text",
-        title: "How often per week or per day?",
-        condition: { id: "frituras", value: "Yes" },
+        title: t.questions.frequencia_frituras,
+        condition: { id: "frituras", value: locale === "pt" ? "Sim" : "Yes" },
         required: true,
       },
       {
         id: "alimentos_frituras",
         type: "text",
-        title: "Which foods?",
-        condition: { id: "frituras", value: "Yes" },
+        title: t.questions.alimentos_frituras,
+        condition: { id: "frituras", value: locale === "pt" ? "Sim" : "Yes" },
         required: true,
       },
 
-      // 6. Cheat Meals
+      // 6. 6. Cheat Meals
       {
         id: "section6_header",
         type: "welcome",
         title: t.sections.section6.title,
         description: t.sections.section6.description,
-        buttonText: "Continue",
+        buttonText: t.buttons.continue,
       },
       {
         id: "refeicoes_livres",
         type: "yes_no",
-        title: "Do you have cheat meals?",
+        title: t.questions.refeicoes_livres,
         required: true,
       },
       {
         id: "frequencia_refeicoes_livres",
         type: "text",
-        title: "How often per week?",
-        condition: { id: "refeicoes_livres", value: "Yes" },
+        title: t.questions.frequencia_refeicoes_livres,
+        condition: {
+          id: "refeicoes_livres",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
       {
         id: "dia_refeicao_livre",
         type: "text",
-        title: "On which day do you usually have it?",
-        condition: { id: "refeicoes_livres", value: "Yes" },
+        title: t.questions.dia_refeicao_livre,
+        condition: {
+          id: "refeicoes_livres",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
       {
         id: "preferencia_refeicao_livre",
         type: "textarea",
-        title: "What do you like to eat during these meals?",
-        condition: { id: "refeicoes_livres", value: "Yes" },
+        title: t.questions.preferencia_refeicao_livre,
+        condition: {
+          id: "refeicoes_livres",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
       {
         id: "preferencia_agendamento",
         type: "multiple_choice",
-        title:
-          "Do you prefer to have your cheat meal scheduled or decide in the moment?",
-        options: ["Scheduled", "Decide in the moment"],
+        title: t.questions.preferencia_agendamento,
+        options: t.options.preferencia_agendamento,
         required: true,
       },
 
-      // 7. Macronutrients and Meal Composition
+      // 7. 7. Macronutrients and Meal Composition
       {
         id: "section7_header",
         type: "welcome",
         title: t.sections.section7.title,
         description: t.sections.section7.description,
-        buttonText: "Continue",
+        buttonText: t.buttons.continue,
       },
       {
         id: "proteina_refeicoes",
         type: "yes_no",
-        title: "Do you include a protein source in all meals?",
+        title: t.questions.proteina_refeicoes,
         required: true,
       },
       {
         id: "fontes_proteina",
         type: "textarea",
-        title: "What are your main sources?",
-        condition: { id: "proteina_refeicoes", value: "Yes" },
+        title: t.questions.fontes_proteina,
+        condition: {
+          id: "proteina_refeicoes",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
-
       {
         id: "gorduras_boas",
         type: "yes_no",
-        title: "Do you consume healthy fat sources?",
+        title: t.questions.gorduras_boas,
         required: true,
       },
       {
         id: "quais_gorduras_boas",
         type: "textarea",
-        title:
-          "Which ones (avocado, nuts, olive oil, egg yolk, coconut oil, etc.)",
-        condition: { id: "gorduras_boas", value: "Yes" },
+        title: t.questions.quais_gorduras_boas,
+        condition: {
+          id: "gorduras_boas",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
-
       {
         id: "carboidratos_frequentes",
         type: "textarea",
-        title:
-          "Which carbohydrates do you consume most frequently? Do you prefer whole grains or refined?",
+        title: t.questions.carboidratos_frequentes,
         required: true,
       },
-
       {
         id: "dieta_manipulacao_carbo",
         type: "yes_no",
-        title: "Have you used a diet with carb manipulation (e.g., cycling)?",
+        title: t.questions.dieta_manipulacao_carbo,
         required: true,
       },
       {
         id: "modelo_dieta_carbo",
         type: "text",
-        title: "Which model?",
-        condition: { id: "dieta_manipulacao_carbo", value: "Yes" },
+        title: t.questions.modelo_dieta_carbo,
+        condition: {
+          id: "dieta_manipulacao_carbo",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
-
       {
         id: "preferencia_ciclo_carbo",
         type: "multiple_choice",
-        title:
-          "Would you like to include carb cycling or maintain a linear pattern?",
-        options: ["Carb cycling", "Linear pattern"],
+        title: t.questions.preferencia_ciclo_carbo,
+        options: t.options.preferencia_ciclo_carbo,
         required: true,
       },
 
-      // 8. Training and Lifestyle
+      // 8. 8. Training and Lifestyle
       {
         id: "section8_header",
         type: "welcome",
         title: t.sections.section8.title,
         description: t.sections.section8.description,
-        buttonText: "Continue",
+        buttonText: t.buttons.continue,
       },
       {
         id: "pratica_atividade",
         type: "yes_no",
-        title: "Do you engage in physical activity?",
+        title: t.questions.pratica_atividade,
         required: true,
       },
       {
         id: "modalidade_atividade",
         type: "text",
-        title: "Which modality?",
-        condition: { id: "pratica_atividade", value: "Yes" },
+        title: t.questions.modalidade_atividade,
+        condition: {
+          id: "pratica_atividade",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
       {
         id: "frequencia_atividade",
         type: "text",
-        title: "Weekly frequency?",
-        condition: { id: "pratica_atividade", value: "Yes" },
+        title: t.questions.frequencia_atividade,
+        condition: {
+          id: "pratica_atividade",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
       {
         id: "horario_atividade",
         type: "text",
-        title: "Usual training time?",
-        condition: { id: "pratica_atividade", value: "Yes" },
+        title: t.questions.horario_atividade,
+        condition: {
+          id: "pratica_atividade",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
       {
         id: "tipo_treino",
         type: "text",
-        title:
-          "Type of training (e.g., weight lifting, running, functional...)",
-        condition: { id: "pratica_atividade", value: "Yes" },
+        title: t.questions.tipo_treino,
+        condition: {
+          id: "pratica_atividade",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
       {
         id: "nivel_treino",
         type: "multiple_choice",
-        title: "Level:",
-        options: ["Beginner", "Intermediate", "Advanced"],
-        condition: { id: "pratica_atividade", value: "Yes" },
+        title: t.questions.nivel_treino,
+        options: t.options.nivel_treino,
+        condition: {
+          id: "pratica_atividade",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
-
       {
         id: "faz_cardio",
         type: "yes_no",
-        title: "Do you do cardio?",
+        title: t.questions.faz_cardio,
         required: true,
       },
       {
         id: "detalhes_cardio",
         type: "text",
-        title: "What type and how often?",
-        condition: { id: "faz_cardio", value: "Yes" },
+        title: t.questions.detalhes_cardio,
+        condition: { id: "faz_cardio", value: locale === "pt" ? "Sim" : "Yes" },
         required: true,
       },
-
       {
         id: "preferencia_alimentar_treino",
         type: "yes_no",
-        title: "Do you have food preferences for pre and post-workout?",
+        title: t.questions.preferencia_alimentar_treino,
         required: true,
       },
       {
         id: "detalhes_alimentar_treino",
         type: "textarea",
-        title: "What do you like or usually consume?",
-        condition: { id: "preferencia_alimentar_treino", value: "Yes" },
+        title: t.questions.detalhes_alimentar_treino,
+        condition: {
+          id: "preferencia_alimentar_treino",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
-
       {
         id: "usa_suplementos",
         type: "yes_no",
-        title: "Do you use any supplements?",
+        title: t.questions.usa_suplementos,
         required: true,
       },
       {
         id: "quais_suplementos",
         type: "textarea",
-        title: "Which ones?",
-        condition: { id: "usa_suplementos", value: "Yes" },
+        title: t.questions.quais_suplementos,
+        condition: {
+          id: "usa_suplementos",
+          value: locale === "pt" ? "Sim" : "Yes",
+        },
         required: true,
       },
 
-      // 9. Sleep and Stress
+      // 9. 9. Sleep and Stress
       {
         id: "section9_header",
         type: "welcome",
         title: t.sections.section9.title,
         description: t.sections.section9.description,
-        buttonText: "Continue",
+        buttonText: t.buttons.continue,
       },
       {
         id: "horas_sono",
         type: "text",
-        title: "How many hours do you sleep per night?",
+        title: t.questions.horas_sono,
         required: true,
       },
       {
         id: "dificuldade_dormir",
         type: "yes_no",
-        title:
-          "Do you have difficulty falling asleep or wake up during the night?",
+        title: t.questions.dificuldade_dormir,
         required: true,
       },
       {
         id: "acorda_descansado",
         type: "yes_no",
-        title: "Do you wake up feeling rested?",
+        title: t.questions.acorda_descansado,
         required: true,
       },
       {
         id: "estresse_elevado",
         type: "yes_no",
-        title: "Are you in a period of high stress?",
+        title: t.questions.estresse_elevado,
         required: true,
       },
       {
         id: "estresse_afeta_alimentacao",
         type: "yes_no",
-        title: "Does stress affect your eating or sleeping?",
+        title: t.questions.estresse_afeta_alimentacao,
         required: true,
       },
 
-      // 10. Final Considerations
+      // 10. 10. Final Considerations
       {
         id: "section10_header",
         type: "welcome",
         title: t.sections.section10.title,
         description: t.sections.section10.description,
-        buttonText: "Continue",
+        buttonText: t.buttons.continue,
+      },
+      {
+        id: "compulsao",
+        type: "yes_no",
+        title: t.questions.compulsao,
+        required: true,
+      },
+      {
+        id: "detalhes_compulsao",
+        type: "textarea",
+        title: t.questions.detalhes_compulsao,
+        condition: { id: "compulsao", value: locale === "pt" ? "Sim" : "Yes" },
+        required: true,
       },
       {
         id: "informacao_adicional",
         type: "textarea",
-        title:
-          "Is there any information you consider important that has not been addressed?",
+        title: t.questions.informacao_adicional,
         required: false,
       },
       {
         id: "preferencia_plano",
         type: "multiple_choice",
-        title:
-          "Would you prefer a plan with more freedom or more detailed structure?",
-        options: [
-          "More freedom",
-          "More detailed structure",
-          "Balance between both",
-        ],
+        title: t.questions.preferencia_plano,
+        options: t.options.preferencia_plano,
         required: true,
       },
       {
         id: "pesar_medir",
         type: "yes_no",
-        title: "Are you willing to weigh and measure your food if necessary?",
+        title: t.questions.pesar_medir,
         required: true,
       },
 
-      // Conclusion
+      // Thank you page
       {
-        id: "thankYou",
+        id: "thank_you",
         type: "thank_you",
-        title: "Thank you for completing the questionnaire!",
-        description:
-          "We will analyze your responses and send your personalized nutrition plan soon.",
+        title: t.welcome.title,
+        description: t.welcome.description,
       },
     ],
-    []
+    [locale, t]
   );
-
   const shouldDisplayQuestion = useCallback(
     (question: Question): boolean => {
       if (!question.condition) return true;
