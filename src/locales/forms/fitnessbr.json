@@ -1,0 +1,320 @@
+{
+  "welcome": {
+    "title": "QUESTIONÁRIO PROFISSIONAL DE FITNESS & MUSCULAÇÃO",
+    "description": "Projetado para todos os níveis: iniciantes a atletas de palco",
+    "buttonText": "Começar"
+  },
+  "buttons": {
+    "start": "Começar",
+    "continue": "Continuar",
+    "next": "Próximo",
+    "back": "Voltar",
+    "yes": "Sim",
+    "no": "Não"
+  },
+  "sections": {
+    "section1": {
+      "title": "SEÇÃO 1 — INFORMAÇÕES PESSOAIS & BÁSICAS",
+      "description": "Vamos começar com algumas informações básicas sobre você.",
+      "buttonText": "Continuar"
+    },
+    "section2": {
+      "title": "SEÇÃO 2 — HISTÓRICO DE SAÚDE",
+      "description": "Vamos conhecer seu histórico de saúde e médico.",
+      "buttonText": "Continuar"
+    },
+    "section3": {
+      "title": "SEÇÃO 3 — HISTÓRICO E EXPERIÊNCIA DE TREINO",
+      "description": "Conte-nos sobre sua experiência com treinos.",
+      "buttonText": "Continuar"
+    },
+    "section4": {
+      "title": "SEÇÃO 4 — OBJETIVOS & PRIORIDADES FÍSICAS",
+      "description": "Vamos entender seus objetivos e prioridades fitness.",
+      "buttonText": "Continuar"
+    },
+    "section5": {
+      "title": "SEÇÃO 5 — ESTILO DE TREINO, LIMITAÇÕES & BIOFEEDBACK",
+      "description": "Conte-nos sobre suas preferências e limitações de treino.",
+      "buttonText": "Continuar"
+    },
+    "section6": {
+      "title": "SEÇÃO 6 — CARDIO, MOBILIDADE & CONDICIONAMENTO",
+      "description": "Vamos discutir seu treino cardiovascular e mobilidade.",
+      "buttonText": "Continuar"
+    },
+    "section7": {
+      "title": "SEÇÃO 7 — ESTILO DE VIDA, ADERÊNCIA & MENTALIDADE",
+      "description": "Conte-nos sobre seu estilo de vida e mentalidade.",
+      "buttonText": "Continuar"
+    },
+    "section8": {
+      "title": "SEÇÃO 8 — FOTOS & ACOMPANHAMENTO DE PROGRESSO",
+      "description": "Como você acompanha seu progresso?",
+      "buttonText": "Continuar"
+    },
+    "section9": {
+      "title": "SEÇÃO 9 — NUTRIÇÃO & SUPLEMENTAÇÃO",
+      "description": "Vamos discutir seus hábitos nutricionais.",
+      "buttonText": "Continuar"
+    },
+    "section10": {
+      "title": "SEÇÃO 10 — HIDRATAÇÃO",
+      "description": "Conte-nos sobre seus hábitos de hidratação.",
+      "buttonText": "Continuar"
+    },
+    "section11": {
+      "title": "SEÇÃO 11 — AAP (ATIVAÇÃO E PADRÕES DE DOR)",
+      "description": "Entendendo sua ativação muscular e padrões de dor.",
+      "buttonText": "Continuar"
+    }
+  },
+  "questions": {
+    "nome_completo": "Nome completo:",
+    "email": "Por favor, forneça seu e-mail para receber seu plano personalizado",
+    "data_nascimento": "Data de nascimento:",
+    "altura": "Altura (em cm):",
+    "peso": "Peso atual (em kg):",
+    "percentual_gordura": "Percentual de gordura corporal (se souber):",
+    "localizacao": "Localização (Cidade e País):",
+    "profissao": "Ocupação e rotina de trabalho (trabalho por turnos, sedentário, trabalho ativo, etc.):",
+    "horario_sono": "Horário habitual de sono (hora de dormir e acordar):",
+    "horas_sono": "Média de horas de sono por noite:",
+    "tipo_sono": "Como você avaliaria seu sono?",
+    "acorda_descansado": "Você acorda se sentindo descansado?",
+    "energia_dia": "Como você descreveria seus níveis de energia diários?",
+    "fuma": "Você fuma?",
+    "alcool": "Você consome álcool?",
+    "alcool_detalhes": "Frequência e quantidade:",
+    "gestante": "Você está grávida ou tentando engravidar? (se aplicável)",
+    "doencas": "Você tem alguma condição médica diagnosticada? (ex: hipotireoidismo, SOP, resistência à insulina)",
+    "lesoes": "Você já sofreu alguma lesão? Por favor, especifique local e ano:",
+    "cirurgias": "Você já fez alguma cirurgia? Quais e quando?",
+    "medicacao": "Você toma algum medicamento regularmente? Quais?",
+    "alergias": "Você tem alguma alergia ou intolerância alimentar?",
+    "anticoncepcional": "Você usa anticoncepcional? Especifique tipo e método:",
+    "exames_sangue": "Você fez exames de sangue nos últimos 6 meses?",
+    "exames_alteracoes": "Se sim, houve alguma anormalidade?",
+    "tempo_treino": "Há quanto tempo você treina consistentemente?",
+    "fases_cutting_bulking": "Você já fez fases de cutting ou bulking? Quantas vezes?",
+    "coach_anterior": "Você já teve acompanhamento profissional antes?",
+    "tipo_treino_atual": "Que tipo de treino você faz atualmente?",
+    "tipo_treino_outros": "Por favor, especifique:",
+    "dias_por_semana": "Quantos dias por semana você pode se comprometer a treinar?",
+    "tempo_disponivel_sessao": "Quanto tempo você tem disponível por sessão?",
+    "local_treino": "Onde você treina?",
+    "limitacoes_equipamento": "Você tem alguma limitação de equipamento?",
+    "objetivo_primario": "Qual é seu objetivo principal?",
+    "objetivo_secundario": "Você tem um objetivo secundário?",
+    "competir": "Você planeja competir? Se sim, em qual categoria e federação?",
+    "prazo_objetivo": "Você tem um prazo para atingir seu objetivo?",
+    "dieta_rigida": "Você está disposto a seguir uma dieta rigorosa se necessário?",
+    "estrategias_avancadas": "Você está aberto a estratégias avançadas (depleção, carga de carboidratos, jejum intermitente)?",
+    "grupos_musculares_enfase": "Quais grupos musculares você gostaria de enfatizar?",
+    "grupos_musculares_dificeis": "Quais grupos musculares são mais difíceis de ativar ou desenvolver?",
+    "uso_anabolicos": "Você já usou substâncias anabólicas? Se sim, quais e por quanto tempo?",
+    "estrategia_farmacologica": "Você está planejando ou seguindo uma estratégia farmacológica sob orientação médica?",
+    "exercicios_gosta": "Quais exercícios você mais gosta e por quê?",
+    "exercicios_nao_gosta": "Quais exercícios você não gosta ou evita e por quê?",
+    "exercicios_nao_pode": "Há exercícios que você não pode fazer devido a lesão ou limitação?",
+    "melhor_estilo_treino": "Qual estilo de treino funciona melhor para você?",
+    "dificuldade_ativar": "Você tem dificuldade em ativar grupos musculares específicos? Quais?",
+    "grupos_respondem_rapido": "Quais grupos musculares respondem mais rápido ao treino?",
+    "dor_articular": "Você sente dor articular? Onde e com que frequência?",
+    "como_se_sente_pos_treino": "Como você se sente após treinar?",
+    "dificuldade_seguir_plano": "Você tem dificuldade em seguir um plano de treino sozinho?",
+    "preferencia_variacao": "Você prefere variação ou progressão estruturada?",
+    "resistencia_cardiovascular": "Como você avaliaria sua resistência cardiovascular?",
+    "experiencia_hiit": "Você tem experiência com HIIT? Você gosta ou se sente mal?",
+    "cardio_jejum": "Você está aberto a fazer cardio em jejum?",
+    "limitacoes_respiratorias": "Você tem alguma limitação respiratória ou cardiovascular?",
+    "mobilidade_alongamento": "Você tem uma rotina de mobilidade ou alongamento?",
+    "dias_faceis_dificeis": "Quais dias são mais fáceis/difíceis para treinar?",
+    "maior_desafio_consistencia": "Qual é seu maior desafio em manter consistência?",
+    "apoio_familia": "Você tem apoio de família/amigos para seus objetivos fitness?",
+    "o_que_desanima": "O que te desanima ou faz você querer desistir de planos fitness?",
+    "nivel_comprometimento": "Em uma escala de 0-10, quão comprometido você está em alcançar seus objetivos?",
+    "enviar_fotos": "Você está aberto a enviar fotos de progresso periodicamente?",
+    "tem_fotos": "Você tem fotos antes/depois de transformações anteriores?",
+    "frequencia_checkin": "Com que frequência você gostaria de check-ins e ajustes?",
+    "usar_apps": "Você gosta de usar apps para rastrear seus treinos ou refeições?",
+    "plano_alimentar_atual": "Você está seguindo um plano alimentar atualmente? Se sim, quem criou?",
+    "suplementos_atuais": "Quais suplementos você usa atualmente? (marca e dosagem)",
+    "ajustar_dieta": "Você está disposto a ajustar sua dieta com base nas demandas do treino?",
+    "preparar_refeicoes": "É fácil para você preparar suas próprias refeições?",
+    "preferencia_dieta": "Qual é sua preferência de dieta?",
+    "agua_por_dia": "Quanta água você consome por dia (em litros)?",
+    "rastreia_agua": "Você rastreia seu consumo de água?",
+    "sede_durante_dia": "Você sente sede durante o dia ou treinos?",
+    "eletrolitros": "Você adiciona eletrólitos ou suplementos de hidratação à sua água?",
+    "sentir_musculo_trabalhando": "Você sente o músculo alvo trabalhando durante os exercícios? Ou tem dificuldade com conexão mente-músculo?",
+    "dor_muscular_pos_treino": "Você sente dor muscular (DOMS) após treinos? Quais músculos?",
+    "dor_articulacoes_treino": "Você sente dor nas articulações durante o treino? Onde?",
+    "informacoes_adicionais": "Há alguma informação adicional que você considera importante que não foi abordada neste formulário?"
+  },
+  "options": {
+    "horas_sono": [
+      "Menos de 5h",
+      "5h",
+      "6h",
+      "7h",
+      "8h",
+      "Mais de 8h"
+    ],
+    "tipo_sono": [
+      "Leve",
+      "Moderado",
+      "Profundo"
+    ],
+    "tipo_treino_atual": [
+      "Musculação/Hipertrofia",
+      "Powerlifting",
+      "CrossFit",
+      "Funcional",
+      "Esporte específico",
+      "Outro"
+    ],
+    "dias_por_semana": [
+      "1-2 dias",
+      "3-4 dias",
+      "5-6 dias",
+      "7 dias"
+    ],
+    "tempo_disponivel_sessao": [
+      "30-45 min",
+      "45-60 min",
+      "60-90 min",
+      "Mais de 90 min"
+    ],
+    "local_treino": [
+      "Casa",
+      "Academia comercial",
+      "Academia privada",
+      "Ao ar livre"
+    ],
+    "objetivo_primario": [
+      "Perda de gordura",
+      "Ganho muscular",
+      "Recomposição corporal",
+      "Melhora de performance",
+      "Preparação para palco",
+      "Saúde geral"
+    ],
+    "melhor_estilo_treino": [
+      "Cargas pesadas/poucas reps",
+      "Cargas moderadas/volume moderado",
+      "Alto volume/metabólico",
+      "Técnicas avançadas (drop sets, supersets)",
+      "Combinação de todos"
+    ],
+    "como_se_sente_pos_treino": [
+      "Muito energizado",
+      "Moderadamente cansado",
+      "Exausto",
+      "Sem padrão específico"
+    ],
+    "preferencia_variacao": [
+      "Prefiro treinos variados",
+      "Prefiro progressão estruturada",
+      "Abordagem equilibrada"
+    ],
+    "resistencia_cardiovascular": [
+      "Baixa",
+      "Moderada",
+      "Alta"
+    ],
+    "experiencia_hiit": [
+      "Gosto e me sinto bem",
+      "Tolero mas fico muito cansado",
+      "Me sinto mal",
+      "Nunca tentei"
+    ],
+    "frequencia_checkin": [
+      "Semanalmente",
+      "Quinzenalmente",
+      "Mensalmente",
+      "Conforme necessário"
+    ],
+    "preferencia_dieta": [
+      "Dieta flexível (IIFYM)",
+      "Alimentação limpa",
+      "Abordagem equilibrada"
+    ],
+    "nivel_comprometimento": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ]
+  },
+  "progress": {
+    "title": "Seu Progresso",
+    "description": "Acompanhe a conclusão do questionário",
+    "answered": "Respondidas",
+    "remaining": "Restantes",
+    "complete": "Completo"
+  },
+  "timeline": [
+    {
+      "title": "Info Pessoal",
+      "description": "Informações básicas"
+    },
+    {
+      "title": "Histórico Saúde",
+      "description": "Histórico médico"
+    },
+    {
+      "title": "Objetivos",
+      "description": "Objetivos fitness"
+    },
+    {
+      "title": "Experiência",
+      "description": "Histórico de treino"
+    },
+    {
+      "title": "Preferências",
+      "description": "Estilo de treino"
+    },
+    {
+      "title": "Estilo de Vida",
+      "description": "Hábitos diários"
+    },
+    {
+      "title": "Info Adicional",
+      "description": "Detalhes finais"
+    }
+  ],
+  "thankYou": {
+    "title": "Obrigado por completar o questionário!",
+    "description": "Dra. Jackie irá revisar suas respostas e criar seu plano de fitness personalizado."
+  },
+  "placeholders": {
+    "text": "Digite sua resposta...",
+    "textarea": "Digite sua resposta detalhada..."
+  },
+  "verification": {
+    "turnstileRequired": "Por favor, complete a verificação de segurança.",
+    "turnstileError": "Verificação falhou. Por favor, tente novamente.",
+    "verifyHuman": "Por favor, verifique que você é humano para continuar"
+  },
+  "submission": {
+    "processing": "Processando suas respostas...",
+    "successTitle": "✅ Sucesso! Sua avaliação de fitness foi enviada",
+    "successMessage": "Obrigado! Dra. Jackie recebeu sua avaliação detalhada e irá revisar pessoalmente todas as suas respostas.\n\nVocê deve receber um email de confirmação no endereço fornecido em breve.\n\nDra. Jackie irá analisar suas informações e criar um plano de treino e nutrição personalizado especificamente para seus objetivos, nível de experiência e estilo de vida.\n\nEspere retorno dentro de 24-48 horas com seu programa personalizado e próximos passos.\n\nObrigado por confiar na expertise da Dra. Jackie. Sua jornada de transformação começa agora! 💪",
+    "errorTitle": "Erro",
+    "errorMessage": "Houve um erro ao enviar seu formulário. Por favor, tente novamente.",
+    "whatHappensNext": "O que acontece agora?",
+    "step1": "Sua avaliação foi enviada diretamente para Dra. Jackie, que irá revisá-la pessoalmente.",
+    "step2": "Ela criará seu plano de fitness personalizado com base nas suas respostas.",
+    "step3": "Dra. Jackie responderá em breve com seu plano e próximos passos.",
+    "thankYouTitle": "Obrigado por confiar no trabalho da Dra. Jackie!",
+    "thankYouDescription": "Sua jornada para um melhor fitness começa aqui. Estamos animados para ajudá-lo a alcançar seus objetivos!"
+  }
+}

@@ -1,0 +1,278 @@
+{
+  "welcome": {
+    "title": "Questionário Nutricional Profissional",
+    "description": "Versão Inteligente com Lógica Ramificada",
+    "buttonText": "Começar"
+  },
+  "buttons": {
+    "start": "Começar",
+    "continue": "Continuar",
+    "next": "Próximo",
+    "back": "Voltar",
+    "yes": "Sim",
+    "no": "Não"
+  },
+  "sections": {
+    "section1": {
+      "title": "1. Informações Básicas",
+      "description": "Vamos começar com algumas informações básicas sobre você.",
+      "buttonText": "Continuar"
+    },
+    "section2": {
+      "title": "2. Objetivos e Histórico",
+      "description": "Vamos entender seus objetivos e histórico.",
+      "buttonText": "Continuar"
+    },
+    "section3": {
+      "title": "3. Saúde e Digestão",
+      "description": "Informações sobre sua saúde e sistema digestivo.",
+      "buttonText": "Continuar"
+    },
+    "section4": {
+      "title": "4. Comportamento e Rotina Alimentar",
+      "description": "Informações sobre seus hábitos alimentares diários.",
+      "buttonText": "Continuar"
+    },
+    "section5": {
+      "title": "5. Preferências e Rejeições Alimentares",
+      "description": "Vamos entender seus gostos e preferências alimentares.",
+      "buttonText": "Continuar"
+    },
+    "section6": {
+      "title": "6. Cheat Meals",
+      "description": "Informações sobre suas preferências para refeições livres.",
+      "buttonText": "Continuar"
+    },
+    "section7": {
+      "title": "7. Macronutrientes e Composição das Refeições",
+      "description": "Informações sobre como você organiza seus macronutrientes.",
+      "buttonText": "Continuar"
+    },
+    "section8": {
+      "title": "8. Treino e Estilo de Vida",
+      "description": "Informações sobre suas atividades físicas e rotina.",
+      "buttonText": "Continuar"
+    },
+    "section9": {
+      "title": "9. Sono e Estresse",
+      "description": "Informações sobre seu sono e níveis de estresse.",
+      "buttonText": "Continuar"
+    },
+    "section10": {
+      "title": "10. Considerações Finais",
+      "description": "Última seção para informações adicionais.",
+      "buttonText": "Continuar"
+    }
+  },
+  "questions": {
+    "nome_completo": "Nome completo:",
+    "email": "Por favor, forneça seu e-mail para receber seu plano nutricional personalizado",
+    "idade": "Idade:",
+    "altura": "Altura (cm):",
+    "peso": "Peso atual (kg):",
+    "acompanhamento_anterior": "Já realizou acompanhamento com nutricionista ou personal trainer?",
+    "tempo_acompanhamento": "Por quanto tempo?",
+    "dieta_anterior": "Já fez dieta antes?",
+    "tempo_seguiu_plano": "Por quanto tempo conseguiu seguir o plano?",
+    "objetivo_principal": "Qual é o seu objetivo principal?",
+    "meta_especifica": "Tem meta de peso, percentual de gordura ou prazo específico para alcançar seu objetivo?",
+    "competicoes": "Já participou ou pretende participar de competições (ex: fisiculturismo)?",
+    "categoria_competicao": "Qual categoria?",
+    "data_competicao": "Quando foi ou será a competição?",
+    "condicoes_saude": "Possui alguma condição de saúde? (ex: SOP, hipotireoidismo, disbiose, gastrite, resistência à insulina, etc.)",
+    "medicamentos": "Faz uso de medicamentos ou suplementos?",
+    "quais_medicamentos": "Quais? Doses? Horários?",
+    "intolerancias": "Possui intolerâncias ou alergias alimentares?",
+    "quais_intolerancias": "Quais?",
+    "dificuldade_digestao": "Tem dificuldade de digerir algum alimento?",
+    "quais_dificuldade_digestao": "Qual(is)?",
+    "inchaço_abdominal": "Costuma apresentar inchaço abdominal?",
+    "inchaço_detalhes": "Em que horário e após quais alimentos?",
+    "azia": "Costuma apresentar azia?",
+    "azia_detalhes": "Com que frequência e em que situações?",
+    "gases": "Costuma apresentar gases/arrotos?",
+    "gases_detalhes": "Em que momentos do dia?",
+    "desconforto_refeicoes": "Costuma apresentar desconforto após refeições?",
+    "desconforto_detalhes": "Com que frequência e após quais tipos de refeições?",
+    "sonolencia_refeicoes": "Sente sonolência após as refeições?",
+    "sonolencia_detalhes": "Em quais refeições e com que frequência?",
+    "queda_energia": "Sente falta de energia ou queda de rendimento físico/cognitivo após comer?",
+    "queda_energia_detalhes": "Após quais refeições ou tipos de alimentos?",
+    "exames_recentes": "Já realizou exames laboratoriais recentes?",
+    "exames_resultados": "Pode compartilhar os principais resultados?",
+    "quantidade_refeicoes": "Quantas refeições costuma fazer por dia?",
+    "refeicoes_frequentes": "Quais refeições realiza com mais frequência?",
+    "horarios_fixos": "Tem horários fixos para comer?",
+    "quais_horarios": "Quais horários?",
+    "pula_refeicoes": "Costuma pular refeições?",
+    "quais_pula_refeicoes": "Quais refeições costuma pular e por quê?",
+    "faz_jejum": "Costuma fazer jejum?",
+    "detalhes_jejum": "Qual tipo? Quantas horas? Com que frequência?",
+    "horario_fome": "Em qual horário sente mais fome?",
+    "belisca": "Belisca entre refeições?",
+    "detalhes_beliscar": "O quê? Com que frequência?",
+    "compulsao": "Tem episódios de compulsão alimentar?",
+    "detalhes_compulsao": "Em quais momentos e com quais alimentos?",
+    "fome_emocional": "Tem episódios de fome emocional?",
+    "detalhes_fome_emocional": "Com que frequência e em que contexto?",
+    "bebe_refeicoes": "Costuma beber líquidos durante as refeições?",
+    "detalhes_bebe_refeicoes": "Quais bebidas? Em que quantidade?",
+    "bebidas_adocadas": "Costuma consumir bebidas adoçadas como sucos, refrigerantes ou energéticos?",
+    "quais_bebidas_adocadas": "Quais bebidas específicas?",
+    "frequencia_bebidas_adocadas": "Com que frequência por semana?",
+    "quantidade_bebidas_adocadas": "Em que quantidade (ml ou latas)?",
+    "bebidas_zero": "Costuma consumir bebidas zero (refrigerante zero, chás adoçados com estévia, etc.)?",
+    "detalhes_bebidas_zero": "Quais e com que frequência?",
+    "cafe": "Costuma consumir café?",
+    "frequencia_cafe": "Quantas vezes por dia?",
+    "quantidade_cafe": "Quantidade por vez (ml ou xícaras)?",
+    "tipo_cafe": "Com açúcar, adoçante, leite ou puro?",
+    "estimulantes": "Usa outros estimulantes (pré-treinos, termogênicos, energéticos)?",
+    "detalhes_estimulantes": "Quais? Em que horário?",
+    "alcool": "Consome álcool?",
+    "frequencia_alcool": "Com que frequência?",
+    "quantidade_alcool": "Em que quantidade (taças, latas, copos)?",
+    "tipo_alcool": "Quais marcas e tipos? (vinho, cerveja, gin, destilados, etc.)",
+    "cigarro": "Fuma cigarro?",
+    "detalhes_cigarro": "Há quanto tempo? Quantos por dia?",
+    "vape": "Usa cigarro eletrônico (vape)?",
+    "detalhes_vape": "Com que frequência? Há quanto tempo?",
+    "charuto": "Fuma charuto?",
+    "detalhes_charuto": "Com que frequência? Há quanto tempo?",
+    "alimentos_gosta": "Quais alimentos você gosta muito e gostaria de manter na dieta?",
+    "alimentos_evita": "Quais alimentos você evita ou não tolera (por sabor, textura ou ideologia)?",
+    "cafe_manha_preferencia": "Prefere café da manhã doce ou salgado?",
+    "frutas_vegetais_preferidos": "Quais frutas e vegetais você prefere?",
+    "aversao_texturas": "Tem aversão a alguma textura ou sabor (ex: hortelã, coco, coentro, gengibre)?",
+    "paladar_alterado": "Costuma sentir o paladar alterado, boca seca ou gosto amargo com frequência?",
+    "detalhes_paladar_alterado": "Em que situações?",
+    "nivel_apetite": "Como você avalia seu apetite:",
+    "consome_ovo": "Consome ovos?",
+    "consome_peixe": "Consome peixe?",
+    "consome_carne_vermelha": "Consome carne vermelha?",
+    "consome_tofu": "Consome tofu ou proteína vegetal?",
+    "consome_leite": "Consome leite e derivados?",
+    "preferencia_carne": "Tem preferência por algum tipo específico de carne?",
+    "tipo_carne_preferido": "Qual?",
+    "dificuldade_carne_vermelha": "Tem dificuldade para digerir carne vermelha?",
+    "gordura_cozinhar": "Qual tipo de gordura costuma usar para cozinhar? (azeite, manteiga, óleo de soja, banha, óleo de coco, etc.)",
+    "azeite": "Usa azeite de oliva regularmente?",
+    "quantidade_azeite": "Em que quantidade aproximada por refeição?",
+    "oleo_coco": "Usa óleo de coco ou produtos com coco?",
+    "frequencia_oleo_coco": "Com que frequência?",
+    "frituras": "Consome frituras?",
+    "frequencia_frituras": "Com que frequência por semana ou por dia?",
+    "alimentos_frituras": "Quais alimentos?",
+    "refeicoes_livres": "Você faz refeições livres (cheat meals)?",
+    "frequencia_refeicoes_livres": "Quantas vezes por semana?",
+    "dia_refeicao_livre": "Em qual dia você costuma fazer?",
+    "preferencia_refeicao_livre": "O que você gosta de comer nessas refeições?",
+    "preferencia_agendamento": "Você prefere ter sua refeição livre programada ou decidir na hora?",
+    "proteina_refeicoes": "Você inclui uma fonte de proteína em todas as refeições?",
+    "fontes_proteina": "Quais são suas principais fontes?",
+    "gorduras_boas": "Você consome fontes de gorduras saudáveis?",
+    "quais_gorduras_boas": "Quais (abacate, castanhas, azeite de oliva, gema de ovo, óleo de coco, etc.)",
+    "carboidratos_frequentes": "Quais carboidratos você consome com mais frequência? Você prefere integrais ou refinados?",
+    "dieta_manipulacao_carbo": "Você já utilizou alguma dieta com manipulação de carboidratos (ex: ciclagem)?",
+    "modelo_dieta_carbo": "Qual modelo?",
+    "preferencia_ciclo_carbo": "Você gostaria de incluir ciclagem de carboidratos ou manter um padrão linear?",
+    "pratica_atividade": "Você pratica atividade física?",
+    "modalidade_atividade": "Qual modalidade?",
+    "frequencia_atividade": "Frequência semanal?",
+    "horario_atividade": "Horário usual de treino?",
+    "tipo_treino": "Tipo de treino (ex: musculação, corrida, funcional...)",
+    "nivel_treino": "Nível:",
+    "faz_cardio": "Você faz cardio?",
+    "detalhes_cardio": "Qual tipo e com que frequência?",
+    "preferencia_alimentar_treino": "Você tem preferência alimentar para pré e pós-treino?",
+    "detalhes_alimentar_treino": "O que você gosta ou costuma consumir?",
+    "usa_suplementos": "Você usa algum suplemento?",
+    "quais_suplementos": "Quais?",
+    "horas_sono": "Quantas horas você dorme por noite?",
+    "dificuldade_dormir": "Você tem dificuldade para pegar no sono ou acorda durante a noite?",
+    "acorda_descansado": "Você acorda descansado(a)?",
+    "estresse_elevado": "Você está em um período de alto estresse?",
+    "estresse_afeta_alimentacao": "O estresse afeta sua alimentação ou sono?",
+    "informacao_adicional": "Existe alguma informação que você considera importante e que não foi abordada?",
+    "preferencia_plano": "Você prefere um plano com mais liberdade ou com estrutura mais detalhada?",
+    "pesar_medir": "Você está disposto(a) a pesar e medir seus alimentos se necessário?"
+  },
+  "options": {
+    "objetivo_principal": [
+      "Emagrecimento",
+      "Ganho de massa muscular",
+      "Recomposição corporal",
+      "Estética (shape/definição)",
+      "Performance atlética",
+      "Reeducação alimentar"
+    ],
+    "nivel_apetite": ["Baixo", "Normal", "Muito alto"],
+    "preferencia_agendamento": ["Programada", "Decidir na hora"],
+    "preferencia_ciclo_carbo": ["Ciclagem de carboidratos", "Padrão linear"],
+    "nivel_treino": ["Iniciante", "Intermediário", "Avançado"],
+    "preferencia_plano": [
+      "Mais liberdade",
+      "Estrutura mais detalhada",
+      "Equilíbrio entre ambos"
+    ]
+  },
+  "progress": {
+    "title": "Seu Progresso",
+    "description": "Acompanhe a conclusão da sua avaliação nutricional",
+    "answered": "Respondidas",
+    "remaining": "Restantes",
+    "complete": "Concluído"
+  },
+  "timeline": [
+    {
+      "title": "Informações Pessoais",
+      "description": "Informações básicas"
+    },
+    {
+      "title": "Histórico de Saúde",
+      "description": "Histórico médico"
+    },
+    {
+      "title": "Objetivos",
+      "description": "Objetivos nutricionais"
+    },
+    {
+      "title": "Experiência",
+      "description": "Histórico alimentar"
+    },
+    {
+      "title": "Preferências",
+      "description": "Estilo alimentar"
+    },
+    {
+      "title": "Estilo de Vida",
+      "description": "Hábitos diários"
+    },
+    {
+      "title": "Informações Adicionais",
+      "description": "Detalhes finais"
+    }
+  ],
+  "thankYou": {
+    "title": "Obrigado por completar o questionário!",
+    "description": "Analisaremos suas respostas e enviaremos seu plano nutricional personalizado em breve.",
+    "processing": "Processando suas respostas...",
+    "successTitle": "Sucesso! Sua avaliação foi enviada",
+    "successDescription": "Dra. Jackie recebeu suas informações e entrará em contato em breve.",
+    "whatHappensNextTitle": "O que acontece agora?",
+    "whatHappensNextStep1": "Sua avaliação foi enviada diretamente para a Dra. Jackie, que irá revisá-la pessoalmente.",
+    "whatHappensNextStep2": "Ela criará seu plano nutricional personalizado com base nas suas respostas.",
+    "whatHappensNextStep3": "A Dra. Jackie responderá em breve com seu plano e próximos passos.",
+    "thankYouTitle": "Obrigado por confiar no trabalho da Dra. Jackie!",
+    "thankYouDescription": "Sua jornada para uma melhor nutrição começa aqui. Estamos animados para ajudá-lo a alcançar seus objetivos!"
+  },
+  "placeholders": {
+    "text": "Digite sua resposta...",
+    "textarea": "Digite sua resposta..."
+  },
+  "validation": {
+    "turnstileRequired": "Por favor, complete a verificação de segurança.",
+    "turnstileError": "Verificação falhou. Por favor, tente novamente.",
+    "emailRequired": "Por favor, verifique que você é humano para continuar"
+  }
+}

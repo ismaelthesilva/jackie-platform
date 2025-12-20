@@ -1,0 +1,278 @@
+{
+  "welcome": {
+    "title": "Professional Nutrition Questionnaire",
+    "description": "Smart Version with Branching Logic",
+    "buttonText": "Start"
+  },
+  "buttons": {
+    "start": "Start",
+    "continue": "Continue",
+    "next": "Next",
+    "back": "Back",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "sections": {
+    "section1": {
+      "title": "1. Basic Information",
+      "description": "Let's start with some basic information about you.",
+      "buttonText": "Continue"
+    },
+    "section2": {
+      "title": "2. Goals and History",
+      "description": "Let's understand your goals and background.",
+      "buttonText": "Continue"
+    },
+    "section3": {
+      "title": "3. Health and Digestion",
+      "description": "Information about your health and digestive system.",
+      "buttonText": "Continue"
+    },
+    "section4": {
+      "title": "4. Eating Behavior and Routine",
+      "description": "Information about your daily eating habits.",
+      "buttonText": "Continue"
+    },
+    "section5": {
+      "title": "5. Food Preferences and Aversions",
+      "description": "Let's understand your food tastes and preferences.",
+      "buttonText": "Continue"
+    },
+    "section6": {
+      "title": "6. Cheat Meals",
+      "description": "Information about your preferences for cheat meals.",
+      "buttonText": "Continue"
+    },
+    "section7": {
+      "title": "7. Macronutrients and Meal Composition",
+      "description": "Information about how you organize your macronutrients.",
+      "buttonText": "Continue"
+    },
+    "section8": {
+      "title": "8. Training and Lifestyle",
+      "description": "Information about your physical activities and routine.",
+      "buttonText": "Continue"
+    },
+    "section9": {
+      "title": "9. Sleep and Stress",
+      "description": "Information about your sleep and stress levels.",
+      "buttonText": "Continue"
+    },
+    "section10": {
+      "title": "10. Final Considerations",
+      "description": "Last section for additional information.",
+      "buttonText": "Continue"
+    }
+  },
+  "questions": {
+    "nome_completo": "Full name:",
+    "email": "Please provide your email to receive your personalized nutrition plan",
+    "idade": "Age:",
+    "altura": "Height (cm):",
+    "peso": "Current weight (kg):",
+    "acompanhamento_anterior": "Have you previously worked with a nutritionist or personal trainer?",
+    "tempo_acompanhamento": "For how long?",
+    "dieta_anterior": "Have you followed a diet before?",
+    "tempo_seguiu_plano": "How long were you able to follow the plan?",
+    "objetivo_principal": "What is your main goal?",
+    "meta_especifica": "Do you have a specific weight goal, body fat percentage, or deadline to achieve your goal?",
+    "competicoes": "Have you participated or plan to participate in competitions (e.g., bodybuilding)?",
+    "categoria_competicao": "Which category?",
+    "data_competicao": "When was or will be the competition?",
+    "condicoes_saude": "Do you have any health conditions? (e.g., PCOS, hypothyroidism, dysbiosis, gastritis, insulin resistance, etc.)",
+    "medicamentos": "Do you take any medications or supplements?",
+    "quais_medicamentos": "Which ones? Dosages? Schedules?",
+    "intolerancias": "Do you have any food intolerances or allergies?",
+    "quais_intolerancias": "Which ones?",
+    "dificuldade_digestao": "Do you have difficulty digesting any foods?",
+    "quais_dificuldade_digestao": "Which one(s)?",
+    "inchaço_abdominal": "Do you often experience abdominal bloating?",
+    "inchaço_detalhes": "At what time of day and after which foods?",
+    "azia": "Do you often experience heartburn?",
+    "azia_detalhes": "How frequently and in what situations?",
+    "gases": "Do you often experience gas/burping?",
+    "gases_detalhes": "At what times of the day?",
+    "desconforto_refeicoes": "Do you often experience discomfort after meals?",
+    "desconforto_detalhes": "How frequently and after what types of meals?",
+    "sonolencia_refeicoes": "Do you feel drowsy after meals?",
+    "sonolencia_detalhes": "Which meals and how often?",
+    "queda_energia": "Do you feel a lack of energy or decreased physical/cognitive performance after eating?",
+    "queda_energia_detalhes": "After which meals or types of food?",
+    "exames_recentes": "Have you had recent lab tests?",
+    "exames_resultados": "Can you share the main results?",
+    "quantidade_refeicoes": "How many meals do you typically have per day?",
+    "refeicoes_frequentes": "Which meals do you have most frequently?",
+    "horarios_fixos": "Do you have fixed meal times?",
+    "quais_horarios": "What times?",
+    "pula_refeicoes": "Do you often skip meals?",
+    "quais_pula_refeicoes": "Which meals do you skip and why?",
+    "faz_jejum": "Do you practice fasting?",
+    "detalhes_jejum": "What type? How many hours? How often?",
+    "horario_fome": "At what time of day do you feel most hungry?",
+    "belisca": "Do you snack between meals?",
+    "detalhes_beliscar": "What? How often?",
+    "compulsao": "Do you experience episodes of binge eating?",
+    "detalhes_compulsao": "In what situations and with which foods?",
+    "fome_emocional": "Do you experience episodes of emotional eating?",
+    "detalhes_fome_emocional": "How often and in what context?",
+    "bebe_refeicoes": "Do you typically drink liquids during meals?",
+    "detalhes_bebe_refeicoes": "Which beverages? In what quantity?",
+    "bebidas_adocadas": "Do you consume sweetened drinks like juices, sodas, or energy drinks?",
+    "quais_bebidas_adocadas": "Which specific drinks?",
+    "frequencia_bebidas_adocadas": "How often per week?",
+    "quantidade_bebidas_adocadas": "In what quantity (ml or cans)?",
+    "bebidas_zero": "Do you consume zero-calorie drinks (diet soda, teas sweetened with stevia, etc.)?",
+    "detalhes_bebidas_zero": "Which ones and how often?",
+    "cafe": "Do you drink coffee?",
+    "frequencia_cafe": "How many times per day?",
+    "quantidade_cafe": "Quantity each time (ml or cups)?",
+    "tipo_cafe": "With sugar, sweetener, milk, or black?",
+    "estimulantes": "Do you use other stimulants (pre-workouts, thermogenics, energy drinks)?",
+    "detalhes_estimulantes": "Which ones? At what time?",
+    "alcool": "Do you consume alcohol?",
+    "frequencia_alcool": "How often?",
+    "quantidade_alcool": "In what quantity (glasses, cans, cups)?",
+    "tipo_alcool": "Which brands and types? (wine, beer, gin, spirits, etc.)",
+    "cigarro": "Do you smoke cigarettes?",
+    "detalhes_cigarro": "For how long? How many per day?",
+    "vape": "Do you use e-cigarettes (vape)?",
+    "detalhes_vape": "How often? For how long?",
+    "charuto": "Do you smoke cigars?",
+    "detalhes_charuto": "How often? For how long?",
+    "alimentos_gosta": "Which foods do you really like and would like to keep in your diet?",
+    "alimentos_evita": "Which foods do you avoid or don't tolerate (due to taste, texture, or ideology)?",
+    "cafe_manha_preferencia": "Do you prefer sweet or savory breakfast?",
+    "frutas_vegetais_preferidos": "Which fruits and vegetables do you prefer?",
+    "aversao_texturas": "Do you have any aversion to certain textures or flavors (e.g. mint, coconut, cilantro, ginger)?",
+    "paladar_alterado": "Do you often experience altered taste, dry mouth, or bitter taste?",
+    "detalhes_paladar_alterado": "In what situations?",
+    "nivel_apetite": "How would you rate your appetite:",
+    "consome_ovo": "Do you eat eggs?",
+    "consome_peixe": "Do you eat fish?",
+    "consome_carne_vermelha": "Do you eat red meat?",
+    "consome_tofu": "Do you eat tofu or plant-based protein?",
+    "consome_leite": "Do you consume milk and dairy products?",
+    "preferencia_carne": "Do you have a preference for any specific type of meat?",
+    "tipo_carne_preferido": "Which one?",
+    "dificuldade_carne_vermelha": "Do you have difficulty digesting red meat?",
+    "gordura_cozinhar": "What type of fat do you typically use for cooking? (olive oil, butter, soybean oil, lard, coconut oil, etc.)",
+    "azeite": "Do you use olive oil regularly?",
+    "quantidade_azeite": "In what approximate amount per meal?",
+    "oleo_coco": "Do you use coconut oil or coconut products?",
+    "frequencia_oleo_coco": "How often?",
+    "frituras": "Do you eat fried foods?",
+    "frequencia_frituras": "How often per week or per day?",
+    "alimentos_frituras": "Which foods?",
+    "refeicoes_livres": "Do you have cheat meals?",
+    "frequencia_refeicoes_livres": "How often per week?",
+    "dia_refeicao_livre": "On which day do you usually have it?",
+    "preferencia_refeicao_livre": "What do you like to eat during these meals?",
+    "preferencia_agendamento": "Do you prefer to have your cheat meal scheduled or decide in the moment?",
+    "proteina_refeicoes": "Do you include a protein source in all meals?",
+    "fontes_proteina": "What are your main sources?",
+    "gorduras_boas": "Do you consume healthy fat sources?",
+    "quais_gorduras_boas": "Which ones (avocado, nuts, olive oil, egg yolk, coconut oil, etc.)",
+    "carboidratos_frequentes": "Which carbohydrates do you consume most frequently? Do you prefer whole grains or refined?",
+    "dieta_manipulacao_carbo": "Have you used a diet with carb manipulation (e.g., cycling)?",
+    "modelo_dieta_carbo": "Which model?",
+    "preferencia_ciclo_carbo": "Would you like to include carb cycling or maintain a linear pattern?",
+    "pratica_atividade": "Do you engage in physical activity?",
+    "modalidade_atividade": "Which modality?",
+    "frequencia_atividade": "Weekly frequency?",
+    "horario_atividade": "Usual training time?",
+    "tipo_treino": "Type of training (e.g., weight lifting, running, functional...)",
+    "nivel_treino": "Level:",
+    "faz_cardio": "Do you do cardio?",
+    "detalhes_cardio": "What type and how often?",
+    "preferencia_alimentar_treino": "Do you have food preferences for pre and post-workout?",
+    "detalhes_alimentar_treino": "What do you like or usually consume?",
+    "usa_suplementos": "Do you use any supplements?",
+    "quais_suplementos": "Which ones?",
+    "horas_sono": "How many hours do you sleep per night?",
+    "dificuldade_dormir": "Do you have difficulty falling asleep or wake up during the night?",
+    "acorda_descansado": "Do you wake up feeling rested?",
+    "estresse_elevado": "Are you in a period of high stress?",
+    "estresse_afeta_alimentacao": "Does stress affect your eating or sleeping?",
+    "informacao_adicional": "Is there any information you consider important that has not been addressed?",
+    "preferencia_plano": "Would you prefer a plan with more freedom or more detailed structure?",
+    "pesar_medir": "Are you willing to weigh and measure your food if necessary?"
+  },
+  "options": {
+    "objetivo_principal": [
+      "Weight loss",
+      "Muscle gain",
+      "Body recomposition",
+      "Aesthetics (shape/definition)",
+      "Athletic performance",
+      "Dietary reeducation"
+    ],
+    "nivel_apetite": ["Low", "Normal", "Very high"],
+    "preferencia_agendamento": ["Scheduled", "Decide in the moment"],
+    "preferencia_ciclo_carbo": ["Carb cycling", "Linear pattern"],
+    "nivel_treino": ["Beginner", "Intermediate", "Advanced"],
+    "preferencia_plano": [
+      "More freedom",
+      "More detailed structure",
+      "Balance between both"
+    ]
+  },
+  "progress": {
+    "title": "Your Progress",
+    "description": "Track your nutrition assessment completion",
+    "answered": "Answered",
+    "remaining": "Remaining",
+    "complete": "Complete"
+  },
+  "timeline": [
+    {
+      "title": "Personal Info",
+      "description": "Basic information"
+    },
+    {
+      "title": "Health History",
+      "description": "Medical background"
+    },
+    {
+      "title": "Goals",
+      "description": "Fitness objectives"
+    },
+    {
+      "title": "Experience",
+      "description": "Training background"
+    },
+    {
+      "title": "Preferences",
+      "description": "Training style"
+    },
+    {
+      "title": "Lifestyle",
+      "description": "Daily habits"
+    },
+    {
+      "title": "Additional Info",
+      "description": "Final details"
+    }
+  ],
+  "thankYou": {
+    "title": "Thank you for completing the questionnaire!",
+    "description": "We will analyze your responses and send your personalized nutrition plan soon.",
+    "processing": "Processing your responses...",
+    "successTitle": "Success! Your assessment has been submitted",
+    "successDescription": "Dr. Jackie has received your information and will be in touch soon.",
+    "whatHappensNextTitle": "What happens next?",
+    "whatHappensNextStep1": "Your assessment was sent directly to Dr. Jackie, who will personally review it.",
+    "whatHappensNextStep2": "She will create your personalized nutrition plan based on your answers.",
+    "whatHappensNextStep3": "Dr. Jackie will respond soon with your plan and next steps.",
+    "thankYouTitle": "Thank you for trusting Dr. Jackie's work!",
+    "thankYouDescription": "Your journey to better nutrition starts here. We're excited to help you achieve your goals!"
+  },
+  "placeholders": {
+    "text": "Type your answer...",
+    "textarea": "Type your answer..."
+  },
+  "validation": {
+    "turnstileRequired": "Please complete the verification before submitting.",
+    "turnstileError": "Verification failed. Please try again.",
+    "emailRequired": "Please verify you're human to continue"
+  }
+}

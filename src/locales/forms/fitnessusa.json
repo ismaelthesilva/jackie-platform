@@ -1,0 +1,290 @@
+{
+  "welcome": {
+    "title": "PROFESSIONAL FITNESS & BODYBUILDING CONSULTATION QUESTIONNAIRE",
+    "description": "Designed for all levels: beginners to stage athletes",
+    "buttonText": "Start"
+  },
+  "buttons": {
+    "start": "Start",
+    "continue": "Continue",
+    "next": "Next",
+    "back": "Back",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "sections": {
+    "section1": {
+      "title": "SECTION 1 — PERSONAL & BASIC INFORMATION",
+      "description": "Let's start with some basic information about you.",
+      "buttonText": "Continue"
+    },
+    "section2": {
+      "title": "SECTION 2 — HEALTH HISTORY",
+      "description": "Let's learn about your health and medical history.",
+      "buttonText": "Continue"
+    },
+    "section3": {
+      "title": "SECTION 3 — TRAINING HISTORY & EXPERIENCE",
+      "description": "Tell us about your training experience.",
+      "buttonText": "Continue"
+    },
+    "section4": {
+      "title": "SECTION 4 — GOALS & PHYSIQUE PRIORITIES",
+      "description": "Let's understand your fitness goals and priorities.",
+      "buttonText": "Continue"
+    },
+    "section5": {
+      "title": "SECTION 5 — TRAINING STYLE, LIMITATIONS & BIOFEEDBACK",
+      "description": "Tell us about your training preferences and limitations.",
+      "buttonText": "Continue"
+    },
+    "section6": {
+      "title": "SECTION 6 — CARDIO, MOBILITY & CONDITIONING",
+      "description": "Let's discuss your cardiovascular training and mobility.",
+      "buttonText": "Continue"
+    },
+    "section7": {
+      "title": "SECTION 7 — LIFESTYLE, ADHERENCE & MINDSET",
+      "description": "Tell us about your lifestyle and mindset.",
+      "buttonText": "Continue"
+    },
+    "section8": {
+      "title": "SECTION 8 — PHOTOS & PROGRESS TRACKING",
+      "description": "How do you track your progress?",
+      "buttonText": "Continue"
+    },
+    "section9": {
+      "title": "SECTION 9 — NUTRITION & SUPPLEMENTATION",
+      "description": "Let's discuss your nutrition habits.",
+      "buttonText": "Continue"
+    },
+    "section10": {
+      "title": "SECTION 10 — HYDRATION",
+      "description": "Tell us about your hydration habits.",
+      "buttonText": "Continue"
+    },
+    "section11": {
+      "title": "SECTION 11 — AAP (ACTIVATION AND PAIN PATTERNS)",
+      "description": "Understanding your muscle activation and pain patterns.",
+      "buttonText": "Continue"
+    }
+  },
+  "questions": {
+    "nome_completo": "Full name:",
+    "email": "Please provide your email to receive your personalized plan",
+    "data_nascimento": "Date of birth:",
+    "altura": "Height (in cm):",
+    "peso": "Current weight (in kg):",
+    "percentual_gordura": "Body fat percentage (if known):",
+    "localizacao": "Location (City and Country):",
+    "profissao": "Occupation and work routine (shift work, sedentary, active job, etc.):",
+    "horario_sono": "Usual sleep schedule (bedtime and wake time):",
+    "horas_sono": "Average hours of sleep per night:",
+    "tipo_sono": "How would you rate your sleep?",
+    "acorda_descansado": "Do you wake up feeling rested?",
+    "energia_dia": "How would you describe your daily energy levels?",
+    "fuma": "Do you smoke?",
+    "alcool": "Do you consume alcohol?",
+    "alcool_detalhes": "Frequency and quantity:",
+    "gestante": "Are you pregnant or trying to conceive? (if applicable)",
+    "doencas": "Do you have any diagnosed medical conditions? (e.g. hypothyroidism, PCOS, insulin resistance)",
+    "lesoes": "Have you ever suffered any injuries? Please specify location and year:",
+    "cirurgias": "Have you had any surgeries? Which ones and when?",
+    "medicacao": "Do you take any medications regularly? Which ones?",
+    "alergias": "Do you have any food allergies or intolerances?",
+    "anticoncepcional": "Do you use birth control? Specify type and method:",
+    "exames_sangue": "Have you had blood work done in the last 6 months?",
+    "exames_alteracoes": "If yes, were there any abnormalities?",
+    "tempo_treino": "How long have you been training consistently?",
+    "fases_cutting_bulking": "Have you ever done cutting or bulking phases? How many times?",
+    "coach_anterior": "Have you had professional coaching before?",
+    "tipo_treino_atual": "What type of training do you currently do?",
+    "tipo_treino_outros": "Please specify:",
+    "dias_por_semana": "How many days per week can you commit to training?",
+    "tempo_disponivel_sessao": "How much time do you have available per session?",
+    "local_treino": "Where do you train?",
+    "limitacoes_equipamento": "Do you have any equipment limitations?",
+    "objetivo_primario": "What is your primary goal?",
+    "objetivo_secundario": "Do you have a secondary goal?",
+    "competir": "Are you planning to compete? If yes, in which category and federation?",
+    "prazo_objetivo": "Do you have a deadline to achieve your goal?",
+    "dieta_rigida": "Are you willing to follow a strict diet if necessary?",
+    "estrategias_avancadas": "Are you open to advanced strategies (depletion, carb-loading, intermittent fasting)?",
+    "grupos_musculares_enfase": "Which muscle groups would you like to emphasize?",
+    "grupos_musculares_dificeis": "Which muscle groups are hardest to activate or develop?",
+    "uso_anabolicos": "Have you ever used anabolic substances? If yes, which ones and for how long?",
+    "estrategia_farmacologica": "Are you planning or currently following a pharmacological strategy under medical guidance?",
+    "exercicios_gosta": "Which exercises do you enjoy most and why?",
+    "exercicios_nao_gosta": "Which exercises do you dislike or avoid and why?",
+    "exercicios_nao_pode": "Are there exercises you cannot perform due to injury or limitation?",
+    "melhor_estilo_treino": "What training style works best for you?",
+    "dificuldade_ativar": "Do you struggle to activate specific muscle groups? Which ones?",
+    "grupos_respondem_rapido": "Which muscle groups respond fastest to training?",
+    "dor_articular": "Do you experience joint pain? Where and how often?",
+    "como_se_sente_pos_treino": "How do you feel after training?",
+    "dificuldade_seguir_plano": "Do you have difficulty following a workout plan on your own?",
+    "preferencia_variacao": "Do you prefer variation or structured progression?",
+    "resistencia_cardiovascular": "How would you rate your cardiovascular endurance?",
+    "experiencia_hiit": "Do you have experience with HIIT? Do you enjoy it or feel unwell?",
+    "cardio_jejum": "Are you open to doing fasted cardio?",
+    "limitacoes_respiratorias": "Do you have any respiratory or cardiovascular limitations?",
+    "mobilidade_alongamento": "Do you have a mobility or stretching routine?",
+    "dias_faceis_dificeis": "Which days are easiest/most difficult to train?",
+    "maior_desafio_consistencia": "What is your biggest challenge in staying consistent?",
+    "apoio_familia": "Do you have support from family/friends for your fitness goals?",
+    "o_que_desanima": "What discourages you or makes you want to give up on fitness plans?",
+    "nivel_comprometimento": "On a scale of 0-10, how committed are you to achieving your goals?",
+    "enviar_fotos": "Are you open to sending progress photos periodically?",
+    "tem_fotos": "Do you have before/after photos from previous transformations?",
+    "frequencia_checkin": "How often would you like check-ins and adjustments?",
+    "usar_apps": "Do you like using apps to track your workouts or meals?",
+    "plano_alimentar_atual": "Are you currently following a meal plan? If yes, who created it?",
+    "suplementos_atuais": "Which supplements do you currently use? (brand and dosage)",
+    "ajustar_dieta": "Are you willing to adjust your diet based on training demands?",
+    "preparar_refeicoes": "Is it easy for you to prepare your own meals?",
+    "preferencia_dieta": "What is your diet preference?",
+    "agua_por_dia": "How much water do you consume per day (in liters)?",
+    "rastreia_agua": "Do you track your water intake?",
+    "sede_durante_dia": "Do you feel thirsty during the day or workouts?",
+    "eletrolitros": "Do you add electrolytes or hydration supplements to your water?",
+    "sentir_musculo_trabalhando": "Do you feel the target muscle working during exercises? Or do you struggle with mind-muscle connection?",
+    "dor_muscular_pos_treino": "Do you experience muscle soreness (DOMS) after workouts? Which muscles?",
+    "dor_articulacoes_treino": "Do you experience joint pain during training? Where?",
+    "informacoes_adicionais": "Is there any additional information you consider important that wasn't covered in this form?"
+  },
+  "options": {
+    "horas_sono": ["Less than 5h", "5h", "6h", "7h", "8h", "More than 8h"],
+    "tipo_sono": ["Light", "Moderate", "Deep"],
+    "tipo_treino_atual": [
+      "Bodybuilding/Hypertrophy",
+      "Powerlifting",
+      "CrossFit",
+      "Functional",
+      "Sports-specific",
+      "Other"
+    ],
+    "dias_por_semana": ["1-2 days", "3-4 days", "5-6 days", "7 days"],
+    "tempo_disponivel_sessao": [
+      "30-45 min",
+      "45-60 min",
+      "60-90 min",
+      "More than 90 min"
+    ],
+    "local_treino": ["Home", "Commercial gym", "Private gym", "Outdoors"],
+    "objetivo_primario": [
+      "Fat loss",
+      "Muscle gain",
+      "Body recomposition",
+      "Performance improvement",
+      "Stage preparation",
+      "General health"
+    ],
+    "melhor_estilo_treino": [
+      "Heavy loads/low reps",
+      "Moderate loads/moderate volume",
+      "High volume/metabolic",
+      "Advanced techniques (drop sets, supersets)",
+      "Combination of all"
+    ],
+    "como_se_sente_pos_treino": [
+      "Very energized",
+      "Moderately tired",
+      "Exhausted",
+      "No specific pattern"
+    ],
+    "preferencia_variacao": [
+      "I prefer varied workouts",
+      "I prefer structured progression",
+      "Balanced approach"
+    ],
+    "resistencia_cardiovascular": ["Low", "Moderate", "High"],
+    "experiencia_hiit": [
+      "I enjoy and feel good",
+      "I tolerate but feel very tired",
+      "I feel unwell",
+      "Never tried"
+    ],
+    "frequencia_checkin": ["Weekly", "Bi-weekly", "Monthly", "As needed"],
+    "preferencia_dieta": [
+      "Flexible dieting (IIFYM)",
+      "Clean eating",
+      "Balanced approach"
+    ],
+    "nivel_comprometimento": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ]
+  },
+  "progress": {
+    "title": "Your Progress",
+    "description": "Track your questionnaire completion",
+    "answered": "Answered",
+    "remaining": "Remaining",
+    "complete": "Complete"
+  },
+  "timeline": [
+    {
+      "title": "Personal Info",
+      "description": "Basic information"
+    },
+    {
+      "title": "Health History",
+      "description": "Medical background"
+    },
+    {
+      "title": "Goals",
+      "description": "Fitness objectives"
+    },
+    {
+      "title": "Experience",
+      "description": "Training background"
+    },
+    {
+      "title": "Preferences",
+      "description": "Training style"
+    },
+    {
+      "title": "Lifestyle",
+      "description": "Daily habits"
+    },
+    {
+      "title": "Additional Info",
+      "description": "Final details"
+    }
+  ],
+  "thankYou": {
+    "title": "Thank you for completing the questionnaire!",
+    "description": "Dr. Jackie will review your answers and create your personalized fitness plan."
+  },
+  "placeholders": {
+    "text": "Type your answer...",
+    "textarea": "Type your detailed answer..."
+  },
+  "verification": {
+    "turnstileRequired": "Please complete the security verification.",
+    "turnstileError": "Verification failed. Please try again.",
+    "verifyHuman": "Please verify you are human to continue"
+  },
+  "submission": {
+    "processing": "Processing your responses...",
+    "successTitle": "✅ Success! Your fitness assessment has been submitted",
+    "successMessage": "Thank you! Dr. Jackie has received your detailed assessment and will personally review all your responses.\n\nYou should receive a confirmation email at the address you provided shortly.\n\nDr. Jackie will analyze your information and create a customized training and nutrition plan tailored specifically to your goals, experience level, and lifestyle.\n\nExpect to hear back within 24-48 hours with your personalized program and next steps.\n\nThank you for trusting Dr. Jackie's expertise. Your transformation journey starts now! 💪",
+    "errorTitle": "Error",
+    "errorMessage": "There was an error submitting your form. Please try again.",
+    "whatHappensNext": "What happens now?",
+    "step1": "Your assessment has been sent directly to Dr. Jackie, who will review it personally.",
+    "step2": "She will create your personalized fitness plan based on your responses.",
+    "step3": "Dr. Jackie will respond shortly with your plan and next steps.",
+    "thankYouTitle": "Thank you for trusting Dr. Jackie's work!",
+    "thankYouDescription": "Your journey to better fitness starts here. We're excited to help you achieve your goals!"
+  }
+}
