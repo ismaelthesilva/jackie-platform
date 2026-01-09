@@ -12,8 +12,6 @@ out/
 
 # Backup and temp files
 backup/
-web/
-admin/
 migrate-to-single-app.sh
 
 # Environment variables
