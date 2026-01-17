@@ -16,6 +16,7 @@ migrate-to-single-app.sh
 
 # Environment variables
 .env
+.env.development
 .env.local
 .env.local.example
 .env.development.local
