@@ -27,8 +27,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import CloudflareTurnstile from "@/components/CloudflareTurnstile";
-import DietPlanGenerator from "../../services/DietPlanGenerator";
-import DietPlanStorage from "../../services/DietPlanStorage";
+import DietPlanGenerator from "@/services/DietPlanGenerator";
+import DietPlanStorage from "@/services/DietPlanStorage";
 import nutritionEN from "@/locales/forms/nutritionusa.json";
 import nutritionPT from "@/locales/forms/nutritionbr.json"; // Will create PT version
 
@@ -1168,7 +1168,7 @@ export default function NutritionForm({ locale }: NutritionFormProps) {
         description: t.welcome.description,
       },
     ],
-    [locale, t]
+    [locale, t],
   );
   const shouldDisplayQuestion = useCallback(
     (question: Question): boolean => {
@@ -1176,7 +1176,7 @@ export default function NutritionForm({ locale }: NutritionFormProps) {
       const { id, value } = question.condition;
       return answers[id] === value;
     },
-    [answers]
+    [answers],
   );
 
   const getNextQuestion = useCallback(
@@ -1188,7 +1188,7 @@ export default function NutritionForm({ locale }: NutritionFormProps) {
       }
       return questions.length - 1;
     },
-    [questions, shouldDisplayQuestion]
+    [questions, shouldDisplayQuestion],
   );
 
   const handleAnswer = useCallback(
@@ -1220,7 +1220,7 @@ export default function NutritionForm({ locale }: NutritionFormProps) {
               index > currentQuestion &&
               q.condition &&
               q.condition.id === questionId &&
-              q.condition.value === "Yes"
+              q.condition.value === "Yes",
           );
           if (nextIndex !== -1) {
             setCurrentQuestion(nextIndex);
@@ -1236,7 +1236,7 @@ export default function NutritionForm({ locale }: NutritionFormProps) {
         setFormCompleted(true);
       }
     },
-    [currentQuestion, getNextQuestion, questions]
+    [currentQuestion, getNextQuestion, questions],
   );
 
   const submitFormData = useCallback(async (): Promise<void> => {
@@ -1310,7 +1310,7 @@ export default function NutritionForm({ locale }: NutritionFormProps) {
         "service_28v1fvr", // Service ID
         "template_wj6zu2c", // Template ID - same as NutritionBR
         templateParams,
-        "ezbPPmM_lDMistyGT" // Public Key
+        "ezbPPmM_lDMistyGT", // Public Key
       );
       console.log("EmailJS response:", response);
 
@@ -1340,7 +1340,7 @@ Please try again or contact us if the problem persists.`);
 
     const handleKeyPress = (
       e: React.KeyboardEvent,
-      value?: string | string[] | number
+      value?: string | string[] | number,
     ) => {
       if (e.key === "Enter" && (value || !currentQ.required)) {
         handleAnswer(currentQ.id, value || "");
@@ -1613,7 +1613,7 @@ Please try again or contact us if the problem persists.`);
                   className={cn(
                     "h-16 text-lg font-medium",
                     answers[currentQ.id] === "Yes" &&
-                      "bg-emerald-600 hover:bg-emerald-700"
+                      "bg-emerald-600 hover:bg-emerald-700",
                   )}
                   onClick={() => handleAnswer(currentQ.id, "Yes")}
                 >
@@ -1628,7 +1628,7 @@ Please try again or contact us if the problem persists.`);
                   className={cn(
                     "h-16 text-lg font-medium",
                     answers[currentQ.id] === "No" &&
-                      "bg-red-600 hover:bg-red-700"
+                      "bg-red-600 hover:bg-red-700",
                   )}
                   onClick={() => handleAnswer(currentQ.id, "No")}
                 >
@@ -1663,7 +1663,7 @@ Please try again or contact us if the problem persists.`);
                       size="lg"
                       className={cn(
                         "w-full h-auto p-4 text-left justify-start text-wrap whitespace-normal text-base font-medium",
-                        isSelected && "bg-emerald-600 hover:bg-emerald-700"
+                        isSelected && "bg-emerald-600 hover:bg-emerald-700",
                       )}
                       onClick={() => handleAnswer(currentQ.id, option)}
                     >
@@ -1708,7 +1708,7 @@ Please try again or contact us if the problem persists.`);
                       size="lg"
                       className={cn(
                         "w-full h-auto p-4 text-left justify-start text-wrap whitespace-normal text-base font-medium",
-                        isSelected && "bg-emerald-600 hover:bg-emerald-700"
+                        isSelected && "bg-emerald-600 hover:bg-emerald-700",
                       )}
                       onClick={() => {
                         const currentSelection =
@@ -1779,7 +1779,7 @@ Please try again or contact us if the problem persists.`);
                       size="lg"
                       className={cn(
                         "w-full h-auto p-4 text-left justify-start text-wrap whitespace-normal text-base font-medium",
-                        isChecked && "bg-emerald-600 hover:bg-emerald-700"
+                        isChecked && "bg-emerald-600 hover:bg-emerald-700",
                       )}
                       onClick={() => {
                         const currentSelection =
@@ -1892,12 +1892,12 @@ Please try again or contact us if the problem persists.`);
                 const isCompleted =
                   index <
                   Math.floor(
-                    currentQuestion / (totalQuestions / timelineSteps.length)
+                    currentQuestion / (totalQuestions / timelineSteps.length),
                   );
                 const isCurrent =
                   index ===
                   Math.floor(
-                    currentQuestion / (totalQuestions / timelineSteps.length)
+                    currentQuestion / (totalQuestions / timelineSteps.length),
                   );
 
                 return (
@@ -1911,8 +1911,8 @@ Please try again or contact us if the problem persists.`);
                         isCompleted
                           ? "bg-emerald-600 text-white"
                           : isCurrent
-                          ? "bg-emerald-100 text-emerald-600 ring-2 ring-emerald-600"
-                          : "bg-gray-200 text-gray-400"
+                            ? "bg-emerald-100 text-emerald-600 ring-2 ring-emerald-600"
+                            : "bg-gray-200 text-gray-400",
                       )}
                     >
                       {isCompleted ? (
@@ -1927,7 +1927,7 @@ Please try again or contact us if the problem persists.`);
                           "text-sm font-medium",
                           isCompleted || isCurrent
                             ? "text-gray-900"
-                            : "text-gray-500"
+                            : "text-gray-500",
                         )}
                       >
                         {step.title}
@@ -1971,6 +1971,24 @@ Please try again or contact us if the problem persists.`);
         </CardContent>
       </Card>
     );
+  };
+
+  const generateDietPlan = async () => {
+    try {
+      const generator = new DietPlanGenerator();
+      const plan = await generator.generate(answers);
+
+      if (plan) {
+        const storage = new DietPlanStorage();
+        await storage.save(clientEmail, plan);
+        console.log("Diet plan generated and saved!");
+      } else {
+        console.log("Diet plan generation is not yet implemented");
+      }
+    } catch (error) {
+      console.error("Error generating diet plan:", error);
+      // Continue with form submission even if diet plan fails
+    }
   };
 
   return (

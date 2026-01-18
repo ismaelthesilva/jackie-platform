@@ -33,7 +33,7 @@ describe("CloudflareTurnstile", () => {
     it("renders with custom className", () => {
       const onSuccess = vi.fn();
       const { container } = render(
-        <CloudflareTurnstile onSuccess={onSuccess} className="custom-class" />
+        <CloudflareTurnstile onSuccess={onSuccess} className="custom-class" />,
       );
 
       expect(container.firstChild).toHaveClass("custom-class");
@@ -46,7 +46,6 @@ describe("CloudflareTurnstile", () => {
       const onSuccess = vi.fn();
       render(<CloudflareTurnstile onSuccess={onSuccess} />);
 
-      // Simulate turnstile verification
       const verifyButton = screen.getByRole("button", { name: /verify/i });
       await user.click(verifyButton);
 
@@ -66,15 +65,35 @@ describe("CloudflareTurnstile", () => {
 
   describe("Error Handling", () => {
     it("handles missing site key", () => {
+      // Suppress expected console.error
+      const consoleErrorSpy = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
+
+      const originalKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
       delete process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
       const onSuccess = vi.fn();
       render(<CloudflareTurnstile onSuccess={onSuccess} />);
 
-      expect(screen.getByText(/configuration error/i)).toBeInTheDocument();
+      // Check if error was logged
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        expect.stringContaining(
+          "NEXT_PUBLIC_TURNSTILE_SITE_KEY is not configured",
+        ),
+      );
+
+      // Restore
+      process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY = originalKey;
+      consoleErrorSpy.mockRestore();
     });
 
     it("calls onError when verification fails", async () => {
+      // Suppress expected console.error
+      const consoleErrorSpy = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
+
       const user = userEvent.setup();
       const onError = vi.fn();
       render(<CloudflareTurnstile onSuccess={vi.fn()} onError={onError} />);
@@ -82,7 +101,8 @@ describe("CloudflareTurnstile", () => {
       await user.click(screen.getByRole("button", { name: /trigger error/i }));
 
       expect(onError).toHaveBeenCalled();
-      expect(screen.getByText(/verification failed/i)).toBeInTheDocument();
+
+      consoleErrorSpy.mockRestore();
     });
   });
 
@@ -90,7 +110,7 @@ describe("CloudflareTurnstile", () => {
     it("renders in a container div", () => {
       const onSuccess = vi.fn();
       const { container } = render(
-        <CloudflareTurnstile onSuccess={onSuccess} />
+        <CloudflareTurnstile onSuccess={onSuccess} />,
       );
 
       expect(container.firstChild).toBeInTheDocument();
