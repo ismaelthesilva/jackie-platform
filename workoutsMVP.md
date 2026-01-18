@@ -170,42 +170,42 @@ src/
 └── auth.ts # Auth types
 
 🚀 Implementation Roadmap (Checklist)
-Phase 1: Setup & Authentication (Week 1)
-[ ] Infrastructure
+Phase 1: Setup & Authentication (Week 1) ✅ COMPLETED
+[x] Infrastructure
 
-[ ] Initialize Next.js project.
+[x] Initialize Next.js project.
 
-[ ] Setup Neon PostgreSQL project.
+[x] Setup Neon PostgreSQL project.
 
-[ ] Install Prisma: `npm install prisma @prisma/client @neondatabase/serverless`
+[x] Install Prisma: `npm install prisma @prisma/client @neondatabase/serverless`
 
-[ ] Initialize Prisma: `npx prisma init`
+[x] Initialize Prisma: `npx prisma init`
 
-[ ] Configure Environment Variables (.env).
+[x] Configure Environment Variables (.env).
 
-[ ] Create Prisma schema.
+[x] Create Prisma schema.
 
-[ ] Run Prisma Migrations: `npx prisma migrate dev --name init`
+[x] Run Prisma Migrations: `npx prisma migrate dev --name init`
 
-Auth Implementation
+Auth Implementation ✅ COMPLETED
 
-[ ] Install bcrypt: `npm install bcryptjs @types/bcryptjs`
+[x] Install bcrypt: `npm install bcryptjs @types/bcryptjs`
 
-[ ] Create User model in Prisma schema.
+[x] Create User model in Prisma schema.
 
-[ ] Create Registration Page (Name, Email, Password, Role Selection).
+[x] Create Registration Page (Name, Email, Password, Role Selection).
 
-[ ] Create Login Page.
+[x] Create Login Page.
 
-[ ] Implement API route for registration (hash password with bcrypt).
+[x] Implement API route for registration (hash password with bcrypt).
 
-[ ] Implement API route for login (verify password, create session).
+[x] Implement API route for login (verify password, create session).
 
-[ ] Setup session management (JWT or next-auth).
+[x] Setup session management (JWT with jose library).
 
-[ ] Implement middleware.ts for route protection.
+[x] Implement middleware.ts for route protection.
 
-[ ] Implement Role-Based Redirects (PT -> /pt, Member -> /member).
+[x] Implement Role-Based Redirects (PT -> /pt, Member -> /member).
 
 Phase 2: PT - Exercise Library (Week 1-2)
 [ ] Backend
