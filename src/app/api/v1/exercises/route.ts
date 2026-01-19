@@ -1,30 +1,34 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/auth/session";
+import { getAllExercises } from "@/lib/exercises";
+
+// GET all static exercises from public/exercises
+export async function GET_static() {
+  const exercises = getAllExercises();
+  return NextResponse.json(exercises);
+}
 
 // GET all exercises
 export async function GET(request: NextRequest) {
   try {
-    const session = await getSession();
+    // Get static exercises from public/exercises
+    const staticExercises = getAllExercises();
 
-    if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    // Get dynamic exercises from database (YouTube links, etc.)
+    let dynamicExercises: any[] = [];
+    try {
+      const session = await getSession();
+      if (session && session.role === "PT") {
+        dynamicExercises = await prisma.exercise.findMany({
+          where: { createdById: session.userId },
+          orderBy: { createdAt: "desc" },
+        });
+      }
+    } catch {}
 
-    // Only PTs can view exercises
-    if (session.role !== "PT") {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
-
-    const exercises = await prisma.exercise.findMany({
-      where: {
-        createdById: session.userId,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-
+    // Merge static and dynamic exercises
+    const exercises = [...staticExercises, ...dynamicExercises];
     return NextResponse.json({ exercises }, { status: 200 });
   } catch (error) {
     console.error("Failed to fetch exercises:", error);

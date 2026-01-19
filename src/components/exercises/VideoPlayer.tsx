@@ -21,7 +21,7 @@ export default function VideoPlayer({
       <div
         className={`flex items-center justify-center bg-gray-200 ${className}`}
       >
-        <p className="text-sm text-gray-500">Invalid video URL</p>
+        <p className="text-sm text-gray-500">Video under production!</p>
       </div>
     );
   }

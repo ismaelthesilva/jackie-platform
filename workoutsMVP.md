@@ -5,6 +5,8 @@ Stack: Next.js (App Router), Neon (PostgreSQL Database), Neon Auth, Prisma ORM, 
 📋 Project Overview
 A fitness platform where Personal Trainers (PTs) can create workout programs with video tutorials for their members. Members can view assigned workouts and watch instructional videos.
 
+🖼️ Until YouTube videos are produced, each exercise will display two images (start and end positions) from the public/exercises folder.
+
 🏗️ 1. Database Schema (Prisma)
 The schema will be defined in `prisma/schema.prisma` and managed through Prisma migrations.
 
@@ -171,40 +173,24 @@ src/
 
 🚀 Implementation Roadmap (Checklist)
 Phase 1: Setup & Authentication (Week 1) ✅ COMPLETED
-[x] Infrastructure
-
-[x] Initialize Next.js project.
-
-[x] Setup Neon PostgreSQL project.
-
-[x] Install Prisma: `npm install prisma @prisma/client @neondatabase/serverless`
-
-[x] Initialize Prisma: `npx prisma init`
-
-[x] Configure Environment Variables (.env).
-
-[x] Create Prisma schema.
-
-[x] Run Prisma Migrations: `npx prisma migrate dev --name init`
+[✅] Infrastructure
+[✅] Initialize Next.js project.
+[✅] Setup Neon PostgreSQL project.
+[✅] Install Prisma: `npm install prisma @prisma/client @neondatabase/serverless`
+[✅] Initialize Prisma: `npx prisma init`
+[✅] Configure Environment Variables (.env).
+[✅] Create Prisma schema.
+[✅] Run Prisma Migrations: `npx prisma migrate dev --name init`
 
 Auth Implementation ✅ COMPLETED
-
 [x] Install bcrypt: `npm install bcryptjs @types/bcryptjs`
-
 [x] Create User model in Prisma schema.
-
 [x] Create Registration Page (Name, Email, Password, Role Selection).
-
 [x] Create Login Page.
-
 [x] Implement API route for registration (hash password with bcrypt).
-
 [x] Implement API route for login (verify password, create session).
-
 [x] Setup session management (JWT with jose library).
-
 [x] Implement middleware.ts for route protection.
-
 [x] Implement Role-Based Redirects (PT -> /pt, Member -> /member).
 
 Phase 2: PT - Exercise Library (Week 1-2)
@@ -227,6 +213,7 @@ Phase 2: PT - Exercise Library (Week 1-2)
 [ ] Build ExerciseList page with Muscle Group filtering.
 
 [ ] Add Edit/Delete functionality.
+[ ] Display two images (start/end) from public/exercises for each exercise until YouTube videos are available.
 
 Phase 3: PT - Workout Builder (Week 2-3)
 [ ] Backend
@@ -295,7 +282,10 @@ Phase 6: Polish & Testing (Week 4-5)
 [ ] Deploy to Vercel/Netlify.
 
 📝 Technical Notes
-YouTube Video Handling
+
+Exercise Media Handling
+Until YouTube videos are available, each exercise will display two images (start and end) from public/exercises. When videos are ready, use the following logic for YouTube embedding:
+
 Helper function logic for lib/utils/videoUtils.ts:
 
 Extract ID: Parse the 11-character ID from standard URL formats.

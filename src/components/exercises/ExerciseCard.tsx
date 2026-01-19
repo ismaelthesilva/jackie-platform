@@ -11,6 +11,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Edit, Trash2, Play } from "lucide-react";
 import VideoPlayer from "./VideoPlayer";
+import ImageMotion from "./ImageMotion";
 
 interface Exercise {
   id: string;
@@ -57,10 +58,23 @@ export default function ExerciseCard({
         )}
       </CardHeader>
 
-      <CardContent className="flex-1 pb-3">
+      {/* <CardContent className="flex-1 pb-3">
         <div className="aspect-video mb-3 bg-gray-100 rounded-md overflow-hidden">
           <VideoPlayer videoUrl={exercise.videoUrl} />
         </div>
+        {exercise.description && (
+          <p className="text-sm text-gray-600 line-clamp-2">
+            {exercise.description}
+          </p>
+        )}
+      </CardContent> */}
+
+      <CardContent className="flex-1 pb-3">
+        <ImageMotion
+          images={(exercise as any).images}
+          videoUrl={exercise.videoUrl}
+          alt={exercise.name}
+        />
         {exercise.description && (
           <p className="text-sm text-gray-600 line-clamp-2">
             {exercise.description}
