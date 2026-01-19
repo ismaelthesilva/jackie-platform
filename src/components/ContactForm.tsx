@@ -38,7 +38,7 @@ const Contact: React.FC = () => {
   const [turnstileToken, setTurnstileToken] = useState<string>("");
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setFormData({
       ...formData,
@@ -52,7 +52,7 @@ const Contact: React.FC = () => {
     if (!turnstileToken) {
       setSubmitError(
         t("contact.form.errorMessage") ||
-          "Please complete the security verification."
+          "Please complete the security verification.",
       );
       return;
     }
@@ -177,126 +177,6 @@ const Contact: React.FC = () => {
             </div>
 
             {/* Contact Form */}
-            <div className="lg:col-span-2">
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t("contact.form.title")}</CardTitle>
-                  <CardDescription>
-                    {t("contact.form.description")}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="name">
-                          {t("contact.form.fullName")} *
-                        </Label>
-                        <Input
-                          id="name"
-                          name="name"
-                          type="text"
-                          required
-                          value={formData.name}
-                          onChange={handleChange}
-                          placeholder={t("contact.form.fullNamePlaceholder")}
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="email">
-                          {t("contact.form.email")} *
-                        </Label>
-                        <Input
-                          id="email"
-                          name="email"
-                          type="email"
-                          required
-                          value={formData.email}
-                          onChange={handleChange}
-                          placeholder={t("contact.form.emailPlaceholder")}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="phone">
-                          {t("contact.form.phoneNumber")}
-                        </Label>
-                        <Input
-                          id="phone"
-                          name="phone"
-                          type="tel"
-                          value={formData.phone}
-                          onChange={handleChange}
-                          placeholder={t("contact.form.phonePlaceholder")}
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="subject">
-                          {t("contact.form.subject")} *
-                        </Label>
-                        <Input
-                          id="subject"
-                          name="subject"
-                          type="text"
-                          required
-                          value={formData.subject}
-                          onChange={handleChange}
-                          placeholder={t("contact.form.subjectPlaceholder")}
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <Label htmlFor="message">
-                        {t("contact.form.message")} *
-                      </Label>
-                      <Textarea
-                        id="message"
-                        name="message"
-                        required
-                        rows={6}
-                        value={formData.message}
-                        onChange={handleChange}
-                        placeholder={t("contact.form.messagePlaceholder")}
-                      />
-                    </div>
-
-                    {/* Cloudflare Turnstile */}
-                    <div className="flex justify-center">
-                      <CloudflareTurnstile onSuccess={setTurnstileToken} />
-                    </div>
-
-                    {submitError && (
-                      <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
-                        <p className="text-red-800 dark:text-red-200 text-sm">
-                          {submitError}
-                        </p>
-                      </div>
-                    )}
-
-                    <Button
-                      type="submit"
-                      disabled={isSubmitting || !turnstileToken}
-                      className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                          {t("contact.form.sending")}
-                        </>
-                      ) : (
-                        <>
-                          <Send className="h-4 w-4 mr-2" />
-                          {t("contact.form.sendMessage")}
-                        </>
-                      )}
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
-            </div>
           </div>
         </div>
       </section>
