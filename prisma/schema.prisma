@@ -8,82 +8,77 @@ datasource db {
 }
 
 model User {
-  id                String            @id @default(uuid())
-  email             String            @unique
-  name              String
-  password          String
-  role              Role              @default(MEMBER)
-  createdAt         DateTime          @default(now())
-  updatedAt         DateTime          @updatedAt
-  
-  createdExercises  Exercise[]        @relation("ExerciseCreator")
-  createdPrograms   WorkoutProgram[]  @relation("ProgramCreator")
-  assignedPrograms  WorkoutProgram[]  @relation("ProgramAssignee")
+  id               String           @id @default(uuid())
+  email            String           @unique
+  name             String
+  password         String
+  role             Role             @default(MEMBER)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  createdExercises Exercise[]       @relation("ExerciseCreator")
+  assignedPrograms WorkoutProgram[] @relation("ProgramAssignee")
+  createdPrograms  WorkoutProgram[] @relation("ProgramCreator")
 
   @@map("users")
 }
 
-enum Role {
-  PT
-  MEMBER
-}
-
 model Exercise {
-  id              String            @id @default(uuid())
-  name            String
-  videoUrl        String
-  description     String?
-  muscleGroup     String?
-  difficulty      String?            // ← Add this line if missing
-  createdById     String
-  createdAt       DateTime          @default(now())
-  
-  createdBy       User              @relation("ExerciseCreator", fields: [createdById], references: [id], onDelete: Cascade)
+  id               String            @id @default(uuid())
+  name             String
+  videoUrl         String
+  description      String?
+  muscleGroup      String?
+  createdById      String
+  createdAt        DateTime          @default(now())
+  difficulty       String?
+  createdBy        User              @relation("ExerciseCreator", fields: [createdById], references: [id], onDelete: Cascade)
   workoutExercises WorkoutExercise[]
 
   @@map("exercises")
 }
 
 model WorkoutProgram {
-  id          String        @id @default(uuid())
-  name        String
-  description String?
-  createdById String
+  id           String       @id @default(uuid())
+  name         String
+  description  String?
+  createdById  String
   assignedToId String?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  
-  createdBy   User          @relation("ProgramCreator", fields: [createdById], references: [id])
-  assignedTo  User?         @relation("ProgramAssignee", fields: [assignedToId], references: [id])
-  workoutDays WorkoutDay[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  workoutDays  WorkoutDay[]
+  assignedTo   User?        @relation("ProgramAssignee", fields: [assignedToId], references: [id])
+  createdBy    User         @relation("ProgramCreator", fields: [createdById], references: [id])
 
   @@map("workout_programs")
 }
 
 model WorkoutDay {
-  id              String            @id @default(uuid())
-  programId       String
-  dayName         String
-  orderIndex      Int
-  createdAt       DateTime          @default(now())
-  
-  program         WorkoutProgram    @relation(fields: [programId], references: [id], onDelete: Cascade)
+  id               String            @id @default(uuid())
+  programId        String
+  dayName          String
+  orderIndex       Int
+  createdAt        DateTime          @default(now())
+  program          WorkoutProgram    @relation(fields: [programId], references: [id], onDelete: Cascade)
   workoutExercises WorkoutExercise[]
 
   @@map("workout_days")
 }
 
 model WorkoutExercise {
-  id            String      @id @default(uuid())
-  workoutDayId  String
-  exerciseId    String
-  orderIndex    Int
-  sets          Int?
-  reps          String?
-  notes         String?
-  
-  workoutDay    WorkoutDay  @relation(fields: [workoutDayId], references: [id], onDelete: Cascade)
-  exercise      Exercise    @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  id           String     @id @default(uuid())
+  workoutDayId String
+  exerciseId   String
+  orderIndex   Int
+  sets         Int?
+  reps         String?
+  notes        String?
+  exercise     Exercise   @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  workoutDay   WorkoutDay @relation(fields: [workoutDayId], references: [id], onDelete: Cascade)
 
   @@map("workout_exercises")
+}
+
+enum Role {
+  PT
+  MEMBER
 }
