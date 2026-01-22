@@ -31,7 +31,7 @@ export default function PTDashboard() {
             </div>
             <CardTitle>Exercise Library</CardTitle>
             <CardDescription>
-              Create and manage your exercise database with video tutorials
+              Create and manage your exercise db with video tutorials
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -54,9 +54,7 @@ export default function PTDashboard() {
           </CardHeader>
           <CardContent>
             <Link href="/pt/workouts">
-              <Button className="w-full" variant="outline" disabled>
-                Coming Soon
-              </Button>
+              <Button className="w-full">Manage Workouts</Button>
             </Link>
           </CardContent>
         </Card>
@@ -74,9 +72,7 @@ export default function PTDashboard() {
           </CardHeader>
           <CardContent>
             <Link href="/pt/members">
-              <Button className="w-full" variant="outline" disabled>
-                Coming Soon
-              </Button>
+              <Button className="w-full">Manage Members</Button>
             </Link>
           </CardContent>
         </Card>
