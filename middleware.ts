@@ -25,20 +25,29 @@ export async function middleware(request: NextRequest) {
 
   // Redirect to appropriate dashboard if logged in user tries to access auth pages
   if (session && (path === "/login" || path === "/register")) {
-    const dashboardPath = session.role === "PT" ? "/pt" : "/member";
+    const dashboardPath = session.role === "PT" ? "/pt" : "/members/me";
     return NextResponse.redirect(new URL(dashboardPath, request.url));
   }
 
   // Role-based route protection
   if (session) {
-    // PT trying to access member routes
-    if (session.role === "PT" && path.startsWith("/member")) {
-      return NextResponse.redirect(new URL("/pt", request.url));
+    // Member trying to access PT routes -> send them to their member view
+    if (session.role === "MEMBER" && path.startsWith("/pt")) {
+      return NextResponse.redirect(new URL("/members/me", request.url));
     }
 
-    // Member trying to access PT routes
-    if (session.role === "MEMBER" && path.startsWith("/pt")) {
-      return NextResponse.redirect(new URL("/member", request.url));
+    // Member trying to access other members' pages or the PT members list
+    if (session.role === "MEMBER" && path.startsWith("/members")) {
+      const userId = (session as any).userId;
+      const allowedPrefix = `/members/${userId}`;
+      const isAllowed =
+        path === "/members/me" ||
+        path === `/members/${userId}` ||
+        path.startsWith(allowedPrefix + "/");
+
+      if (!isAllowed) {
+        return NextResponse.redirect(new URL("/members/me", request.url));
+      }
     }
   }
 
