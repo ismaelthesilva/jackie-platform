@@ -41,7 +41,13 @@ export default function ImageMotion({
       title="Click to toggle image"
     >
       <img
-        src={`/exercises/${images[idx]}`}
+        src={
+          images[idx]?.startsWith("http")
+            ? images[idx]
+            : images[idx]?.startsWith("/")
+              ? images[idx]
+              : `/exercises/${images[idx]}`
+        }
         alt={`${alt} ${idx === 0 ? "start" : "end"}`}
         className="object-contain w-full h-full"
       />

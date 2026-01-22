@@ -13,13 +13,32 @@ export async function GET(request: Request) {
       where: { createdById: session.userId },
       include: {
         workoutDays: {
-          include: { workoutExercises: true },
+          include: { workoutExercises: { include: { exercise: true } } },
           orderBy: { orderIndex: "asc" },
         },
       },
     });
 
-    return NextResponse.json(programs);
+    // attach static images from public/exercises to each exercise if available
+    const staticExercises = getAllExercises();
+    const mapped = programs.map((p: any) => {
+      const days = (p.workoutDays || []).map((d: any) => {
+        const wexs = (d.workoutExercises || []).map((we: any) => {
+          const ex = we.exercise ?? null;
+          const staticEx = staticExercises.find(
+            (s: any) => s.id === ex?.id || s.name === ex?.name,
+          );
+          const images = (staticEx?.images || []).map((p: string) =>
+            p.startsWith("/") ? p : `/exercises/${p}`,
+          );
+          return { ...we, exercise: { ...(ex ?? {}), images } };
+        });
+        return { ...d, workoutExercises: wexs };
+      });
+      return { ...p, workoutDays: days };
+    });
+
+    return NextResponse.json(mapped);
   } catch (err: any) {
     console.error(
       "GET /api/v1/workouts error:",
@@ -46,40 +65,99 @@ export async function POST(request: Request) {
     if (!name)
       return NextResponse.json({ error: "Missing name" }, { status: 400 });
 
+    // Load static exercises (from public/exercises)
+    const staticExercises = getAllExercises();
+
+    // Map workoutDays/workoutExercises and ensure referenced exercises exist in DB.
+    const mappedDays = [] as any[];
+
+    for (
+      let di = 0;
+      Array.isArray(workoutDays) && di < workoutDays.length;
+      di++
+    ) {
+      const d = workoutDays[di];
+      const dayName = d.dayName ?? `Day ${di + 1}`;
+      const orderIndex = d.orderIndex ?? di;
+
+      const wexs = [] as any[];
+      const list = Array.isArray(d.workoutExercises) ? d.workoutExercises : [];
+      for (let wi = 0; wi < list.length; wi++) {
+        const we = list[wi];
+        const rawId = we.exerciseId;
+        if (!rawId) continue;
+
+        // Try to find exercise by id in DB
+        let ex = await prisma.exercise
+          .findUnique({ where: { id: rawId } })
+          .catch(() => null);
+
+        // If not found by id, try name match in DB
+        if (!ex) {
+          ex = await prisma.exercise
+            .findFirst({ where: { name: rawId } })
+            .catch(() => null);
+        }
+
+        // If still not found, try to create from static exercises (match by id or name)
+        if (!ex) {
+          const staticEx = staticExercises.find(
+            (s: any) => s.id === rawId || s.name === rawId,
+          );
+          if (staticEx) {
+            const videoUrl =
+              staticEx.videoUrl || process.env.VIDEO_URL_FALLBACK || "";
+            try {
+              ex = await prisma.exercise.create({
+                data: {
+                  name: staticEx.name,
+                  description: staticEx.description ?? null,
+                  videoUrl,
+                  muscleGroup: staticEx.muscleGroup ?? null,
+                  difficulty: staticEx.difficulty ?? null,
+                  createdById: session.userId,
+                },
+              });
+            } catch (e) {
+              // ignore and leave ex null — will error below
+            }
+          }
+        }
+
+        if (!ex) {
+          return NextResponse.json(
+            { error: `Exercise not found: ${rawId}` },
+            { status: 400 },
+          );
+        }
+
+        wexs.push({
+          exerciseId: ex.id,
+          orderIndex: we.orderIndex ?? wi,
+          sets: we.sets == null || we.sets === "" ? null : Number(we.sets),
+          reps: we.reps == null || we.reps === "" ? null : String(we.reps),
+          notes: we.notes ?? null,
+        });
+      }
+
+      mappedDays.push({
+        dayName,
+        orderIndex,
+        workoutExercises: { create: wexs },
+      });
+    }
+
     const program = await prisma.workoutProgram.create({
       data: {
         name,
         description: description ?? null,
         createdById: session.userId,
         assignedToId: assignedToId ?? null,
-        workoutDays: {
-          create: (Array.isArray(workoutDays) ? workoutDays : []).map(
-            (d: any, di: number) => ({
-              dayName: d.dayName ?? `Day ${di + 1}`,
-              orderIndex: d.orderIndex ?? di,
-              workoutExercises: {
-                create: (Array.isArray(d.workoutExercises)
-                  ? d.workoutExercises
-                  : []
-                ).map((we: any, wi: number) => ({
-                  exerciseId: we.exerciseId,
-                  orderIndex: we.orderIndex ?? wi,
-                  // coerce sets to number or null
-                  sets:
-                    we.sets == null || we.sets === "" ? null : Number(we.sets),
-                  // Prisma expects string|null for reps — ensure string
-                  reps:
-                    we.reps == null || we.reps === "" ? null : String(we.reps),
-                  notes: we.notes ?? null,
-                })),
-              },
-            }),
-          ),
-        },
+        workoutDays: { create: mappedDays },
       },
       include: {
         workoutDays: {
-          include: { workoutExercises: true },
+          include: { workoutExercises: { include: { exercise: true } } },
           orderBy: { orderIndex: "asc" },
         },
       },
@@ -95,17 +173,15 @@ export async function POST(request: Request) {
   }
 }
 
-export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } },
-) {
+export async function DELETE(request: Request, context: { params: any }) {
   const session = await getSession();
   if (!session)
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   if (session.role !== "PT")
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
-  const id = params.id;
+  const params = await context.params;
+  const id = params?.id;
   try {
     // ensure PT owns program
     const program = await prisma.workoutProgram.findUnique({ where: { id } });

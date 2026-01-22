@@ -15,6 +15,7 @@ export default function WorkoutsPage() {
   const [exercisesList, setExercisesList] = useState<
     { exerciseId: string; customId?: string; sets: number | ""; reps: string }[]
   >([{ exerciseId: "", customId: "", sets: "", reps: "" }]);
+  const [editId, setEditId] = useState<string | null>(null);
 
   const fetchPrograms = async () => {
     setLoading(true);
@@ -79,7 +80,16 @@ export default function WorkoutsPage() {
           },
         ],
       };
-      await createProgram(payload);
+
+      if (editId) {
+        // update
+        const { updateProgram } = await import("@/lib/workoutClient");
+        await updateProgram(editId, payload);
+        setEditId(null);
+      } else {
+        await createProgram(payload);
+      }
+
       setName("");
       setDescription("");
       setExercisesList([{ exerciseId: "", customId: "", sets: "", reps: "" }]);
@@ -99,7 +109,6 @@ export default function WorkoutsPage() {
   };
 
   if (loading) return <div className="p-4">Loading workout programs…</div>;
-  if (error) return <div className="p-4 text-red-600">Error: {error}</div>;
 
   return (
     <div className="space-y-4 p-4">
@@ -216,14 +225,17 @@ export default function WorkoutsPage() {
                     { exerciseId: "", customId: "", sets: "", reps: "" },
                   ])
                 }
-                className="btn"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-3 py-1 rounded"
               >
                 Add exercise
               </button>
             </div>
           </div>
           <div className="flex gap-2">
-            <button type="submit" className="btn btn-primary">
+            <button
+              type="submit"
+              className="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded"
+            >
               Create program
             </button>
             <button
@@ -236,13 +248,15 @@ export default function WorkoutsPage() {
                 ]);
                 setError(null);
               }}
-              className="btn"
+              className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded"
             >
               Reset
             </button>
           </div>
         </form>
       </div>
+
+      {error && <div className="p-4 text-red-600">Error: {error}</div>}
 
       {programs.length === 0 ? (
         <div>No workout programs found.</div>
@@ -257,6 +271,33 @@ export default function WorkoutsPage() {
                 aria-label={`Delete ${p.name}`}
               >
                 Delete
+              </button>
+              <button
+                onClick={() => {
+                  // populate form for edit (only first day supported)
+                  setEditId(p.id);
+                  setName(p.name || "");
+                  setDescription(p.description || "");
+                  const firstDay = (p.workoutDays && p.workoutDays[0]) || null;
+                  if (firstDay && Array.isArray(firstDay.workoutExercises)) {
+                    setExercisesList(
+                      firstDay.workoutExercises.map((we: any) => ({
+                        exerciseId: we.exerciseId,
+                        customId: "",
+                        sets: we.sets ?? "",
+                        reps: we.reps ?? "",
+                      })),
+                    );
+                  } else {
+                    setExercisesList([
+                      { exerciseId: "", customId: "", sets: "", reps: "" },
+                    ]);
+                  }
+                }}
+                className="absolute top-2 right-20 text-sm text-blue-600"
+                aria-label={`Edit ${p.name}`}
+              >
+                Edit
               </button>
             </div>
           ))}

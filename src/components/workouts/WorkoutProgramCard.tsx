@@ -9,23 +9,28 @@ export default function WorkoutProgramCard({ program }: { program: any }) {
         {program.workoutDays.map((d: any) => (
           <div key={d.id}>
             <div className="font-medium">{d.dayName}</div>
-            {d.workoutExercises.map((we: any) => (
-              <div key={we.id} className="flex gap-3 items-start">
-                <div className="w-36">
-                  <ImageMotion
-                    images={we.exercise?.images ?? []}
-                    videoUrl={we.exercise?.videoUrl}
-                    alt={we.exercise?.name ?? ""}
-                  />
-                </div>
-                <div>
-                  <div>{we.exercise?.name ?? we.exerciseId}</div>
-                  <div className="text-sm text-gray-600">
-                    {we.sets ?? ""} x {we.reps ?? ""}
+            {d.workoutExercises.map((we: any) => {
+              const ex = we.exercise ?? null;
+              const images = ex?.images ?? [];
+
+              return (
+                <div key={we.id} className="flex gap-3 items-start">
+                  <div className="w-36">
+                    <ImageMotion
+                      images={images}
+                      videoUrl={ex?.videoUrl}
+                      alt={ex?.name ?? we.exerciseId}
+                    />
+                  </div>
+                  <div>
+                    <div>{ex?.name ?? we.exerciseId}</div>
+                    <div className="text-sm text-gray-600">
+                      {we.sets ?? ""} x {we.reps ?? ""}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ))}
       </div>
