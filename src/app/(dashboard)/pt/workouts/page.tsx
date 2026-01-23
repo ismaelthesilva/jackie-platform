@@ -1,12 +1,19 @@
 "use client";
 import { useEffect, useState } from "react";
 import WorkoutProgramCard from "@/components/workouts/WorkoutProgramCard";
-import { createProgram, deleteProgram } from "@/lib/workoutClient";
+import {
+  createProgram,
+  deleteProgram,
+  updateProgram,
+} from "@/lib/workoutClient";
 
 export default function WorkoutsPage() {
   const [programs, setPrograms] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [members, setMembers] = useState<
+    { id: string; name: string; email: string }[]
+  >([]);
 
   // form state for creating a program
   const [name, setName] = useState("");
@@ -15,7 +22,7 @@ export default function WorkoutsPage() {
   const [exercisesList, setExercisesList] = useState<
     { exerciseId: string; customId?: string; sets: number | ""; reps: string }[]
   >([{ exerciseId: "", customId: "", sets: "", reps: "" }]);
-  const [editId, setEditId] = useState<string | null>(null);
+  // Remove editId and related state
 
   const fetchPrograms = async () => {
     setLoading(true);
@@ -35,7 +42,25 @@ export default function WorkoutsPage() {
   useEffect(() => {
     fetchPrograms();
     fetchExercises();
+    fetchMembers();
   }, []);
+
+  const fetchMembers = async () => {
+    try {
+      const res = await fetch("/api/v1/members", { credentials: "include" });
+      const body = await res.json().catch(() => ({}));
+      // Support both { members: [...] } and [...]
+      if (Array.isArray(body)) {
+        setMembers(body);
+      } else if (Array.isArray(body.members)) {
+        setMembers(body.members);
+      } else {
+        setMembers([]);
+      }
+    } catch (err) {
+      setMembers([]);
+    }
+  };
 
   const fetchExercises = async () => {
     try {
@@ -80,16 +105,7 @@ export default function WorkoutsPage() {
           },
         ],
       };
-
-      if (editId) {
-        // update
-        const { updateProgram } = await import("@/lib/workoutClient");
-        await updateProgram(editId, payload);
-        setEditId(null);
-      } else {
-        await createProgram(payload);
-      }
-
+      await createProgram(payload);
       setName("");
       setDescription("");
       setExercisesList([{ exerciseId: "", customId: "", sets: "", reps: "" }]);
@@ -263,43 +279,19 @@ export default function WorkoutsPage() {
       ) : (
         <div className="space-y-4">
           {programs.map((p) => (
-            <div key={p.id} className="relative">
-              <WorkoutProgramCard program={p} />
-              <button
-                onClick={() => handleDelete(p.id)}
-                className="absolute top-2 right-2 text-sm text-red-600"
-                aria-label={`Delete ${p.name}`}
-              >
-                Delete
-              </button>
-              <button
-                onClick={() => {
-                  // populate form for edit (only first day supported)
-                  setEditId(p.id);
-                  setName(p.name || "");
-                  setDescription(p.description || "");
-                  const firstDay = (p.workoutDays && p.workoutDays[0]) || null;
-                  if (firstDay && Array.isArray(firstDay.workoutExercises)) {
-                    setExercisesList(
-                      firstDay.workoutExercises.map((we: any) => ({
-                        exerciseId: we.exerciseId,
-                        customId: "",
-                        sets: we.sets ?? "",
-                        reps: we.reps ?? "",
-                      })),
-                    );
-                  } else {
-                    setExercisesList([
-                      { exerciseId: "", customId: "", sets: "", reps: "" },
-                    ]);
-                  }
-                }}
-                className="absolute top-2 right-20 text-sm text-blue-600"
-                aria-label={`Edit ${p.name}`}
-              >
-                Edit
-              </button>
-            </div>
+            <WorkoutProgramCard
+              key={p.id}
+              program={p}
+              exercises={exercises}
+              members={members}
+              onUpdate={async (id, data) => {
+                await updateProgram(id, data);
+                await fetchPrograms();
+              }}
+              onDelete={async (id) => {
+                await handleDelete(id);
+              }}
+            />
           ))}
         </div>
       )}

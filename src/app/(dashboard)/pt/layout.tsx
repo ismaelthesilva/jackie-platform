@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth/session";
+import PtNavbar from "./PtNavbar";
 
 export default async function PTLayout({
   children,
@@ -45,6 +46,7 @@ export default async function PTLayout({
           </div>
         </div>
       </nav>
+      <PtNavbar />
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">{children}</main>
     </div>
   );
