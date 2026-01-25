@@ -71,8 +71,20 @@ export default function ExerciseCard({
 
       <CardContent className="flex-1 pb-3">
         <ImageMotion
-          images={(exercise as any).images}
-          videoUrl={exercise.videoUrl}
+          images={(() => {
+            const imgs = (exercise as any).images;
+            if (Array.isArray(imgs) && imgs.length > 0) {
+              return imgs.map((img: string) => {
+                if (img.startsWith("http")) return img;
+                if (img.startsWith("/")) return img;
+                if (img.startsWith("exercises/")) return `/${img}`;
+                return `/exercises/${img}`;
+              });
+            }
+            // If no images, try to use default convention: /exercises/{id}/0.jpg and /exercises/{id}/1.jpg
+            const id = (exercise as any).id;
+            return [`/exercises/${id}/0.jpg`, `/exercises/${id}/1.jpg`];
+          })()}
           alt={exercise.name}
         />
         {exercise.description && (
@@ -81,22 +93,6 @@ export default function ExerciseCard({
           </p>
         )}
       </CardContent>
-
-      <CardFooter className="flex gap-2 pt-3 border-t">
-        <Link href={`/pt/exercises/${exercise.id}/edit`} className="flex-1">
-          <Button variant="outline" size="sm" className="w-full">
-            <Edit className="h-4 w-4 mr-1" />
-            Edit
-          </Button>
-        </Link>
-        <Button
-          variant="destructive"
-          size="sm"
-          onClick={() => onDelete(exercise.id)}
-        >
-          <Trash2 className="h-4 w-4" />
-        </Button>
-      </CardFooter>
     </Card>
   );
 }

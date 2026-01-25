@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function PtNavbar() {
   return (
-    <nav className="bg-gray-900 text-white px-4 py-2 mb-6 flex gap-6 items-center">
+    <nav className="bg-gray-900 text-white px-4 py-2 mb-6 flex gap-6 items-center justify-center">
       <Link href="/pt" className="hover:underline font-semibold">
         Dashboard
       </Link>

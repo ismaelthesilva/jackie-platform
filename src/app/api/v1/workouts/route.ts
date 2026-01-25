@@ -79,6 +79,7 @@ export async function POST(request: Request) {
       const d = workoutDays[di];
       const dayName = d.dayName ?? `Day ${di + 1}`;
       const orderIndex = d.orderIndex ?? di;
+      const area = d.area ?? null;
 
       const wexs = [] as any[];
       const list = Array.isArray(d.workoutExercises) ? d.workoutExercises : [];
@@ -143,6 +144,7 @@ export async function POST(request: Request) {
       mappedDays.push({
         dayName,
         orderIndex,
+        area,
         workoutExercises: { create: wexs },
       });
     }

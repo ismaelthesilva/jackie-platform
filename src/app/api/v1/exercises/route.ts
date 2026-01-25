@@ -12,24 +12,58 @@ export async function GET_static() {
 // GET all exercises
 export async function GET(request: NextRequest) {
   try {
-    // Get static exercises from public/exercises
-    const staticExercises = getAllExercises();
+    const { searchParams } = new URL(request.url);
+    const name = searchParams.get("name") || undefined;
+    const muscleGroup = searchParams.get("area") || undefined;
+    const page = parseInt(searchParams.get("page") || "1", 10);
+    const pageSize = parseInt(searchParams.get("pageSize") || "20", 10);
 
-    // Get dynamic exercises from database (YouTube links, etc.)
+    // Filter static exercises
+    let staticExercises = getAllExercises();
+    if (name) {
+      staticExercises = staticExercises.filter((ex) =>
+        ex.name.toLowerCase().includes(name.toLowerCase()),
+      );
+    }
+    if (muscleGroup) {
+      staticExercises = staticExercises.filter(
+        (ex) =>
+          ex.muscleGroup &&
+          ex.muscleGroup.toLowerCase() === muscleGroup.toLowerCase(),
+      );
+    }
+
+    // Filter dynamic exercises from DB
     let dynamicExercises: any[] = [];
     try {
       const session = await getSession();
       if (session && session.role === "PT") {
         dynamicExercises = await prisma.exercise.findMany({
-          where: { createdById: session.userId },
+          where: {
+            createdById: session.userId,
+            ...(name && { name: { contains: name, mode: "insensitive" } }),
+            ...(muscleGroup && {
+              muscleGroup: { equals: muscleGroup, mode: "insensitive" },
+            }),
+          },
           orderBy: { createdAt: "desc" },
         });
       }
     } catch {}
 
     // Merge static and dynamic exercises
-    const exercises = [...staticExercises, ...dynamicExercises];
-    return NextResponse.json({ exercises }, { status: 200 });
+    let exercises = [...staticExercises, ...dynamicExercises];
+
+    // Pagination
+    const total = exercises.length;
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize;
+    exercises = exercises.slice(start, end);
+
+    return NextResponse.json(
+      { exercises, total, page, pageSize },
+      { status: 200 },
+    );
   } catch (error) {
     console.error("Failed to fetch exercises:", error);
     return NextResponse.json(

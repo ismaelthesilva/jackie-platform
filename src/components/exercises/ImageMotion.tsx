@@ -1,52 +1,34 @@
 import React from "react";
-import VideoPlayer from "./VideoPlayer";
-
 interface Props {
   images?: string[];
-  videoUrl?: string | null;
   alt?: string;
 }
 
-export default function ImageMotion({
-  images = [],
-  videoUrl,
-  alt = "",
-}: Props) {
+export default function ImageMotion({ images = [], alt = "" }: Props) {
   const [idx, setIdx] = React.useState(0);
 
-  if (!Array.isArray(images) || images.length === 0) {
-    if (videoUrl) {
-      return (
-        <div className="aspect-video mb-3 bg-gray-100 rounded-md overflow-hidden">
-          <VideoPlayer videoUrl={videoUrl} />
-        </div>
-      );
-    }
-
-    return (
-      <div className="aspect-video mb-3 bg-gray-100 rounded-md flex items-center justify-center text-gray-400">
-        No image available
-      </div>
-    );
-  }
+  // Always show an image. If no images, use a fallback image.
+  const hasImages = Array.isArray(images) && images.length > 0;
+  const fallback = "/no-image.png"; // Place a fallback image in public/no-image.png
+  const displayImages = hasImages ? images : [fallback];
 
   const toggle = () => {
-    if (images.length > 1) setIdx((i) => (i === 0 ? 1 : 0));
+    if (displayImages.length > 1) setIdx((i) => (i === 0 ? 1 : 0));
   };
 
   return (
     <div
       className="aspect-video mb-3 bg-gray-100 rounded-md overflow-hidden cursor-pointer flex items-center justify-center"
       onClick={toggle}
-      title="Click to toggle image"
+      title="Click to show movement"
     >
       <img
         src={
-          images[idx]?.startsWith("http")
-            ? images[idx]
-            : images[idx]?.startsWith("/")
-              ? images[idx]
-              : `/exercises/${images[idx]}`
+          displayImages[idx]?.startsWith("http")
+            ? displayImages[idx]
+            : displayImages[idx]?.startsWith("/")
+              ? displayImages[idx]
+              : `/exercises/${displayImages[idx]}`
         }
         alt={`${alt} ${idx === 0 ? "start" : "end"}`}
         className="object-contain w-full h-full"

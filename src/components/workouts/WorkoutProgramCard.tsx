@@ -56,16 +56,30 @@ export default function WorkoutProgramCard({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const workoutExercises = exercisesList
-      .map((it: { exerciseId: string; customId: string; sets: string | number; reps: string }) => {
-        const finalId =
-          it.exerciseId === "__custom__" ? it.customId : it.exerciseId;
-        return {
-          exerciseId: finalId?.trim?.() || "",
-          sets: it.sets === "" ? null : Number(it.sets),
-          reps: it.reps || null,
-        };
-      })
-      .filter((it: { exerciseId: string; customId: string; sets: string | number; reps: string }) => it.exerciseId);
+      .map(
+        (it: {
+          exerciseId: string;
+          customId: string;
+          sets: string | number;
+          reps: string;
+        }) => {
+          const finalId =
+            it.exerciseId === "__custom__" ? it.customId : it.exerciseId;
+          return {
+            exerciseId: finalId?.trim?.() || "",
+            sets: it.sets === "" ? null : Number(it.sets),
+            reps: it.reps || null,
+          };
+        },
+      )
+      .filter(
+        (it: {
+          exerciseId: string;
+          customId: string;
+          sets: string | number;
+          reps: string;
+        }) => it.exerciseId,
+      );
     if (!name || workoutExercises.length === 0) {
       setError("Program name and at least one valid exercise are required");
       return;
@@ -85,7 +99,7 @@ export default function WorkoutProgramCard({
   };
 
   return (
-    <div className="p-4 border rounded relative">
+    <div className="bg-white rounded-lg shadow-md flex flex-col justify-between h-full p-4 border border-gray-100">
       {editing ? (
         <form onSubmit={handleSubmit} className="space-y-2">
           <input
@@ -102,93 +116,111 @@ export default function WorkoutProgramCard({
           />
           <div className="space-y-2">
             <span className="text-sm">Exercises</span>
-            {exercisesList.map((it: { exerciseId: string; customId: string; sets: string | number; reps: string }, idx: number) => (
-              <div key={idx} className="grid grid-cols-12 gap-2 items-center">
-                <div className="col-span-5">
-                  <select
-                    value={it.exerciseId}
-                    onChange={(e) => {
-                      const copy = [...exercisesList];
-                      copy[idx] = { ...copy[idx], exerciseId: e.target.value };
-                      setExercisesList(copy);
-                    }}
-                    className="w-full p-2 border rounded"
-                  >
-                    <option value="">-- select exercise --</option>
-                    {exercises.map((ex: any) => (
-                      <option key={ex.id || ex.name} value={ex.id || ex.name}>
-                        {ex.name || ex.id}
-                      </option>
-                    ))}
-                    <option value="__custom__">Custom id...</option>
-                  </select>
-                  {it.exerciseId === "__custom__" && (
-                    <input
-                      placeholder="Custom exercise id"
-                      value={it.customId}
+            {exercisesList.map(
+              (
+                it: {
+                  exerciseId: string;
+                  customId: string;
+                  sets: string | number;
+                  reps: string;
+                },
+                idx: number,
+              ) => (
+                <div key={idx} className="grid grid-cols-12 gap-2 items-center">
+                  <div className="col-span-5">
+                    <select
+                      value={it.exerciseId}
                       onChange={(e) => {
                         const copy = [...exercisesList];
-                        copy[idx] = { ...copy[idx], customId: e.target.value };
+                        copy[idx] = {
+                          ...copy[idx],
+                          exerciseId: e.target.value,
+                        };
                         setExercisesList(copy);
                       }}
-                      className="w-full p-2 border rounded mt-1"
+                      className="w-full p-2 border rounded"
+                    >
+                      <option value="">-- select exercise --</option>
+                      {exercises.map((ex: any) => (
+                        <option key={ex.id || ex.name} value={ex.id || ex.name}>
+                          {ex.name || ex.id}
+                        </option>
+                      ))}
+                      <option value="__custom__">Custom id...</option>
+                    </select>
+                    {it.exerciseId === "__custom__" && (
+                      <input
+                        placeholder="Custom exercise id"
+                        value={it.customId}
+                        onChange={(e) => {
+                          const copy = [...exercisesList];
+                          copy[idx] = {
+                            ...copy[idx],
+                            customId: e.target.value,
+                          };
+                          setExercisesList(copy);
+                        }}
+                        className="w-full p-2 border rounded mt-1"
+                      />
+                    )}
+                  </div>
+                  <div className="col-span-2">
+                    <input
+                      placeholder="Sets"
+                      value={it.sets as any}
+                      onChange={(e) => {
+                        const copy = [...exercisesList];
+                        copy[idx] = {
+                          ...copy[idx],
+                          sets:
+                            e.target.value === "" ? "" : Number(e.target.value),
+                        };
+                        setExercisesList(copy);
+                      }}
+                      className="p-2 border rounded w-full"
                     />
-                  )}
+                  </div>
+                  <div className="col-span-4">
+                    <input
+                      placeholder="Reps (e.g. 12 or 8-12)"
+                      value={it.reps}
+                      onChange={(e) => {
+                        const copy = [...exercisesList];
+                        copy[idx] = { ...copy[idx], reps: e.target.value };
+                        setExercisesList(copy);
+                      }}
+                      className="p-2 border rounded w-full"
+                    />
+                  </div>
+                  <div className="col-span-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const copy = exercisesList.filter(
+                          (_: any, i: number) => i !== idx,
+                        );
+                        setExercisesList(
+                          copy.length
+                            ? copy
+                            : [
+                                {
+                                  exerciseId: "",
+                                  customId: "",
+                                  sets: "",
+                                  reps: "",
+                                },
+                              ],
+                        );
+                      }}
+                      className="text-red-600"
+                      aria-label="Remove exercise"
+                    >
+                      ×
+                    </button>
+                  </div>
                 </div>
-                <div className="col-span-2">
-                  <input
-                    placeholder="Sets"
-                    value={it.sets as any}
-                    onChange={(e) => {
-                      const copy = [...exercisesList];
-                      copy[idx] = {
-                        ...copy[idx],
-                        sets:
-                          e.target.value === "" ? "" : Number(e.target.value),
-                      };
-                      setExercisesList(copy);
-                    }}
-                    className="p-2 border rounded w-full"
-                  />
-                </div>
-                <div className="col-span-4">
-                  <input
-                    placeholder="Reps (e.g. 12 or 8-12)"
-                    value={it.reps}
-                    onChange={(e) => {
-                      const copy = [...exercisesList];
-                      copy[idx] = { ...copy[idx], reps: e.target.value };
-                      setExercisesList(copy);
-                    }}
-                    className="p-2 border rounded w-full"
-                  />
-                </div>
-                <div className="col-span-1">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const copy = exercisesList.filter((_: any, i: number) => i !== idx);
-                      setExercisesList(
-                        copy.length
-                          ? copy
-                          : [
-                              {
-                                exerciseId: "",
-                                customId: "",
-                                sets: "",
-                                reps: "",
-                              },
-                            ],
-                      );
-                    }}
-                    className="text-red-600"
-                    aria-label="Remove exercise"
-                  >
-                    ×
-                  </button>
-                </div>
-              </div>
-            ))}
+              ),
+            )}
             <div>
               <button
                 type="button"
@@ -223,49 +255,58 @@ export default function WorkoutProgramCard({
         </form>
       ) : (
         <>
-          <h3 className="font-bold">{program.name}</h3>
-          <p className="text-sm text-gray-600">{program.description}</p>
+          <h3 className="font-bold text-lg mb-1 truncate">{program.name}</h3>
+          <p className="text-sm text-gray-600 mb-2 line-clamp-2">
+            {program.description}
+          </p>
           <div className="mt-2 space-y-2">
-            {program.workoutDays.map((d: any) => (
+            {program.workoutDays.map((d: any, i: number) => (
               <div key={d.id}>
-                <div className="font-medium">{d.dayName}</div>
-                {d.workoutExercises.map((we: any) => {
-                  const ex = we.exercise ?? null;
-                  const images = ex?.images ?? [];
-
-                  return (
-                    <div key={we.id} className="flex gap-3 items-start">
-                      <div className="w-36">
-                        <ImageMotion
-                          images={images}
-                          videoUrl={ex?.videoUrl}
-                          alt={ex?.name ?? we.exerciseId}
-                        />
-                      </div>
-                      <div>
-                        <div>{ex?.name ?? we.exerciseId}</div>
-                        <div className="text-sm text-gray-600">
-                          {we.sets ?? ""} x {we.reps ?? ""}
+                <div className="flex items-center gap-2 mb-1">
+                  <div className="font-medium text-xs text-gray-700">
+                    {d.dayName}
+                    {d.area ? ` - ${d.area}` : ""}
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2">
+                  {d.workoutExercises.map((we: any) => {
+                    const ex = we.exercise ?? null;
+                    const images = ex?.images ?? [];
+                    return (
+                      <div key={we.id} className="flex gap-3 items-center">
+                        <div className="w-20 h-16 flex-shrink-0">
+                          <ImageMotion
+                            images={images}
+                            alt={ex?.name ?? we.exerciseId}
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="truncate font-medium text-sm">
+                            {ex?.name ?? we.exerciseId}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {we.sets ?? ""} x {we.reps ?? ""}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
             ))}
           </div>
-          <div className="flex flex-col md:flex-row gap-2 mt-2 items-center">
+          <div className="flex flex-col md:flex-row gap-2 mt-3 items-center">
             <div className="flex gap-2">
               <button
                 onClick={handleEdit}
-                className="text-blue-600 text-sm"
+                className="text-blue-600 text-xs font-semibold"
                 aria-label={`Edit ${program.name}`}
               >
                 Edit
               </button>
               <button
                 onClick={() => onDelete(program.id)}
-                className="text-red-600 text-sm"
+                className="text-red-600 text-xs font-semibold"
                 aria-label={`Delete ${program.name}`}
               >
                 Delete
@@ -280,7 +321,13 @@ export default function WorkoutProgramCard({
 }
 
 // Inline component for assignment UI
-function AssignProgramToMember({ programId, members }: { programId: string; members: { id: string; name: string; email: string }[] }) {
+function AssignProgramToMember({
+  programId,
+  members,
+}: {
+  programId: string;
+  members: { id: string; name: string; email: string }[];
+}) {
   const [selected, setSelected] = useState("");
   const [status, setStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -307,11 +354,11 @@ function AssignProgramToMember({ programId, members }: { programId: string; memb
     <div className="flex gap-2 items-center mt-2 md:mt-0">
       <select
         value={selected}
-        onChange={e => setSelected(e.target.value)}
+        onChange={(e) => setSelected(e.target.value)}
         className="border rounded p-1 text-sm"
       >
         <option value="">Assign to member…</option>
-        {members.map(m => (
+        {members.map((m) => (
           <option key={m.id} value={m.id}>
             {m.name} ({m.email})
           </option>

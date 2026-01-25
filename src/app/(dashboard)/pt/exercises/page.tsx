@@ -27,20 +27,38 @@ export default function ExercisesPage() {
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [search, setSearch] = useState("");
+  const [area, setArea] = useState("");
 
   useEffect(() => {
-    fetchExercises();
+    fetchTopExercises();
   }, []);
 
-  const fetchExercises = async () => {
+  // Fetch top 20 most used exercises
+  const fetchTopExercises = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch("/api/v1/exercises");
+      const response = await fetch("/api/v1/exercises/top");
+      if (!response.ok) throw new Error("Failed to fetch top exercises");
+      const data = await response.json();
+      setExercises(data.exercises);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to load exercises");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch exercises");
-      }
-
+  // Fetch exercises by search/filter
+  const fetchExercises = async (params?: { name?: string; area?: string }) => {
+    try {
+      setIsLoading(true);
+      const query = new URLSearchParams();
+      if (params?.name) query.set("name", params.name);
+      if (params?.area) query.set("area", params.area);
+      const url = `/api/v1/exercises${query.toString() ? `?${query}` : ""}`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Failed to fetch exercises");
       const data = await response.json();
       setExercises(data.exercises);
     } catch (err) {
@@ -65,11 +83,29 @@ export default function ExercisesPage() {
       }
 
       // Refresh list
-      fetchExercises();
+      fetchTopExercises();
     } catch (err) {
       alert(err instanceof Error ? err.message : "Failed to delete exercise");
     }
   };
+
+  // Handle search/filter submit
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    fetchExercises({ name: search, area });
+  };
+
+  // Area options (example)
+  const areaOptions = [
+    "Chest",
+    "Back",
+    "Legs",
+    "Shoulders",
+    "Arms",
+    "Abs",
+    "Glutes",
+    "Full Body",
+  ];
 
   if (isLoading) {
     return (
@@ -81,14 +117,36 @@ export default function ExercisesPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+      {/* Header & Search/Filter */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h2 className="text-3xl font-bold text-gray-900">Exercise Library</h2>
           <p className="mt-2 text-gray-600">
             Manage your exercise database with video tutorials
           </p>
         </div>
+        <form onSubmit={handleSearch} className="flex gap-2 items-center">
+          <input
+            type="text"
+            placeholder="Search by name..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="border rounded px-2 py-1"
+          />
+          <select
+            value={area}
+            onChange={(e) => setArea(e.target.value)}
+            className="border rounded px-2 py-1"
+          >
+            <option value="">All Areas</option>
+            {areaOptions.map((opt) => (
+              <option key={opt} value={opt}>
+                {opt}
+              </option>
+            ))}
+          </select>
+          <Button type="submit">Search</Button>
+        </form>
         <Link href="/pt/exercises/new">
           <Button>
             <Plus className="h-4 w-4 mr-2" />

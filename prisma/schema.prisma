@@ -56,6 +56,7 @@ model WorkoutDay {
   id               String            @id @default(uuid())
   programId        String
   dayName          String
+  area             String?           // Body part for the day (e.g., Chest, Legs)
   orderIndex       Int
   createdAt        DateTime          @default(now())
   program          WorkoutProgram    @relation(fields: [programId], references: [id], onDelete: Cascade)
