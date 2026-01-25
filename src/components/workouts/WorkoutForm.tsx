@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { Combobox } from "@headlessui/react";
+import { Fragment, useEffect, useState } from "react";
 
 export default function WorkoutForm({
   exercises,
@@ -19,6 +20,15 @@ export default function WorkoutForm({
     },
   ]);
   const [error, setError] = useState<string | null>(null);
+  const [top40, setTop40] = useState<any[]>([]);
+  const [exerciseSearch, setExerciseSearch] = useState<string[]>([]); // one per day/exercise
+
+  // Fetch Top 40 on mount
+  useEffect(() => {
+    fetch("/api/v1/exercises/top?limit=40")
+      .then((r) => r.json())
+      .then((data) => setTop40(data.exercises || []));
+  }, []);
 
   const handleCreate = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -113,101 +123,168 @@ export default function WorkoutForm({
                 </button>
               )}
             </div>
-            {day.exercises.map((it, idx) => (
-              <div
-                key={idx}
-                className="grid grid-cols-12 gap-2 items-center mb-1"
-              >
-                <div className="col-span-5">
-                  <select
-                    value={it.exerciseId}
-                    onChange={(e) => {
-                      const copy = [...workoutDays];
-                      copy[dayIdx].exercises[idx] = {
-                        ...copy[dayIdx].exercises[idx],
-                        exerciseId: e.target.value,
-                      };
-                      setWorkoutDays(copy);
-                    }}
-                    className="w-full p-2 border rounded"
-                  >
-                    <option value="">-- select exercise --</option>
-                    {exercises.map((ex: any) => (
-                      <option key={ex.id || ex.name} value={ex.id || ex.name}>
-                        {ex.name || ex.id}
-                      </option>
-                    ))}
-                    <option value="__custom__">Custom id...</option>
-                  </select>
-                  {it.exerciseId === "__custom__" && (
+            {day.exercises.map((it, idx) => {
+              // All options: Top 40 first, then rest
+              const allOptions = [
+                ...top40,
+                ...exercises.filter(
+                  (ex) =>
+                    !top40.some((t) => (t.id || t.name) === (ex.id || ex.name)),
+                ),
+              ];
+              // Find selected option
+              const selectedOption =
+                allOptions.find((ex) => (ex.id || ex.name) === it.exerciseId) ||
+                null;
+              // Filtered options for search
+              const [query, setQuery] = useState("");
+              const filteredOptions =
+                query === ""
+                  ? allOptions
+                  : allOptions.filter(
+                      (ex) =>
+                        ex.name?.toLowerCase().includes(query.toLowerCase()) ||
+                        ex.id?.toLowerCase().includes(query.toLowerCase()),
+                    );
+              return (
+                <div
+                  key={idx}
+                  className="grid grid-cols-12 gap-2 items-center mb-1"
+                >
+                  <div className="col-span-5">
+                    <Combobox
+                      value={selectedOption}
+                      onChange={(val) => {
+                        const copy = [...workoutDays];
+                        copy[dayIdx].exercises[idx] = {
+                          ...copy[dayIdx].exercises[idx],
+                          exerciseId: val?.id || val?.name || "",
+                        };
+                        setWorkoutDays(copy);
+                      }}
+                    >
+                      <div className="relative">
+                        <Combobox.Input
+                          className="w-full p-2 border rounded"
+                          displayValue={(ex: any) => ex?.name || ""}
+                          onChange={(e) => setQuery(e.target.value)}
+                          placeholder="Select or search exercise"
+                        />
+                        <Combobox.Options className="absolute z-10 mt-1 w-full bg-white border rounded shadow-lg max-h-60 overflow-auto">
+                          {filteredOptions.length === 0 && (
+                            <div className="p-2 text-gray-500">
+                              No exercises found
+                            </div>
+                          )}
+                          {filteredOptions.map((ex: any, i: number) => (
+                            <Combobox.Option
+                              key={ex.id || ex.name}
+                              value={ex}
+                              as={Fragment}
+                            >
+                              {({ active, selected }) => (
+                                <li
+                                  className={`cursor-pointer select-none p-2 ${
+                                    active ? "bg-blue-100" : ""
+                                  } ${selected ? "font-bold" : ""}`}
+                                >
+                                  {ex.name || ex.id}
+                                </li>
+                              )}
+                            </Combobox.Option>
+                          ))}
+                          <Combobox.Option
+                            value={{ id: "__custom__", name: "Custom id..." }}
+                            as={Fragment}
+                          >
+                            {({ active }) => (
+                              <li
+                                className={`cursor-pointer select-none p-2 ${
+                                  active ? "bg-blue-100" : ""
+                                }`}
+                              >
+                                Custom id...
+                              </li>
+                            )}
+                          </Combobox.Option>
+                        </Combobox.Options>
+                      </div>
+                    </Combobox>
+                    {it.exerciseId === "__custom__" && (
+                      <input
+                        placeholder="Custom exercise id"
+                        value={it.customId}
+                        onChange={(e) => {
+                          const copy = [...workoutDays];
+                          copy[dayIdx].exercises[idx] = {
+                            ...copy[dayIdx].exercises[idx],
+                            customId: e.target.value,
+                          };
+                          setWorkoutDays(copy);
+                        }}
+                        className="w-full p-2 border rounded mt-1"
+                      />
+                    )}
+                  </div>
+                  <div className="col-span-2">
                     <input
-                      placeholder="Custom exercise id"
-                      value={it.customId}
+                      placeholder="Sets"
+                      value={it.sets}
                       onChange={(e) => {
                         const copy = [...workoutDays];
                         copy[dayIdx].exercises[idx] = {
                           ...copy[dayIdx].exercises[idx],
-                          customId: e.target.value,
+                          sets: e.target.value,
                         };
                         setWorkoutDays(copy);
                       }}
-                      className="w-full p-2 border rounded mt-1"
+                      className="p-2 border rounded w-full"
                     />
-                  )}
+                  </div>
+                  <div className="col-span-4">
+                    <input
+                      placeholder="Reps (e.g. 12 or 8-12)"
+                      value={it.reps}
+                      onChange={(e) => {
+                        const copy = [...workoutDays];
+                        copy[dayIdx].exercises[idx] = {
+                          ...copy[dayIdx].exercises[idx],
+                          reps: e.target.value,
+                        };
+                        setWorkoutDays(copy);
+                      }}
+                      className="p-2 border rounded w-full"
+                    />
+                  </div>
+                  <div className="col-span-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const copy = [...workoutDays];
+                        copy[dayIdx].exercises = copy[dayIdx].exercises.filter(
+                          (_, i) => i !== idx,
+                        );
+                        if (copy[dayIdx].exercises.length === 0) {
+                          copy[dayIdx].exercises = [
+                            {
+                              exerciseId: "",
+                              customId: "",
+                              sets: "",
+                              reps: "",
+                            },
+                          ];
+                        }
+                        setWorkoutDays(copy);
+                      }}
+                      className="text-red-600"
+                      aria-label="Remove exercise"
+                    >
+                      ×
+                    </button>
+                  </div>
                 </div>
-                <div className="col-span-2">
-                  <input
-                    placeholder="Sets"
-                    value={it.sets}
-                    onChange={(e) => {
-                      const copy = [...workoutDays];
-                      copy[dayIdx].exercises[idx] = {
-                        ...copy[dayIdx].exercises[idx],
-                        sets: e.target.value,
-                      };
-                      setWorkoutDays(copy);
-                    }}
-                    className="p-2 border rounded w-full"
-                  />
-                </div>
-                <div className="col-span-4">
-                  <input
-                    placeholder="Reps (e.g. 12 or 8-12)"
-                    value={it.reps}
-                    onChange={(e) => {
-                      const copy = [...workoutDays];
-                      copy[dayIdx].exercises[idx] = {
-                        ...copy[dayIdx].exercises[idx],
-                        reps: e.target.value,
-                      };
-                      setWorkoutDays(copy);
-                    }}
-                    className="p-2 border rounded w-full"
-                  />
-                </div>
-                <div className="col-span-1">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const copy = [...workoutDays];
-                      copy[dayIdx].exercises = copy[dayIdx].exercises.filter(
-                        (_, i) => i !== idx,
-                      );
-                      if (copy[dayIdx].exercises.length === 0) {
-                        copy[dayIdx].exercises = [
-                          { exerciseId: "", customId: "", sets: "", reps: "" },
-                        ];
-                      }
-                      setWorkoutDays(copy);
-                    }}
-                    className="text-red-600"
-                    aria-label="Remove exercise"
-                  >
-                    ×
-                  </button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
             <div>
               <button
                 type="button"

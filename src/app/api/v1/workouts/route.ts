@@ -106,21 +106,32 @@ export async function POST(request: Request) {
             (s: any) => s.id === rawId || s.name === rawId,
           );
           if (staticEx) {
-            const videoUrl =
-              staticEx.videoUrl || process.env.VIDEO_URL_FALLBACK || "";
-            try {
-              ex = await prisma.exercise.create({
-                data: {
+            // Try to find by name and createdById (avoid duplicate creation)
+            ex = await prisma.exercise
+              .findFirst({
+                where: {
                   name: staticEx.name,
-                  description: staticEx.description ?? null,
-                  videoUrl,
-                  muscleGroup: staticEx.muscleGroup ?? null,
-                  difficulty: staticEx.difficulty ?? null,
                   createdById: session.userId,
                 },
-              });
-            } catch (e) {
-              // ignore and leave ex null — will error below
+              })
+              .catch(() => null);
+            if (!ex) {
+              const videoUrl =
+                staticEx.videoUrl || process.env.VIDEO_URL_FALLBACK || "";
+              try {
+                ex = await prisma.exercise.create({
+                  data: {
+                    name: staticEx.name,
+                    description: staticEx.description ?? null,
+                    videoUrl,
+                    muscleGroup: staticEx.muscleGroup ?? null,
+                    difficulty: staticEx.difficulty ?? null,
+                    createdById: session.userId,
+                  },
+                });
+              } catch (e) {
+                // ignore and leave ex null — will error below
+              }
             }
           }
         }

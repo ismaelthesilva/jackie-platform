@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
+    "@headlessui/react": "^2.2.9",
     "@marsidev/react-turnstile": "^1.4.0",
     "@neondatabase/serverless": "^0.9.5",
     "@prisma/client": "^6.19.2",
