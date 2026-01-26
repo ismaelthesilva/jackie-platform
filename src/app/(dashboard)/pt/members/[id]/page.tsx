@@ -16,9 +16,17 @@ export default async function PtMemberDetailPage({ params }: Props) {
     return redirect("/member/me");
   }
 
+  if (!params.id) return notFound();
+
   const member = await prisma.user.findUnique({
     where: { id: params.id },
-    select: { id: true, name: true, email: true, createdAt: true },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      createdAt: true,
+      assignedPrograms: { select: { id: true, name: true } },
+    },
   });
 
   if (!member) return notFound();
@@ -30,6 +38,16 @@ export default async function PtMemberDetailPage({ params }: Props) {
       <div className="text-sm text-gray-500">
         Joined {new Date(member.createdAt).toLocaleDateString()}
       </div>
+      {member.assignedPrograms && member.assignedPrograms.length > 0 && (
+        <div className="pt-2">
+          <span className="font-semibold">Assigned Workouts:</span>
+          <ul className="list-disc ml-6 mt-1">
+            {member.assignedPrograms.map((p) => (
+              <li key={p.id}>{p.name}</li>
+            ))}
+          </ul>
+        </div>
+      )}
       <div className="pt-4">
         <Link href="/pt/members">
           <Button>Back to members</Button>

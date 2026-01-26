@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -88,11 +89,34 @@ export default function ExerciseCard({
           alt={exercise.name}
         />
         {exercise.description && (
-          <p className="text-sm text-gray-600 line-clamp-2">
-            {exercise.description}
-          </p>
+          <DescriptionPreview description={exercise.description} />
         )}
       </CardContent>
     </Card>
+  );
+}
+
+// Show only first 2 lines of description, with 'Show more' button
+function DescriptionPreview({ description }: { description: string }) {
+  const [expanded, setExpanded] = useState(false);
+  // Split by line or period, fallback to 2 lines
+  const lines = description.split(/\n|\r|(?<=\.) /g);
+  const preview = lines.slice(0, 2).join(" ");
+  const isLong = lines.length > 2;
+  return (
+    <div className="mt-2">
+      <p className="text-sm text-gray-600">
+        {expanded || !isLong ? description : preview + "..."}
+      </p>
+      {isLong && (
+        <Button
+          variant="link"
+          className="px-0 text-xs"
+          onClick={() => setExpanded((v) => !v)}
+        >
+          {expanded ? "Show less" : "Show more"}
+        </Button>
+      )}
+    </div>
   );
 }

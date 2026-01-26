@@ -4,7 +4,13 @@ import prisma from "@/lib/prisma";
 export default async function PtMembersPage() {
   const members = await prisma.user.findMany({
     where: { role: "MEMBER" },
-    select: { id: true, name: true, email: true, createdAt: true },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      createdAt: true,
+      assignedPrograms: { select: { id: true, name: true } },
+    },
     orderBy: { createdAt: "desc" },
   });
 
@@ -32,6 +38,11 @@ export default async function PtMembersPage() {
                 <span className="ml-2 text-xs text-gray-400">
                   Joined {new Date(m.createdAt).toLocaleDateString()}
                 </span>
+                {m.assignedPrograms && m.assignedPrograms.length > 0 && (
+                  <span className="ml-2 text-xs text-green-700">
+                    Workouts: {m.assignedPrograms.map((p) => p.name).join(", ")}
+                  </span>
+                )}
               </div>
               <div className="mt-2 md:mt-0">
                 <Link

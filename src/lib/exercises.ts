@@ -12,10 +12,10 @@ function normalizeImagePath(p: string): string {
 }
 
 export function getAllExercises(): any[] {
+  // Loads all exercises (legacy, avoid for large sets)
   const exercisesDir = path.join(process.cwd(), "public/exercises");
   const folders = fs.readdirSync(exercisesDir);
   const exercises: any[] = [];
-
   folders.forEach((folder) => {
     const jsonPath = path.join(exercisesDir, folder, `${folder}.json`);
     if (fs.existsSync(jsonPath)) {
@@ -26,6 +26,26 @@ export function getAllExercises(): any[] {
       exercises.push(data);
     }
   });
+  return exercises;
+}
 
+export function getExercisesByNames(names: string[]): any[] {
+  // Loads only exercises matching the provided names (case-insensitive)
+  const exercisesDir = path.join(process.cwd(), "public/exercises");
+  const folders = fs.readdirSync(exercisesDir);
+  const lowerNames = names.map((n) => n.toLowerCase());
+  const exercises: any[] = [];
+  folders.forEach((folder) => {
+    const jsonPath = path.join(exercisesDir, folder, `${folder}.json`);
+    if (fs.existsSync(jsonPath)) {
+      const data = JSON.parse(fs.readFileSync(jsonPath, "utf-8"));
+      if (Array.isArray(data.images)) {
+        data.images = data.images.map((p: string) => normalizeImagePath(p));
+      }
+      if (lowerNames.includes(data.name.toLowerCase())) {
+        exercises.push(data);
+      }
+    }
+  });
   return exercises;
 }
