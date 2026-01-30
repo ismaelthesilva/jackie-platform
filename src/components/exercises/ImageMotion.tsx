@@ -1,10 +1,16 @@
 import React from "react";
+
 interface Props {
   images?: string[];
   alt?: string;
+  className?: string;
 }
 
-export default function ImageMotion({ images = [], alt = "" }: Props) {
+export default function ImageMotion({
+  images = [],
+  alt = "",
+  className = "",
+}: Props) {
   const [idx, setIdx] = React.useState(0);
 
   // Always show an image. If no images, use a fallback image.
@@ -18,7 +24,7 @@ export default function ImageMotion({ images = [], alt = "" }: Props) {
 
   return (
     <div
-      className="aspect-video mb-3 bg-gray-100 rounded-md overflow-hidden cursor-pointer flex items-center justify-center"
+      className={`w-full h-full bg-gray-100 rounded-md overflow-hidden cursor-pointer flex items-center justify-center ${className}`}
       onClick={toggle}
       title="Click to show movement"
     >

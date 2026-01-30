@@ -83,7 +83,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     if (data.user.role === "PT") {
       router.push("/pt");
     } else {
-      router.push("/members");
+      router.push("/member/me");
     }
   };
 

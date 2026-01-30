@@ -85,7 +85,10 @@ export async function POST(request: Request) {
       const list = Array.isArray(d.workoutExercises) ? d.workoutExercises : [];
       for (let wi = 0; wi < list.length; wi++) {
         const we = list[wi];
-        const rawId = we.exerciseId;
+        let rawId = we.exerciseId;
+        if (typeof rawId === "string") rawId = rawId.trim();
+        const rawIdLower =
+          typeof rawId === "string" ? rawId.toLowerCase() : rawId;
         if (!rawId) continue;
 
         // Try to find exercise by id in DB
@@ -93,18 +96,27 @@ export async function POST(request: Request) {
           .findUnique({ where: { id: rawId } })
           .catch(() => null);
 
-        // If not found by id, try name match in DB
+        // If not found by id, try case-insensitive name match in DB
         if (!ex) {
           ex = await prisma.exercise
-            .findFirst({ where: { name: rawId } })
+            .findFirst({
+              where: { name: { equals: rawId, mode: "insensitive" } },
+            })
             .catch(() => null);
         }
 
         // If still not found, try to create from static exercises (match by id or name)
         if (!ex) {
-          const staticEx = staticExercises.find(
-            (s: any) => s.id === rawId || s.name === rawId,
-          );
+          const staticEx = staticExercises.find((s: any) => {
+            if (!s) return false;
+            const sid = String(s.id || "")
+              .trim()
+              .toLowerCase();
+            const sname = String(s.name || "")
+              .trim()
+              .toLowerCase();
+            return sid === rawIdLower || sname === rawIdLower;
+          });
           if (staticEx) {
             // Try to find by name and createdById (avoid duplicate creation)
             ex = await prisma.exercise

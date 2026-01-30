@@ -5,14 +5,20 @@ export default function WorkoutForm({
   exercises,
   areaOptions,
   onCreate,
+  initialData,
+  onSubmit,
+  submitLabel,
 }: {
   exercises: any[];
   areaOptions: string[];
-  onCreate: (payload: any) => Promise<void>;
+  onCreate?: (payload: any) => Promise<void>;
+  initialData?: any;
+  onSubmit?: (payload: any) => Promise<void>;
+  submitLabel?: string;
 }) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [workoutDays, setWorkoutDays] = useState([
+  const [workoutDays, setWorkoutDays] = useState<any[]>([
     {
       dayName: "Day 1",
       area: "",
@@ -30,13 +36,203 @@ export default function WorkoutForm({
       .then((data) => setTop40(data.exercises || []));
   }, []);
 
-  const handleCreate = async (e?: React.FormEvent) => {
-    e?.preventDefault();
+  // Initialize form when initialData is provided (edit mode)
+  useEffect(() => {
+    if (!initialData) return;
+    setName(initialData.name || "");
+    setDescription(initialData.description || "");
+    const days = (initialData.workoutDays || []).map((d: any) => ({
+      dayName: d.dayName || "Day 1",
+      area: d.area || "",
+      exercises: (d.workoutExercises || []).map((we: any) => ({
+        exerciseId: we.exerciseId || we.exercise?.id || "",
+        customId: "",
+        sets: we.sets == null ? "" : String(we.sets),
+        reps: we.reps || "",
+      })),
+    }));
+    setWorkoutDays(
+      days.length
+        ? days
+        : [
+            {
+              dayName: "Day 1",
+              area: "",
+              exercises: [{ exerciseId: "", customId: "", sets: "", reps: "" }],
+            },
+          ],
+    );
+  }, [initialData]);
+
+  // Child component for a single exercise row (separate component so hooks are stable)
+  function ExerciseRow({
+    dayIdx,
+    idx,
+    it,
+  }: {
+    dayIdx: number;
+    idx: number;
+    it: any;
+  }) {
+    const [query, setQuery] = useState("");
+
+    const allOptions = [
+      ...top40,
+      ...exercises.filter(
+        (ex) => !top40.some((t) => (t.id || t.name) === (ex.id || ex.name)),
+      ),
+    ];
+
+    let selectedOption =
+      allOptions.find((ex) => (ex.id || ex.name) === it.exerciseId) || null;
+
+    // If no option matches but we have an exerciseId (from initialData),
+    // create a lightweight placeholder so the Combobox shows the current value.
+    if (!selectedOption && it.exerciseId) {
+      selectedOption = { id: it.exerciseId, name: it.exerciseId } as any;
+    }
+
+    const filteredOptions =
+      query === ""
+        ? allOptions
+        : allOptions.filter(
+            (ex) =>
+              ex.name?.toLowerCase().includes(query.toLowerCase()) ||
+              ex.id?.toLowerCase().includes(query.toLowerCase()),
+          );
+
+    return (
+      <div key={idx} className="grid grid-cols-12 gap-2 items-center mb-1">
+        <div className="col-span-5">
+          <Combobox
+            value={selectedOption}
+            onChange={(val) => {
+              const copy = [...workoutDays];
+              copy[dayIdx].exercises[idx] = {
+                ...copy[dayIdx].exercises[idx],
+                exerciseId: val?.id || val?.name || "",
+              };
+              setWorkoutDays(copy);
+            }}
+          >
+            <div className="relative">
+              <Combobox.Input
+                className="w-full p-2 border rounded"
+                displayValue={(ex: any) => ex?.name || ""}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Select or search exercise"
+              />
+              <Combobox.Options className="absolute z-10 mt-1 w-full bg-white border rounded shadow-lg max-h-60 overflow-auto">
+                {filteredOptions.length === 0 && (
+                  <div className="p-2 text-gray-500">No exercises found</div>
+                )}
+                {filteredOptions.map((ex: any) => (
+                  <Combobox.Option
+                    key={ex.id || ex.name}
+                    value={ex}
+                    as={Fragment}
+                  >
+                    {({ active, selected }) => (
+                      <li
+                        className={`cursor-pointer select-none p-2 ${active ? "bg-blue-100" : ""} ${selected ? "font-bold" : ""}`}
+                      >
+                        {ex.name || ex.id}
+                      </li>
+                    )}
+                  </Combobox.Option>
+                ))}
+                <Combobox.Option
+                  value={{ id: "__custom__", name: "Custom id..." }}
+                  as={Fragment}
+                >
+                  {({ active }) => (
+                    <li
+                      className={`cursor-pointer select-none p-2 ${active ? "bg-blue-100" : ""}`}
+                    >
+                      Custom id...
+                    </li>
+                  )}
+                </Combobox.Option>
+              </Combobox.Options>
+            </div>
+          </Combobox>
+          {it.exerciseId === "__custom__" && (
+            <input
+              placeholder="Custom exercise id"
+              value={it.customId}
+              onChange={(e) => {
+                const copy = [...workoutDays];
+                copy[dayIdx].exercises[idx] = {
+                  ...copy[dayIdx].exercises[idx],
+                  customId: e.target.value,
+                };
+                setWorkoutDays(copy);
+              }}
+              className="w-full p-2 border rounded mt-1"
+            />
+          )}
+        </div>
+        <div className="col-span-2">
+          <input
+            placeholder="Sets"
+            value={it.sets}
+            onChange={(e) => {
+              const copy = [...workoutDays];
+              copy[dayIdx].exercises[idx] = {
+                ...copy[dayIdx].exercises[idx],
+                sets: e.target.value,
+              };
+              setWorkoutDays(copy);
+            }}
+            className="p-2 border rounded w-full"
+          />
+        </div>
+        <div className="col-span-4">
+          <input
+            placeholder="Reps (e.g. 12 or 8-12)"
+            value={it.reps}
+            onChange={(e) => {
+              const copy = [...workoutDays];
+              copy[dayIdx].exercises[idx] = {
+                ...copy[dayIdx].exercises[idx],
+                reps: e.target.value,
+              };
+              setWorkoutDays(copy);
+            }}
+            className="p-2 border rounded w-full"
+          />
+        </div>
+        <div className="col-span-1">
+          <button
+            type="button"
+            onClick={() => {
+              const copy = [...workoutDays];
+              copy[dayIdx].exercises = copy[dayIdx].exercises.filter(
+                (_: any, i: number) => i !== idx,
+              );
+              if (copy[dayIdx].exercises.length === 0) {
+                copy[dayIdx].exercises = [
+                  { exerciseId: "", customId: "", sets: "", reps: "" },
+                ];
+              }
+              setWorkoutDays(copy);
+            }}
+            className="text-red-600"
+            aria-label="Remove exercise"
+          >
+            ×
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const buildPayload = () => {
     const days = workoutDays.map((day) => ({
       dayName: day.dayName,
       area: day.area,
       workoutExercises: day.exercises
-        .map((it) => {
+        .map((it: any) => {
           const finalId =
             it.exerciseId === "__custom__" ? it.customId : it.exerciseId;
           return {
@@ -45,25 +241,40 @@ export default function WorkoutForm({
             reps: it.reps || null,
           };
         })
-        .filter((it) => it.exerciseId),
+        .filter((it: any) => it.exerciseId),
     }));
-    if (!name || days.some((d) => d.workoutExercises.length === 0)) {
+    return { name, description, workoutDays: days };
+  };
+
+  const handleCreate = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    const payload = buildPayload();
+    if (
+      !payload.name ||
+      payload.workoutDays.some((d: any) => d.workoutExercises.length === 0)
+    ) {
       setError(
         "Program name and at least one valid exercise per day are required",
       );
       return;
     }
     setError(null);
-    await onCreate({ name, description, workoutDays: days });
-    setName("");
-    setDescription("");
-    setWorkoutDays([
-      {
-        dayName: "Day 1",
-        area: "",
-        exercises: [{ exerciseId: "", customId: "", sets: "", reps: "" }],
-      },
-    ]);
+    const submit = onSubmit || onCreate;
+    if (!submit) return;
+    await submit(payload);
+
+    // If we're calling onCreate (create mode), reset form. If editing (initialData provided), keep values.
+    if (!initialData && onCreate) {
+      setName("");
+      setDescription("");
+      setWorkoutDays([
+        {
+          dayName: "Day 1",
+          area: "",
+          exercises: [{ exerciseId: "", customId: "", sets: "", reps: "" }],
+        },
+      ]);
+    }
   };
 
   return (
@@ -115,7 +326,9 @@ export default function WorkoutForm({
                 <button
                   type="button"
                   onClick={() =>
-                    setWorkoutDays(workoutDays.filter((_, i) => i !== dayIdx))
+                    setWorkoutDays(
+                      workoutDays.filter((_: any, i: number) => i !== dayIdx),
+                    )
                   }
                   className="text-red-600 text-xs"
                 >
@@ -123,168 +336,9 @@ export default function WorkoutForm({
                 </button>
               )}
             </div>
-            {day.exercises.map((it, idx) => {
-              // All options: Top 40 first, then rest
-              const allOptions = [
-                ...top40,
-                ...exercises.filter(
-                  (ex) =>
-                    !top40.some((t) => (t.id || t.name) === (ex.id || ex.name)),
-                ),
-              ];
-              // Find selected option
-              const selectedOption =
-                allOptions.find((ex) => (ex.id || ex.name) === it.exerciseId) ||
-                null;
-              // Filtered options for search
-              const [query, setQuery] = useState("");
-              const filteredOptions =
-                query === ""
-                  ? allOptions
-                  : allOptions.filter(
-                      (ex) =>
-                        ex.name?.toLowerCase().includes(query.toLowerCase()) ||
-                        ex.id?.toLowerCase().includes(query.toLowerCase()),
-                    );
-              return (
-                <div
-                  key={idx}
-                  className="grid grid-cols-12 gap-2 items-center mb-1"
-                >
-                  <div className="col-span-5">
-                    <Combobox
-                      value={selectedOption}
-                      onChange={(val) => {
-                        const copy = [...workoutDays];
-                        copy[dayIdx].exercises[idx] = {
-                          ...copy[dayIdx].exercises[idx],
-                          exerciseId: val?.id || val?.name || "",
-                        };
-                        setWorkoutDays(copy);
-                      }}
-                    >
-                      <div className="relative">
-                        <Combobox.Input
-                          className="w-full p-2 border rounded"
-                          displayValue={(ex: any) => ex?.name || ""}
-                          onChange={(e) => setQuery(e.target.value)}
-                          placeholder="Select or search exercise"
-                        />
-                        <Combobox.Options className="absolute z-10 mt-1 w-full bg-white border rounded shadow-lg max-h-60 overflow-auto">
-                          {filteredOptions.length === 0 && (
-                            <div className="p-2 text-gray-500">
-                              No exercises found
-                            </div>
-                          )}
-                          {filteredOptions.map((ex: any, i: number) => (
-                            <Combobox.Option
-                              key={ex.id || ex.name}
-                              value={ex}
-                              as={Fragment}
-                            >
-                              {({ active, selected }) => (
-                                <li
-                                  className={`cursor-pointer select-none p-2 ${
-                                    active ? "bg-blue-100" : ""
-                                  } ${selected ? "font-bold" : ""}`}
-                                >
-                                  {ex.name || ex.id}
-                                </li>
-                              )}
-                            </Combobox.Option>
-                          ))}
-                          <Combobox.Option
-                            value={{ id: "__custom__", name: "Custom id..." }}
-                            as={Fragment}
-                          >
-                            {({ active }) => (
-                              <li
-                                className={`cursor-pointer select-none p-2 ${
-                                  active ? "bg-blue-100" : ""
-                                }`}
-                              >
-                                Custom id...
-                              </li>
-                            )}
-                          </Combobox.Option>
-                        </Combobox.Options>
-                      </div>
-                    </Combobox>
-                    {it.exerciseId === "__custom__" && (
-                      <input
-                        placeholder="Custom exercise id"
-                        value={it.customId}
-                        onChange={(e) => {
-                          const copy = [...workoutDays];
-                          copy[dayIdx].exercises[idx] = {
-                            ...copy[dayIdx].exercises[idx],
-                            customId: e.target.value,
-                          };
-                          setWorkoutDays(copy);
-                        }}
-                        className="w-full p-2 border rounded mt-1"
-                      />
-                    )}
-                  </div>
-                  <div className="col-span-2">
-                    <input
-                      placeholder="Sets"
-                      value={it.sets}
-                      onChange={(e) => {
-                        const copy = [...workoutDays];
-                        copy[dayIdx].exercises[idx] = {
-                          ...copy[dayIdx].exercises[idx],
-                          sets: e.target.value,
-                        };
-                        setWorkoutDays(copy);
-                      }}
-                      className="p-2 border rounded w-full"
-                    />
-                  </div>
-                  <div className="col-span-4">
-                    <input
-                      placeholder="Reps (e.g. 12 or 8-12)"
-                      value={it.reps}
-                      onChange={(e) => {
-                        const copy = [...workoutDays];
-                        copy[dayIdx].exercises[idx] = {
-                          ...copy[dayIdx].exercises[idx],
-                          reps: e.target.value,
-                        };
-                        setWorkoutDays(copy);
-                      }}
-                      className="p-2 border rounded w-full"
-                    />
-                  </div>
-                  <div className="col-span-1">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const copy = [...workoutDays];
-                        copy[dayIdx].exercises = copy[dayIdx].exercises.filter(
-                          (_, i) => i !== idx,
-                        );
-                        if (copy[dayIdx].exercises.length === 0) {
-                          copy[dayIdx].exercises = [
-                            {
-                              exerciseId: "",
-                              customId: "",
-                              sets: "",
-                              reps: "",
-                            },
-                          ];
-                        }
-                        setWorkoutDays(copy);
-                      }}
-                      className="text-red-600"
-                      aria-label="Remove exercise"
-                    >
-                      ×
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
+            {day.exercises.map((it: any, idx: number) => (
+              <ExerciseRow key={idx} dayIdx={dayIdx} idx={idx} it={it} />
+            ))}
             <div>
               <button
                 type="button"
@@ -329,28 +383,30 @@ export default function WorkoutForm({
           type="submit"
           className="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded"
         >
-          Create program
+          {submitLabel || (initialData ? "Update program" : "Create program")}
         </button>
-        <button
-          type="button"
-          onClick={() => {
-            setName("");
-            setDescription("");
-            setWorkoutDays([
-              {
-                dayName: "Day 1",
-                area: "",
-                exercises: [
-                  { exerciseId: "", customId: "", sets: "", reps: "" },
-                ],
-              },
-            ]);
-            setError(null);
-          }}
-          className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded"
-        >
-          Reset
-        </button>
+        {!initialData && (
+          <button
+            type="button"
+            onClick={() => {
+              setName("");
+              setDescription("");
+              setWorkoutDays([
+                {
+                  dayName: "Day 1",
+                  area: "",
+                  exercises: [
+                    { exerciseId: "", customId: "", sets: "", reps: "" },
+                  ],
+                },
+              ]);
+              setError(null);
+            }}
+            className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded"
+          >
+            Reset
+          </button>
+        )}
       </div>
       {error && <div className="text-red-600 mt-2">{error}</div>}
     </form>

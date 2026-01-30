@@ -114,6 +114,7 @@ export default function WorkoutsPage() {
               program={p}
               exercises={exercises}
               members={members}
+              areaOptions={areaOptions}
               onUpdate={async (id, data) => {
                 await updateProgram(id, data);
                 await fetchPrograms();
