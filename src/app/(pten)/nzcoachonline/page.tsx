@@ -1,12 +1,23 @@
-'use client';
+"use client";
 
 import React, { useState, useEffect } from "react";
-import emailjs from '@emailjs/browser';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { CheckCircle, Star, Trophy, Heart, Instagram, ArrowRight } from 'lucide-react';
+import emailjs from "@emailjs/browser";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import {
+  CheckCircle,
+  Star,
+  Trophy,
+  Heart,
+  Instagram,
+  ArrowRight,
+  Dumbbell,
+  Apple,
+  Globe,
+  Users,
+} from "lucide-react";
 
 interface FormData {
   firstName: string;
@@ -17,12 +28,56 @@ interface FormData {
 
 export default function NZCoachOnlinePage() {
   const [formData, setFormData] = useState<FormData>({
-    firstName: '',
-    lastName: '',
-    phone: '',
-    email: ''
+    firstName: "",
+    lastName: "",
+    phone: "",
+    email: "",
   });
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+
+  // Dynamic services array (used by other pages/components)
+  const services = [
+    {
+      title: "Fitness Coaching",
+      href: "/fitness-coaching",
+      description: "Personalised training and coaching",
+      icon: <Dumbbell className="h-4 w-4" />,
+    },
+    {
+      title: "Nutrition Guidance",
+      href: "/nutrition-coaching",
+      description: "Nutrition plans and support",
+      icon: <Apple className="h-4 w-4" />,
+    },
+    {
+      title: "Online Coaching",
+      href: "/online-coaching",
+      description: "Remote coaching & programs",
+      icon: <Globe className="h-4 w-4" />,
+    },
+  ];
+
+  // Dynamic locations array
+  const locations = [
+    {
+      title: "Brazil Coaching",
+      href: "/nzcoachonline",
+      description: "Services available in Brazil",
+      icon: <Users className="h-4 w-4" />,
+    },
+    {
+      title: "USA Coaching",
+      href: "/ptnz",
+      description: "Services available in USA",
+      icon: <Users className="h-4 w-4" />,
+    },
+    {
+      title: "New Zealand",
+      href: "/online-coaching",
+      description: "Services available in New Zealand",
+      icon: <Users className="h-4 w-4" />,
+    },
+  ];
 
   useEffect(() => {
     // Inject the Facebook Pixel script
@@ -64,7 +119,7 @@ export default function NZCoachOnlinePage() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -72,7 +127,7 @@ export default function NZCoachOnlinePage() {
     e.preventDefault();
     try {
       const templateParams = {
-        to_email: 'jacksouto7@gmail.com',
+        to_email: "jacksouto7@gmail.com",
         client_name: `${formData.firstName} ${formData.lastName}`,
         client_email: formData.email,
         client_phone: formData.phone,
@@ -81,25 +136,25 @@ export default function NZCoachOnlinePage() {
           <p><strong>Name:</strong> ${formData.firstName} ${formData.lastName}</p>
           <p><strong>Email:</strong> ${formData.email}</p>
           <p><strong>Phone:</strong> ${formData.phone}</p>
-        `
+        `,
       };
 
       await emailjs.send(
-        'service_28v1fvr',
-        'template_wj6zu2c',
+        "service_28v1fvr",
+        "template_wj6zu2c",
         templateParams,
-        'ezbPPmM_lDMistyGT'
+        "ezbPPmM_lDMistyGT",
       );
 
       setIsSubmitted(true);
       setFormData({
-        firstName: '',
-        lastName: '',
-        phone: '',
-        email: ''
+        firstName: "",
+        lastName: "",
+        phone: "",
+        email: "",
       });
     } catch (error) {
-      console.error('Error sending email:', error);
+      console.error("Error sending email:", error);
     }
   };
 
@@ -119,13 +174,13 @@ export default function NZCoachOnlinePage() {
           <p className="text-lg text-gray-600 mb-6">
             Kia ora whānau in New Zealand Aotearoa!
           </p>
-          
+
           {/* Video Section */}
           <div className="mb-8">
             <div className="relative w-full aspect-video max-w-full mx-auto">
-              <video 
-                src="/jackie-images/messages/video1.mp4" 
-                className="w-full h-full rounded-lg shadow-md" 
+              <video
+                src="/jackie-images/messages/video1.mp4"
+                className="w-full h-full rounded-lg shadow-md"
                 controls
                 preload="metadata"
               >
@@ -133,19 +188,21 @@ export default function NZCoachOnlinePage() {
               </video>
             </div>
           </div>
-          
+
           <h5 className="text-xl font-semibold text-blue-600 mb-8">
-            Fill the form below to get your FREE class!
+            Fill the form below to get your FIRST class for only $30!
           </h5>
         </div>
       </div>
 
-     {/* Contact Form Section */}
+      {/* Contact Form Section */}
       <div className="mt-12">
         {!isSubmitted ? (
           <Card className="w-full max-w-2xl mx-auto">
             <CardHeader className="text-center">
-              <CardTitle className="text-2xl text-gray-900">Get Your FREE Consultation</CardTitle>
+              <CardTitle className="text-2xl text-gray-900">
+                Get Your FIRST Consultation for only $30!
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -187,8 +244,8 @@ export default function NZCoachOnlinePage() {
                   required
                   className="text-base p-3"
                 />
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   size="lg"
                   className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 shadow-md transition duration-300"
                 >
@@ -212,11 +269,13 @@ export default function NZCoachOnlinePage() {
         )}
       </div>
 
-       {/* Kiwi-friendly Copy Section */}
-       <div className="mt-16 mb-12">
+      {/* Kiwi-friendly Copy Section */}
+      <div className="mt-16 mb-12">
         <Card className="w-full max-w-4xl mx-auto">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl text-gray-900">Why Train with Jackie?</CardTitle>
+            <CardTitle className="text-2xl text-gray-900">
+              Why Train with Jackie?
+            </CardTitle>
           </CardHeader>
           <CardContent className="p-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -224,34 +283,47 @@ export default function NZCoachOnlinePage() {
                 <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                   <Star className="h-6 w-6 text-blue-600" />
                 </div>
-                <span className="text-gray-800">20+ years of experience helping Kiwis achieve their fitness goals</span>
+                <span className="text-gray-800">
+                  20+ years of experience helping Kiwis achieve their fitness
+                  goals
+                </span>
               </div>
               <div className="flex items-center space-x-4 p-4 bg-yellow-50 rounded-lg">
                 <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
                   <Trophy className="h-6 w-6 text-yellow-600" />
                 </div>
-                <span className="text-gray-800">Coach to the BJJ World Champion</span>
+                <span className="text-gray-800">
+                  Coach to the BJJ World Champion
+                </span>
               </div>
               <div className="flex items-center space-x-4 p-4 bg-purple-50 rounded-lg">
                 <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
                   <Trophy className="h-6 w-6 text-purple-600" />
                 </div>
-                <span className="text-gray-800">Mentor to a World Champion Bodybuilder</span>
+                <span className="text-gray-800">
+                  Mentor to a World Champion Bodybuilder
+                </span>
               </div>
               <div className="flex items-center space-x-4 p-4 bg-green-50 rounded-lg">
                 <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
                   <Heart className="h-6 w-6 text-green-600" />
                 </div>
-                <span className="text-gray-800">Now taking on new members at CityFitness Westgate</span>
+                <span className="text-gray-800">
+                  Now taking on new members at CityFitness Westgate
+                </span>
               </div>
             </div>
             <div className="space-y-4 text-center">
               <p className="text-gray-700 text-lg">
-                Whether you're just starting your fitness journey or looking to take it to the next level, Jackie's got your back. She's helped Kiwis of all ages move better, feel better, and build lasting healthy habits.
+                Whether you're just starting your fitness journey or looking to
+                take it to the next level, Jackie's got your back. She's helped
+                Kiwis of all ages move better, feel better, and build lasting
+                healthy habits.
               </p>
               <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
                 <p className="font-bold text-orange-800">
-                  👉 Limited spots available for free classes at CityFitness. Don't miss out on this opportunity to train with a champion!
+                  👉 Limited spots available for free classes at CityFitness.
+                  Don't miss out on this opportunity to train with a champion!
                 </p>
               </div>
             </div>
@@ -261,39 +333,49 @@ export default function NZCoachOnlinePage() {
 
       {/* BJJ Champ & Bodybuilder Photos */}
       <div className="mt-16 mb-12">
-        <h3 className="text-2xl font-bold mb-8 text-gray-900 text-center">What Champions Look Like</h3>
+        <h3 className="text-2xl font-bold mb-8 text-gray-900 text-center">
+          What Champions Look Like
+        </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-4xl mx-auto">
           <Card className="overflow-hidden">
             <CardContent className="p-0">
-              <img 
-                src="/jackie-images/isma-champ.jpg" 
-                alt="BJJ World Champion" 
-                className="w-full h-64 object-cover" 
+              <img
+                src="/jackie-images/isma-champ.jpg"
+                alt="BJJ World Champion"
+                className="w-full h-64 object-cover"
               />
               <div className="p-4">
                 <Badge className="bg-yellow-100 text-yellow-800 mb-2">
                   <Trophy className="h-4 w-4 mr-1" />
                   World Champion
                 </Badge>
-                <p className="font-semibold text-gray-900">BJJ World Champion (Double Gold)</p>
-                <p className="text-sm text-gray-600 mt-1">Trained by Jackie Souto</p>
+                <p className="font-semibold text-gray-900">
+                  BJJ World Champion (Double Gold)
+                </p>
+                <p className="text-sm text-gray-600 mt-1">
+                  Trained by Jackie Souto
+                </p>
               </div>
             </CardContent>
           </Card>
           <Card className="overflow-hidden">
             <CardContent className="p-0">
-              <img 
-                src="/jackie-images/miguel-oliveira.jpg" 
-                alt="World Champion Bodybuilder" 
-                className="w-full h-64 object-cover" 
+              <img
+                src="/jackie-images/miguel-oliveira.jpg"
+                alt="World Champion Bodybuilder"
+                className="w-full h-64 object-cover"
               />
               <div className="p-4">
                 <Badge className="bg-purple-100 text-purple-800 mb-2">
                   <Trophy className="h-4 w-4 mr-1" />
                   World Champion
                 </Badge>
-                <p className="font-semibold text-gray-900">World Champion Bodybuilder</p>
-                <p className="text-sm text-gray-600 mt-1">Mentored by Jackie Souto</p>
+                <p className="font-semibold text-gray-900">
+                  World Champion Bodybuilder
+                </p>
+                <p className="text-sm text-gray-600 mt-1">
+                  Mentored by Jackie Souto
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -302,56 +384,76 @@ export default function NZCoachOnlinePage() {
 
       {/* Testimonials Section */}
       <div className="mt-16 mb-12">
-        <h3 className="text-2xl font-bold mb-8 text-gray-900 text-center">What Kiwis Say</h3>
+        <h3 className="text-2xl font-bold mb-8 text-gray-900 text-center">
+          What Kiwis Say
+        </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           <Card className="overflow-hidden">
             <CardContent className="p-0">
-              <img 
-                src="/jackie-images/before-after-1.jpg" 
-                alt="Testimonial 1" 
-                className="w-full h-48 object-cover" 
+              <img
+                src="/jackie-images/before-after-1.jpg"
+                alt="Testimonial 1"
+                className="w-full h-48 object-cover"
               />
               <div className="p-4">
                 <div className="flex mb-2">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                    <Star
+                      key={i}
+                      className="h-4 w-4 fill-yellow-400 text-yellow-400"
+                    />
                   ))}
                 </div>
-                <p className="italic text-sm text-gray-600">"Jackie helped me get my energy back and feel confident again!"</p>
+                <p className="italic text-sm text-gray-600">
+                  "Jackie helped me get my energy back and feel confident
+                  again!"
+                </p>
               </div>
             </CardContent>
           </Card>
           <Card className="overflow-hidden">
             <CardContent className="p-0">
-              <img 
-                src="/jackie-images/before-after-2.jpg" 
-                alt="Testimonial 2" 
-                className="w-full h-48 object-cover" 
+              <img
+                src="/jackie-images/before-after-2.jpg"
+                alt="Testimonial 2"
+                className="w-full h-48 object-cover"
               />
               <div className="p-4">
                 <div className="flex mb-2">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                    <Star
+                      key={i}
+                      className="h-4 w-4 fill-yellow-400 text-yellow-400"
+                    />
                   ))}
                 </div>
-                <p className="italic text-sm text-gray-600">"Her support made all the difference. I never thought I could enjoy training from home."</p>
+                <p className="italic text-sm text-gray-600">
+                  "Her support made all the difference. I never thought I could
+                  enjoy training from home."
+                </p>
               </div>
             </CardContent>
           </Card>
           <Card className="overflow-hidden">
             <CardContent className="p-0">
-              <img 
-                src="/jackie-images/before-after-3.jpg" 
-                alt="Testimonial 3" 
-                className="w-full h-48 object-cover" 
+              <img
+                src="/jackie-images/before-after-3.jpg"
+                alt="Testimonial 3"
+                className="w-full h-48 object-cover"
               />
               <div className="p-4">
                 <div className="flex mb-2">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                    <Star
+                      key={i}
+                      className="h-4 w-4 fill-yellow-400 text-yellow-400"
+                    />
                   ))}
                 </div>
-                <p className="italic text-sm text-gray-600">"Jackie's experience shows—she knows how to motivate and guide you every step."</p>
+                <p className="italic text-sm text-gray-600">
+                  "Jackie's experience shows—she knows how to motivate and guide
+                  you every step."
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -360,69 +462,71 @@ export default function NZCoachOnlinePage() {
 
       {/* Messages - Masonry Layout */}
       <div className="mt-16 mb-12">
-        <h3 className="text-2xl font-bold mb-8 text-gray-900">Client Messages</h3>
+        <h3 className="text-2xl font-bold mb-8 text-gray-900">
+          Client Messages
+        </h3>
         <div className="columns-2 md:columns-4 gap-2 space-y-2">
           {/* Column 1 */}
           <div className="break-inside-avoid mb-2">
-            <img 
-              src="/jackie-images/messages/message1.jpg" 
-              alt="Client Message 1" 
-              className="w-full rounded-lg shadow-md" 
+            <img
+              src="/jackie-images/messages/message1.jpg"
+              alt="Client Message 1"
+              className="w-full rounded-lg shadow-md"
             />
           </div>
           <div className="break-inside-avoid mb-2">
-            <img 
-              src="/jackie-images/messages/message5.jpg" 
-              alt="Client Message 5" 
-              className="w-full rounded-lg shadow-md" 
+            <img
+              src="/jackie-images/messages/message5.jpg"
+              alt="Client Message 5"
+              className="w-full rounded-lg shadow-md"
             />
           </div>
-          
+
           {/* Column 2 */}
           <div className="break-inside-avoid mb-2">
-            <img 
-              src="/jackie-images/messages/message2.jpg" 
-              alt="Client Message 2" 
-              className="w-full rounded-lg shadow-md" 
+            <img
+              src="/jackie-images/messages/message2.jpg"
+              alt="Client Message 2"
+              className="w-full rounded-lg shadow-md"
             />
           </div>
           <div className="break-inside-avoid mb-2">
-            <img 
-              src="/jackie-images/messages/message6.jpg" 
-              alt="Client Message 6" 
-              className="w-full rounded-lg shadow-md" 
+            <img
+              src="/jackie-images/messages/message6.jpg"
+              alt="Client Message 6"
+              className="w-full rounded-lg shadow-md"
             />
           </div>
-          
+
           {/* Column 3 */}
           <div className="break-inside-avoid mb-2">
-            <img 
-              src="/jackie-images/messages/message3.jpg" 
-              alt="Client Message 3" 
-              className="w-full rounded-lg shadow-md" 
+            <img
+              src="/jackie-images/messages/message3.jpg"
+              alt="Client Message 3"
+              className="w-full rounded-lg shadow-md"
             />
           </div>
           <div className="break-inside-avoid mb-2">
-            <img 
-              src="/jackie-images/messages/message7.jpg" 
-              alt="Client Message 7" 
-              className="w-full rounded-lg shadow-md" 
+            <img
+              src="/jackie-images/messages/message7.jpg"
+              alt="Client Message 7"
+              className="w-full rounded-lg shadow-md"
             />
           </div>
-          
+
           {/* Column 4 */}
           <div className="break-inside-avoid mb-2">
-            <img 
-              src="/jackie-images/messages/message4.jpg" 
-              alt="Client Message 4" 
-              className="w-full rounded-lg shadow-md" 
+            <img
+              src="/jackie-images/messages/message4.jpg"
+              alt="Client Message 4"
+              className="w-full rounded-lg shadow-md"
             />
           </div>
           <div className="break-inside-avoid mb-2">
-            <img 
-              src="/jackie-images/messages/message8.jpg" 
-              alt="Client Message 8" 
-              className="w-full rounded-lg shadow-md" 
+            <img
+              src="/jackie-images/messages/message8.jpg"
+              alt="Client Message 8"
+              className="w-full rounded-lg shadow-md"
             />
           </div>
         </div>
@@ -432,31 +536,33 @@ export default function NZCoachOnlinePage() {
       <footer className="mt-20 pt-8 pb-6 border-t border-gray-200">
         <Card className="w-full max-w-2xl mx-auto">
           <CardContent className="p-8 text-center">
-            <h5 className="text-xl font-semibold mb-3 text-gray-900">PT Jackie Souto</h5>
+            <h5 className="text-xl font-semibold mb-3 text-gray-900">
+              PT Jackie Souto
+            </h5>
             <p className="text-gray-600 mb-6">
-              Personal trainer with 20+ years of experience helping Kiwis achieve their health and fitness goals.
-              Based on West Auckland.
+              Personal trainer with 20+ years of experience helping Kiwis
+              achieve their health and fitness goals. Based on West Auckland.
             </p>
-            <Button 
+            <Button
               variant="outline"
               asChild
               className="mb-6 border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white"
             >
-              <a 
-                href="https://www.instagram.com/soutojackie" 
-                target="_blank" 
+              <a
+                href="https://www.instagram.com/soutojackie"
+                target="_blank"
                 rel="noreferrer"
               >
                 <Instagram className="w-4 h-4 mr-2" />
                 Follow on Instagram
               </a>
             </Button>
-            <p className="text-sm text-gray-500">© {new Date().getFullYear()} PT Jackie Souto. All rights reserved.</p>
+            <p className="text-sm text-gray-500">
+              © {new Date().getFullYear()} PT Jackie Souto. All rights reserved.
+            </p>
           </CardContent>
         </Card>
       </footer>
     </div>
   );
-};
-
-
+}

@@ -12,9 +12,9 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import MemberWorkoutList from "@/components/workouts/MemberWorkoutList";
+import ClientWorkoutList from "@/components/workouts/ClientWorkoutList";
 
-export default async function MemberMePage() {
+export default async function ClientDashboardPage() {
   const session = await getSession();
   if (!session)
     return (
@@ -38,7 +38,7 @@ export default async function MemberMePage() {
               PTs should use the members list.
             </CardTitle>
             <CardDescription>
-              <Link href="/members" className="text-blue-600 underline">
+              <Link href="/pt/members" className="text-blue-600 underline">
                 Go to members
               </Link>
             </CardDescription>
@@ -129,7 +129,7 @@ export default async function MemberMePage() {
       </Card>
 
       {/* Render the client component directly; it includes its own Card/header */}
-      <MemberWorkoutList
+      <ClientWorkoutList
         assignedPrograms={
           Array.isArray(programsWithImages) ? programsWithImages : []
         }

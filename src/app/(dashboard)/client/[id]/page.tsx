@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-export default async function MemberDetail({
+export default async function ClientDetail({
   params,
 }: {
   params: { id: string };
@@ -18,7 +18,7 @@ export default async function MemberDetail({
     if (session.role === "MEMBER" && session.userId === params.id) {
       // allow
     } else {
-      return redirect("/members/me");
+      return redirect("/client");
     }
   }
 
@@ -37,7 +37,7 @@ export default async function MemberDetail({
         Joined {new Date(member.createdAt).toLocaleDateString()}
       </div>
       <div className="pt-4">
-        <Link href="/members">
+        <Link href="/pt/members">
           <Button>Back to members</Button>
         </Link>
       </div>

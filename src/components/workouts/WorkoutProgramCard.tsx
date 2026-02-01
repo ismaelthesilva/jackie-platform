@@ -1,5 +1,9 @@
 import ImageMotion from "@/components/exercises/ImageMotion";
 import WorkoutForm from "@/components/workouts/WorkoutForm";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Edit, Trash2, Info, ChevronUp } from "lucide-react";
 
 import { useState, useEffect } from "react";
 
@@ -30,6 +34,9 @@ export default function WorkoutProgramCard({
     })),
   );
   const [error, setError] = useState<string | null>(null);
+  const [showInstructions, setShowInstructions] = useState<
+    Record<string, boolean>
+  >({});
 
   // Add at least one row if empty (fix: useEffect, not in render)
   useEffect(() => {
@@ -111,90 +118,244 @@ export default function WorkoutProgramCard({
     }
   };
 
+  const toggleInstructions = (exerciseId: string) => {
+    setShowInstructions((prev) => ({
+      ...prev,
+      [exerciseId]: !prev[exerciseId],
+    }));
+  };
+
+  const levelColors: Record<string, string> = {
+    beginner: "bg-green-50 text-green-700 border-green-200",
+    intermediate: "bg-yellow-50 text-yellow-700 border-yellow-200",
+    advanced: "bg-red-50 text-red-700 border-red-200",
+    expert: "bg-purple-50 text-purple-700 border-purple-200",
+  };
+
   return (
-    <div className="bg-white rounded-lg shadow-md flex flex-col justify-between h-full p-4 border border-gray-100">
+    <div className="space-y-4">
       {editing ? (
-        <div>
-          <WorkoutForm
-            exercises={exercises}
-            areaOptions={areaOptions}
-            initialData={program}
-            onSubmit={handleUpdate}
-            submitLabel="Update program"
-          />
-          <div className="mt-2">
-            <button
-              type="button"
-              onClick={handleCancel}
-              className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded"
-            >
-              Cancel
-            </button>
-          </div>
-          {error && <div className="text-red-600 mt-2">{error}</div>}
-        </div>
-      ) : (
-        <>
-          <h3 className="font-bold text-lg mb-1 truncate">{program.name}</h3>
-          <p className="text-sm text-gray-600 mb-2 line-clamp-2">
-            {program.description}
-          </p>
-          <div className="mt-2 space-y-2">
-            {program.workoutDays.map((d: any, i: number) => (
-              <div key={d.id}>
-                <div className="flex items-center gap-2 mb-1">
-                  <div className="font-medium text-xs text-gray-700">
-                    {d.dayName}
-                    {d.area ? ` - ${d.area}` : ""}
-                  </div>
-                </div>
-                <div className="flex flex-col gap-2">
-                  {d.workoutExercises.map((we: any) => {
-                    const ex = we.exercise ?? null;
-                    const images = ex?.images ?? [];
-                    return (
-                      <div key={we.id} className="flex gap-3 items-center">
-                        <div className="w-20 h-16 flex-shrink-0">
-                          <ImageMotion
-                            images={images}
-                            alt={ex?.name ?? we.exerciseId}
-                          />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="truncate font-medium text-sm">
-                            {ex?.name ?? we.exerciseId}
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            {we.sets ?? ""} x {we.reps ?? ""}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="flex flex-col md:flex-row gap-2 mt-3 items-center">
-            <div className="flex gap-2">
-              <button
-                onClick={handleEdit}
-                className="text-blue-600 text-xs font-semibold"
-                aria-label={`Edit ${program.name}`}
+        <Card className="flex flex-col hover:shadow-lg transition-shadow">
+          <CardContent className="pt-6">
+            <WorkoutForm
+              areaOptions={areaOptions}
+              initialData={program}
+              onSubmit={handleUpdate}
+              submitLabel="Update program"
+            />
+            <div className="mt-4 flex gap-2">
+              <Button
+                type="button"
+                onClick={handleCancel}
+                variant="destructive"
               >
-                Edit
-              </button>
-              <button
-                onClick={() => onDelete(program.id)}
-                className="text-red-600 text-xs font-semibold"
-                aria-label={`Delete ${program.name}`}
-              >
-                Delete
-              </button>
+                Cancel
+              </Button>
             </div>
-            <AssignProgramToMember programId={program.id} members={members} />
-          </div>
-        </>
+            {error && <div className="text-red-600 mt-2 text-sm">{error}</div>}
+          </CardContent>
+        </Card>
+      ) : (
+        <Card className="hover:shadow-lg transition-shadow">
+          {/* Program Header */}
+          <CardHeader className="pb-4 border-b">
+            <CardTitle className="text-xl mb-2">{program.name}</CardTitle>
+            {program.description && (
+              <p className="text-sm text-gray-600">{program.description}</p>
+            )}
+
+            {/* Edit and Delete Buttons */}
+            <div className="flex gap-2 mt-4">
+              <Button
+                onClick={handleEdit}
+                variant="outline"
+                size="sm"
+                className="flex-1"
+              >
+                <Edit className="h-4 w-4 mr-1" />
+                Edit Program
+              </Button>
+              <Button
+                onClick={() => onDelete(program.id)}
+                variant="destructive"
+                size="sm"
+                className="flex-1"
+              >
+                <Trash2 className="h-4 w-4 mr-1" />
+                Delete Program
+              </Button>
+            </div>
+          </CardHeader>
+
+          <CardContent className="pt-4 pb-4">
+            {/* Each Day with Exercises */}
+            {program.workoutDays && program.workoutDays.length > 0 ? (
+              <div className="space-y-6">
+                {program.workoutDays.map((d: any, dayIndex: number) => (
+                  <div key={d.id} className="space-y-3">
+                    {/* Day Header */}
+                    <div className="flex items-center justify-between pb-2 border-b-2 border-gray-200">
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-base font-bold text-gray-800">
+                          {d.dayName}
+                        </h3>
+                        {d.area && (
+                          <Badge
+                            variant="outline"
+                            className="bg-blue-50 text-blue-700"
+                          >
+                            {d.area}
+                          </Badge>
+                        )}
+                      </div>
+                      <Badge variant="secondary" className="text-xs">
+                        {d.workoutExercises?.length || 0} exercises
+                      </Badge>
+                    </div>
+
+                    {/* Exercise List */}
+                    {d.workoutExercises && d.workoutExercises.length > 0 ? (
+                      <div className="space-y-3">
+                        {d.workoutExercises.map(
+                          (we: any, exerciseIndex: number) => {
+                            const ex = we.exercise ?? null;
+                            const images = ex?.images ?? [];
+                            const exerciseKey = `${d.id}-${we.id}`;
+
+                            return (
+                              <div
+                                key={we.id}
+                                className="p-3 border rounded-lg bg-white hover:bg-gray-50 transition-colors"
+                              >
+                                <div className="flex gap-3">
+                                  {/* Exercise Image - Fixed Size */}
+                                  <div className="flex-shrink-0">
+                                    {ex && (
+                                      <div className="w-24 h-20 rounded overflow-hidden bg-gray-100">
+                                        <ImageMotion
+                                          images={images}
+                                          alt={ex?.name ?? we.exerciseId}
+                                        />
+                                      </div>
+                                    )}
+                                  </div>
+
+                                  {/* Exercise Info - Flexible */}
+                                  <div className="flex-1 min-w-0">
+                                    {/* Exercise Name & Sets/Reps */}
+                                    <div className="flex items-start justify-between gap-2 mb-2">
+                                      <h4 className="font-semibold text-sm leading-tight">
+                                        {ex?.name ?? we.exerciseId}
+                                      </h4>
+                                      <div className="flex gap-1 flex-shrink-0">
+                                        <Badge
+                                          variant="outline"
+                                          className="bg-green-50 text-green-700 border-green-200 text-xs"
+                                        >
+                                          {we.sets ?? "-"}×{we.reps ?? "-"}
+                                        </Badge>
+                                      </div>
+                                    </div>
+
+                                    {/* Badges Row */}
+                                    <div className="flex flex-wrap items-center gap-1.5 mb-2">
+                                      {ex?.level && (
+                                        <Badge
+                                          className={
+                                            levelColors[
+                                              ex.level.toLowerCase()
+                                            ] || "border"
+                                          }
+                                          variant="outline"
+                                        >
+                                          {ex.level}
+                                        </Badge>
+                                      )}
+
+                                      {ex?.muscleGroup && (
+                                        <Badge
+                                          variant="outline"
+                                          className="bg-blue-50 text-blue-700 border-blue-200 text-xs"
+                                        >
+                                          🎯 {ex.muscleGroup}
+                                        </Badge>
+                                      )}
+
+                                      {/* Instructions Button */}
+                                      {ex?.instructions &&
+                                        ex.instructions.length > 0 && (
+                                          <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            className="h-6 px-2 text-xs"
+                                            onClick={() =>
+                                              toggleInstructions(exerciseKey)
+                                            }
+                                          >
+                                            {showInstructions[exerciseKey] ? (
+                                              <>
+                                                <ChevronUp className="h-3 w-3 mr-1" />
+                                                Hide
+                                              </>
+                                            ) : (
+                                              <>
+                                                <Info className="h-3 w-3 mr-1" />
+                                                Info
+                                              </>
+                                            )}
+                                          </Button>
+                                        )}
+                                    </div>
+
+                                    {/* Instructions Content */}
+                                    {showInstructions[exerciseKey] &&
+                                      ex?.instructions &&
+                                      ex.instructions.length > 0 && (
+                                        <div className="mt-2 p-2 bg-gray-50 rounded text-xs">
+                                          <ol className="list-decimal list-inside space-y-1 text-gray-700">
+                                            {ex.instructions.map(
+                                              (
+                                                instruction: string,
+                                                index: number,
+                                              ) => (
+                                                <li
+                                                  key={index}
+                                                  className="leading-snug"
+                                                >
+                                                  {instruction}
+                                                </li>
+                                              ),
+                                            )}
+                                          </ol>
+                                        </div>
+                                      )}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          },
+                        )}
+                      </div>
+                    ) : (
+                      <p className="text-sm text-gray-500 italic">
+                        No exercises in this day
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-gray-500 italic">
+                No workout days configured
+              </p>
+            )}
+
+            {/* Assign to Member Section - Always at bottom */}
+            <div className="mt-6 pt-4 border-t">
+              <AssignProgramToMember programId={program.id} members={members} />
+            </div>
+          </CardContent>
+        </Card>
       )}
     </div>
   );
@@ -231,11 +392,11 @@ function AssignProgramToMember({
     }
   };
   return (
-    <div className="flex gap-2 items-center mt-2 md:mt-0">
+    <div className="flex flex-col gap-2 w-full">
       <select
         value={selected}
         onChange={(e) => setSelected(e.target.value)}
-        className="border rounded p-1 text-sm"
+        className="border rounded px-3 py-2 text-sm w-full"
       >
         <option value="">Assign to member…</option>
         {members.map((m) => (
@@ -244,14 +405,17 @@ function AssignProgramToMember({
           </option>
         ))}
       </select>
-      <button
+      <Button
         onClick={handleAssign}
         disabled={!selected || loading}
-        className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 rounded disabled:opacity-50"
+        size="sm"
+        className="w-full"
       >
-        Assign
-      </button>
-      {status && <span className="text-xs ml-2">{status}</span>}
+        Assign Program
+      </Button>
+      {status && (
+        <span className="text-xs text-center text-gray-600">{status}</span>
+      )}
     </div>
   );
 }

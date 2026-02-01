@@ -19,9 +19,9 @@ import {
   Sun,
   Moon,
   Dumbbell,
+  Star,
   Apple,
   Globe,
-  Users,
   Calendar,
   MessageCircle,
   LogIn,
@@ -49,7 +49,7 @@ const DarkModeToggle: React.FC = () => {
       // If system, check current system preference and toggle opposite
       if (typeof window !== "undefined") {
         const systemIsDark = window.matchMedia(
-          "(prefers-color-scheme: dark)"
+          "(prefers-color-scheme: dark)",
         ).matches;
         setTheme(systemIsDark ? "light" : "dark");
       } else {
@@ -119,7 +119,7 @@ const ListItem = React.forwardRef<
           ref={ref}
           className={cn(
             "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-            className
+            className,
           )}
           {...props}
         >
@@ -167,28 +167,6 @@ const Navbar: React.FC = () => {
     },
   ];
 
-  // Dynamic locations array using translations
-  const locations: NavItem[] = [
-    {
-      title: t("navbar.locationsMenu.brazilCoaching"),
-      href: "/nzcoachonline",
-      description: t("navbar.locationsMenu.brazilDescription"),
-      icon: <Users className="h-4 w-4" />,
-    },
-    {
-      title: t("navbar.locationsMenu.usaCoaching"),
-      href: "/ptnz",
-      description: t("navbar.locationsMenu.usaDescription"),
-      icon: <Users className="h-4 w-4" />,
-    },
-    {
-      title: t("navbar.locationsMenu.newZealand"),
-      href: "/online-coaching",
-      description: t("navbar.locationsMenu.newZealandDescription"),
-      icon: <Users className="h-4 w-4" />,
-    },
-  ];
-
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       {/* Centered Container - matching main content width */}
@@ -226,7 +204,7 @@ const Navbar: React.FC = () => {
                     asChild
                     className={cn(
                       "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50",
-                      isActive("/") && "bg-accent text-accent-foreground"
+                      isActive("/") && "bg-accent text-accent-foreground",
                     )}
                   >
                     <Link href="/">{t("navbar.home")}</Link>
@@ -253,32 +231,14 @@ const Navbar: React.FC = () => {
                   </NavigationMenuContent>
                 </NavigationMenuItem>
 
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-sm font-medium">
-                    {t("navbar.locations")}
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent className="!bg-white dark:!bg-gray-900 !border !border-gray-200 dark:!border-gray-700 shadow-lg">
-                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-1 lg:w-[600px]">
-                      {locations.map((location) => (
-                        <ListItem
-                          key={location.title}
-                          title={location.title}
-                          href={location.href}
-                          icon={location.icon}
-                        >
-                          {location.description}
-                        </ListItem>
-                      ))}
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
+                {/* Locations menu removed */}
 
                 <NavigationMenuItem>
                   <NavigationMenuLink
                     asChild
                     className={cn(
                       "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50",
-                      isActive("/about") && "bg-accent text-accent-foreground"
+                      isActive("/about") && "bg-accent text-accent-foreground",
                     )}
                   >
                     <Link href="/about">{t("navbar.about")}</Link>
@@ -290,7 +250,20 @@ const Navbar: React.FC = () => {
                     asChild
                     className={cn(
                       "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50",
-                      isActive("/contact") && "bg-accent text-accent-foreground"
+                      isActive("/review") && "bg-accent text-accent-foreground",
+                    )}
+                  >
+                    <Link href="/review">{t("navbar.review") || "Review"}</Link>
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+
+                <NavigationMenuItem>
+                  <NavigationMenuLink
+                    asChild
+                    className={cn(
+                      "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50",
+                      isActive("/contact") &&
+                        "bg-accent text-accent-foreground",
                     )}
                   >
                     <Link href="/contact">{t("navbar.contact")}</Link>
@@ -413,40 +386,7 @@ const Navbar: React.FC = () => {
                     </div>
                   </div>
 
-                  <Separator />
-
-                  {/* Locations */}
-                  <div>
-                    <h4 className="font-medium mb-2 text-sm text-muted-foreground uppercase tracking-wide">
-                      {t("navbar.mobile.locations")}
-                    </h4>
-                    <div className="space-y-2">
-                      {locations.map((location) => (
-                        <Button
-                          key={location.title}
-                          asChild
-                          variant="ghost"
-                          className="w-full justify-start h-auto py-3"
-                          onClick={() => setIsOpen(false)}
-                        >
-                          <Link
-                            href={location.href}
-                            className="flex items-start space-x-3"
-                          >
-                            <div className="mt-0.5">{location.icon}</div>
-                            <div className="text-left">
-                              <div className="font-medium">
-                                {location.title}
-                              </div>
-                              <div className="text-xs text-muted-foreground mt-1">
-                                {location.description}
-                              </div>
-                            </div>
-                          </Link>
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
+                  {/* Locations removed */}
 
                   <Separator />
 
@@ -469,6 +409,17 @@ const Navbar: React.FC = () => {
                       <Link href="/contact" className="flex items-center gap-2">
                         <MessageCircle className="h-4 w-4" />
                         Contact & Support
+                      </Link>
+                    </Button>
+                    <Button
+                      asChild
+                      variant="ghost"
+                      className="w-full justify-start"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <Link href="/review" className="flex items-center gap-2">
+                        <Star className="h-4 w-4" />
+                        {t("navbar.review") || "Review"}
                       </Link>
                     </Button>
                   </div>

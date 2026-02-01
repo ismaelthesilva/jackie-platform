@@ -13,7 +13,7 @@ export default async function PtMemberDetailPage({ params }: Props) {
   if (!session) return <div className="p-6">Not authenticated</div>;
 
   if (session.role !== "PT") {
-    return redirect("/member/me");
+    return redirect("/client");
   }
 
   if (!params.id) return notFound();

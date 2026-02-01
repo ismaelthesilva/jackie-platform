@@ -93,7 +93,6 @@ export default function WorkoutsPage() {
       <div className="border p-4 rounded">
         <h3 className="font-bold mb-2">Create Workout Program (PT)</h3>
         <WorkoutForm
-          exercises={exercises}
           areaOptions={areaOptions}
           onCreate={async (payload) => {
             await createProgram(payload);
@@ -107,7 +106,7 @@ export default function WorkoutsPage() {
       {programs.length === 0 ? (
         <div>No workout programs found.</div>
       ) : (
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {programs.map((p) => (
             <WorkoutProgramCard
               key={p.id}

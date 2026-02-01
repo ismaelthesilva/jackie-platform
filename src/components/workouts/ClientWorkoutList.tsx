@@ -40,7 +40,7 @@ interface Program {
   workoutDays: WorkoutDay[];
 }
 
-export default function MemberWorkoutList({
+export default function ClientWorkoutList({
   assignedPrograms,
 }: {
   assignedPrograms: Program[];

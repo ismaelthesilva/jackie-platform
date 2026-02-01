@@ -15,7 +15,7 @@ export default async function PTLayout({
   }
 
   if (session.role !== "PT") {
-    redirect("/members");
+    redirect("/client");
   }
 
   return (

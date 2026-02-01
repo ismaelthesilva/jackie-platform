@@ -23,17 +23,29 @@ model User {
 }
 
 model Exercise {
-  id               String            @id @default(uuid())
-  name             String
-  videoUrl         String
+  id               String            @id @default(cuid())
+  name             String            @unique
+  force            String?
+  level            String?
+  mechanic         String?
+  equipment        String?
+  primaryMuscles   String[]
+  secondaryMuscles String[]
+  instructions     String[]
+  category         String?
+  images           String[]
+  popularity       Int               @default(0)
+  videoUrl         String?
   description      String?
   muscleGroup      String?
-  createdById      String
+  createdById      String?
   createdAt        DateTime          @default(now())
   difficulty       String?
-  createdBy        User              @relation("ExerciseCreator", fields: [createdById], references: [id], onDelete: Cascade)
+  createdBy        User?             @relation("ExerciseCreator", fields: [createdById], references: [id], onDelete: Cascade)
   workoutExercises WorkoutExercise[]
 
+  @@index([popularity])
+  @@index([category])
   @@map("exercises")
 }
 
@@ -56,9 +68,9 @@ model WorkoutDay {
   id               String            @id @default(uuid())
   programId        String
   dayName          String
-  area             String?           // Body part for the day (e.g., Chest, Legs)
   orderIndex       Int
   createdAt        DateTime          @default(now())
+  area             String?
   program          WorkoutProgram    @relation(fields: [programId], references: [id], onDelete: Cascade)
   workoutExercises WorkoutExercise[]
 

@@ -7,7 +7,7 @@ export default async function NewMemberPage() {
   if (!session) return <div className="p-6">Not authenticated</div>;
 
   if (session.role !== "PT") {
-    return redirect("/member/me");
+    return redirect("/client");
   }
 
   return <NewMemberForm />;

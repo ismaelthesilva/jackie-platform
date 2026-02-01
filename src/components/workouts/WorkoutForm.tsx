@@ -1,414 +1,659 @@
-import { Combobox } from "@headlessui/react";
-import { Fragment, useEffect, useState } from "react";
+"use client";
 
-export default function WorkoutForm({
-  exercises,
-  areaOptions,
-  onCreate,
-  initialData,
-  onSubmit,
-  submitLabel,
-}: {
-  exercises: any[];
+import { useState, useEffect } from "react";
+import { GripVertical, Trash2, Plus, X } from "lucide-react";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { ExerciseSelector, Exercise } from "./ExerciseSelector";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+
+interface WorkoutExercise {
+  id: string;
+  exerciseId: string;
+  exerciseName?: string;
+  sets: string;
+  reps: string;
+}
+
+interface WorkoutDay {
+  id: string;
+  dayName: string;
+  area: string;
+  exercises: WorkoutExercise[];
+}
+
+interface WorkoutFormProps {
+  exercises?: any[];
   areaOptions: string[];
   onCreate?: (payload: any) => Promise<void>;
   initialData?: any;
   onSubmit?: (payload: any) => Promise<void>;
   submitLabel?: string;
+}
+
+// Sortable Exercise Row Component
+function SortableExerciseRow({
+  exercise,
+  dayId,
+  onUpdate,
+  onRemove,
+}: {
+  exercise: WorkoutExercise;
+  dayId: string;
+  onUpdate: (exerciseId: string, field: string, value: any) => void;
+  onRemove: (exerciseId: string) => void;
 }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: exercise.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="group flex items-start gap-2 p-3 bg-background border rounded-lg hover:border-primary/50 transition-colors"
+    >
+      {/* Drag Handle */}
+      <button
+        type="button"
+        className="mt-2 cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground"
+        {...attributes}
+        {...listeners}
+      >
+        <GripVertical className="h-5 w-5" />
+      </button>
+
+      {/* Exercise Selector */}
+      <div className="flex-1 grid grid-cols-1 md:grid-cols-12 gap-2">
+        <div className="md:col-span-6">
+          <Label className="text-xs text-muted-foreground">Exercise</Label>
+          <ExerciseSelector
+            value={
+              exercise.exerciseId && exercise.exerciseName
+                ? ({
+                    id: exercise.exerciseId,
+                    name: exercise.exerciseName,
+                  } as Exercise)
+                : null
+            }
+            onSelect={(selectedExercise) => {
+              onUpdate(exercise.id, "exerciseId", selectedExercise.id);
+              onUpdate(exercise.id, "exerciseName", selectedExercise.name);
+            }}
+            placeholder="Select exercise..."
+          />
+        </div>
+
+        <div className="md:col-span-2">
+          <Label className="text-xs text-muted-foreground">Sets</Label>
+          <Input
+            type="text"
+            placeholder="e.g., 4"
+            value={exercise.sets}
+            onChange={(e) => onUpdate(exercise.id, "sets", e.target.value)}
+          />
+        </div>
+
+        <div className="md:col-span-3">
+          <Label className="text-xs text-muted-foreground">Reps</Label>
+          <Input
+            type="text"
+            placeholder="e.g., 10 or 8-12"
+            value={exercise.reps}
+            onChange={(e) => onUpdate(exercise.id, "reps", e.target.value)}
+          />
+        </div>
+
+        <div className="md:col-span-1 flex items-end">
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={() => onRemove(exercise.id)}
+            className="text-destructive hover:text-destructive hover:bg-destructive/10"
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Day Card Component
+function DayCard({
+  day,
+  dayIndex,
+  areaOptions,
+  onUpdateDay,
+  onRemoveDay,
+  onAddExercise,
+  onUpdateExercise,
+  onRemoveExercise,
+  onReorderExercises,
+  isOnlyDay,
+}: {
+  day: WorkoutDay;
+  dayIndex: number;
+  areaOptions: string[];
+  onUpdateDay: (dayId: string, field: string, value: any) => void;
+  onRemoveDay: (dayId: string) => void;
+  onAddExercise: (dayId: string) => void;
+  onUpdateExercise: (
+    dayId: string,
+    exerciseId: string,
+    field: string,
+    value: any,
+  ) => void;
+  onRemoveExercise: (dayId: string, exerciseId: string) => void;
+  onReorderExercises: (
+    dayId: string,
+    oldIndex: number,
+    newIndex: number,
+  ) => void;
+  isOnlyDay: boolean;
+}) {
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      const oldIndex = day.exercises.findIndex((ex) => ex.id === active.id);
+      const newIndex = day.exercises.findIndex((ex) => ex.id === over.id);
+      onReorderExercises(day.id, oldIndex, newIndex);
+    }
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <div className="flex items-center gap-2">
+          <Input
+            value={day.dayName}
+            onChange={(e) => onUpdateDay(day.id, "dayName", e.target.value)}
+            className="flex-1 font-semibold"
+            placeholder={`Day ${dayIndex + 1} name`}
+          />
+          <Select
+            value={day.area}
+            onValueChange={(value) => onUpdateDay(day.id, "area", value)}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select area" />
+            </SelectTrigger>
+            <SelectContent>
+              {areaOptions.map((area) => (
+                <SelectItem key={area} value={area}>
+                  {area}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {!isOnlyDay && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={() => onRemoveDay(day.id)}
+              className="text-destructive hover:text-destructive"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
+        {day.area && (
+          <Badge variant="secondary" className="w-fit">
+            {day.area}
+          </Badge>
+        )}
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={day.exercises.map((ex) => ex.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            {day.exercises.map((exercise) => (
+              <SortableExerciseRow
+                key={exercise.id}
+                exercise={exercise}
+                dayId={day.id}
+                onUpdate={(exerciseId, field, value) =>
+                  onUpdateExercise(day.id, exerciseId, field, value)
+                }
+                onRemove={(exerciseId) => onRemoveExercise(day.id, exerciseId)}
+              />
+            ))}
+          </SortableContext>
+        </DndContext>
+
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => onAddExercise(day.id)}
+          className="w-full"
+        >
+          <Plus className="h-4 w-4 mr-2" />
+          Add Exercise
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+
+export default function WorkoutForm({
+  areaOptions,
+  onCreate,
+  initialData,
+  onSubmit,
+  submitLabel,
+}: WorkoutFormProps) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [workoutDays, setWorkoutDays] = useState<any[]>([
+  const [workoutDays, setWorkoutDays] = useState<WorkoutDay[]>([
     {
+      id: crypto.randomUUID(),
       dayName: "Day 1",
       area: "",
-      exercises: [{ exerciseId: "", customId: "", sets: "", reps: "" }],
+      exercises: [],
     },
   ]);
   const [error, setError] = useState<string | null>(null);
-  const [top40, setTop40] = useState<any[]>([]);
-  const [exerciseSearch, setExerciseSearch] = useState<string[]>([]); // one per day/exercise
-
-  // Fetch Top 40 on mount
-  useEffect(() => {
-    fetch("/api/v1/exercises/top?limit=40")
-      .then((r) => r.json())
-      .then((data) => setTop40(data.exercises || []));
-  }, []);
+  const [activeTab, setActiveTab] = useState("0");
 
   // Initialize form when initialData is provided (edit mode)
   useEffect(() => {
     if (!initialData) return;
+
     setName(initialData.name || "");
     setDescription(initialData.description || "");
-    const days = (initialData.workoutDays || []).map((d: any) => ({
-      dayName: d.dayName || "Day 1",
-      area: d.area || "",
-      exercises: (d.workoutExercises || []).map((we: any) => ({
-        exerciseId: we.exerciseId || we.exercise?.id || "",
-        customId: "",
-        sets: we.sets == null ? "" : String(we.sets),
-        reps: we.reps || "",
-      })),
-    }));
+
+    const days: WorkoutDay[] = (initialData.workoutDays || []).map(
+      (d: any) => ({
+        id: d.id || crypto.randomUUID(),
+        dayName: d.dayName || "Day 1",
+        area: d.area || "",
+        exercises: (d.workoutExercises || []).map((we: any) => ({
+          id: we.id || crypto.randomUUID(),
+          exerciseId: we.exerciseId || we.exercise?.id || "",
+          exerciseName: we.exercise?.name || "",
+          sets: we.sets == null ? "" : String(we.sets),
+          reps: we.reps || "",
+        })),
+      }),
+    );
+
     setWorkoutDays(
-      days.length
+      days.length > 0
         ? days
         : [
             {
+              id: crypto.randomUUID(),
               dayName: "Day 1",
               area: "",
-              exercises: [{ exerciseId: "", customId: "", sets: "", reps: "" }],
+              exercises: [],
             },
           ],
     );
   }, [initialData]);
 
-  // Child component for a single exercise row (separate component so hooks are stable)
-  function ExerciseRow({
-    dayIdx,
-    idx,
-    it,
-  }: {
-    dayIdx: number;
-    idx: number;
-    it: any;
-  }) {
-    const [query, setQuery] = useState("");
+  // Day Management
+  const addDay = () => {
+    const newDay: WorkoutDay = {
+      id: crypto.randomUUID(),
+      dayName: `Day ${workoutDays.length + 1}`,
+      area: "",
+      exercises: [],
+    };
+    setWorkoutDays([...workoutDays, newDay]);
+    setActiveTab(String(workoutDays.length));
+  };
 
-    const allOptions = [
-      ...top40,
-      ...exercises.filter(
-        (ex) => !top40.some((t) => (t.id || t.name) === (ex.id || ex.name)),
-      ),
-    ];
-
-    let selectedOption =
-      allOptions.find((ex) => (ex.id || ex.name) === it.exerciseId) || null;
-
-    // If no option matches but we have an exerciseId (from initialData),
-    // create a lightweight placeholder so the Combobox shows the current value.
-    if (!selectedOption && it.exerciseId) {
-      selectedOption = { id: it.exerciseId, name: it.exerciseId } as any;
+  const removeDay = (dayId: string) => {
+    const filtered = workoutDays.filter((d) => d.id !== dayId);
+    setWorkoutDays(filtered);
+    if (activeTab === String(workoutDays.findIndex((d) => d.id === dayId))) {
+      setActiveTab("0");
     }
+  };
 
-    const filteredOptions =
-      query === ""
-        ? allOptions
-        : allOptions.filter(
-            (ex) =>
-              ex.name?.toLowerCase().includes(query.toLowerCase()) ||
-              ex.id?.toLowerCase().includes(query.toLowerCase()),
-          );
-
-    return (
-      <div key={idx} className="grid grid-cols-12 gap-2 items-center mb-1">
-        <div className="col-span-5">
-          <Combobox
-            value={selectedOption}
-            onChange={(val) => {
-              const copy = [...workoutDays];
-              copy[dayIdx].exercises[idx] = {
-                ...copy[dayIdx].exercises[idx],
-                exerciseId: val?.id || val?.name || "",
-              };
-              setWorkoutDays(copy);
-            }}
-          >
-            <div className="relative">
-              <Combobox.Input
-                className="w-full p-2 border rounded"
-                displayValue={(ex: any) => ex?.name || ""}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Select or search exercise"
-              />
-              <Combobox.Options className="absolute z-10 mt-1 w-full bg-white border rounded shadow-lg max-h-60 overflow-auto">
-                {filteredOptions.length === 0 && (
-                  <div className="p-2 text-gray-500">No exercises found</div>
-                )}
-                {filteredOptions.map((ex: any) => (
-                  <Combobox.Option
-                    key={ex.id || ex.name}
-                    value={ex}
-                    as={Fragment}
-                  >
-                    {({ active, selected }) => (
-                      <li
-                        className={`cursor-pointer select-none p-2 ${active ? "bg-blue-100" : ""} ${selected ? "font-bold" : ""}`}
-                      >
-                        {ex.name || ex.id}
-                      </li>
-                    )}
-                  </Combobox.Option>
-                ))}
-                <Combobox.Option
-                  value={{ id: "__custom__", name: "Custom id..." }}
-                  as={Fragment}
-                >
-                  {({ active }) => (
-                    <li
-                      className={`cursor-pointer select-none p-2 ${active ? "bg-blue-100" : ""}`}
-                    >
-                      Custom id...
-                    </li>
-                  )}
-                </Combobox.Option>
-              </Combobox.Options>
-            </div>
-          </Combobox>
-          {it.exerciseId === "__custom__" && (
-            <input
-              placeholder="Custom exercise id"
-              value={it.customId}
-              onChange={(e) => {
-                const copy = [...workoutDays];
-                copy[dayIdx].exercises[idx] = {
-                  ...copy[dayIdx].exercises[idx],
-                  customId: e.target.value,
-                };
-                setWorkoutDays(copy);
-              }}
-              className="w-full p-2 border rounded mt-1"
-            />
-          )}
-        </div>
-        <div className="col-span-2">
-          <input
-            placeholder="Sets"
-            value={it.sets}
-            onChange={(e) => {
-              const copy = [...workoutDays];
-              copy[dayIdx].exercises[idx] = {
-                ...copy[dayIdx].exercises[idx],
-                sets: e.target.value,
-              };
-              setWorkoutDays(copy);
-            }}
-            className="p-2 border rounded w-full"
-          />
-        </div>
-        <div className="col-span-4">
-          <input
-            placeholder="Reps (e.g. 12 or 8-12)"
-            value={it.reps}
-            onChange={(e) => {
-              const copy = [...workoutDays];
-              copy[dayIdx].exercises[idx] = {
-                ...copy[dayIdx].exercises[idx],
-                reps: e.target.value,
-              };
-              setWorkoutDays(copy);
-            }}
-            className="p-2 border rounded w-full"
-          />
-        </div>
-        <div className="col-span-1">
-          <button
-            type="button"
-            onClick={() => {
-              const copy = [...workoutDays];
-              copy[dayIdx].exercises = copy[dayIdx].exercises.filter(
-                (_: any, i: number) => i !== idx,
-              );
-              if (copy[dayIdx].exercises.length === 0) {
-                copy[dayIdx].exercises = [
-                  { exerciseId: "", customId: "", sets: "", reps: "" },
-                ];
-              }
-              setWorkoutDays(copy);
-            }}
-            className="text-red-600"
-            aria-label="Remove exercise"
-          >
-            ×
-          </button>
-        </div>
-      </div>
+  const updateDay = (dayId: string, field: string, value: any) => {
+    setWorkoutDays(
+      workoutDays.map((day) =>
+        day.id === dayId ? { ...day, [field]: value } : day,
+      ),
     );
-  }
+  };
 
+  // Exercise Management
+  const addExercise = (dayId: string) => {
+    setWorkoutDays(
+      workoutDays.map((day) =>
+        day.id === dayId
+          ? {
+              ...day,
+              exercises: [
+                ...day.exercises,
+                {
+                  id: crypto.randomUUID(),
+                  exerciseId: "",
+                  exerciseName: "",
+                  sets: "",
+                  reps: "",
+                },
+              ],
+            }
+          : day,
+      ),
+    );
+  };
+
+  const removeExercise = (dayId: string, exerciseId: string) => {
+    setWorkoutDays(
+      workoutDays.map((day) =>
+        day.id === dayId
+          ? {
+              ...day,
+              exercises: day.exercises.filter((ex) => ex.id !== exerciseId),
+            }
+          : day,
+      ),
+    );
+  };
+
+  const updateExercise = (
+    dayId: string,
+    exerciseId: string,
+    field: string,
+    value: any,
+  ) => {
+    setWorkoutDays(
+      workoutDays.map((day) =>
+        day.id === dayId
+          ? {
+              ...day,
+              exercises: day.exercises.map((ex) =>
+                ex.id === exerciseId ? { ...ex, [field]: value } : ex,
+              ),
+            }
+          : day,
+      ),
+    );
+  };
+
+  const reorderExercises = (
+    dayId: string,
+    oldIndex: number,
+    newIndex: number,
+  ) => {
+    setWorkoutDays(
+      workoutDays.map((day) =>
+        day.id === dayId
+          ? {
+              ...day,
+              exercises: arrayMove(day.exercises, oldIndex, newIndex),
+            }
+          : day,
+      ),
+    );
+  };
+
+  // Form Submission
   const buildPayload = () => {
     const days = workoutDays.map((day) => ({
       dayName: day.dayName,
       area: day.area,
       workoutExercises: day.exercises
-        .map((it: any) => {
-          const finalId =
-            it.exerciseId === "__custom__" ? it.customId : it.exerciseId;
-          return {
-            exerciseId: finalId?.trim?.() || "",
-            sets: it.sets === "" ? null : Number(it.sets),
-            reps: it.reps || null,
-          };
-        })
-        .filter((it: any) => it.exerciseId),
+        .filter((ex) => ex.exerciseId)
+        .map((ex) => ({
+          exerciseId: ex.exerciseId,
+          sets: ex.sets === "" ? null : Number(ex.sets),
+          reps: ex.reps || null,
+        })),
     }));
     return { name, description, workoutDays: days };
   };
 
-  const handleCreate = async (e?: React.FormEvent) => {
-    e?.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     const payload = buildPayload();
-    if (
-      !payload.name ||
-      payload.workoutDays.some((d: any) => d.workoutExercises.length === 0)
-    ) {
-      setError(
-        "Program name and at least one valid exercise per day are required",
-      );
+
+    if (!payload.name.trim()) {
+      setError("Program name is required");
       return;
     }
+
+    if (payload.workoutDays.some((d: any) => d.workoutExercises.length === 0)) {
+      setError("Each day must have at least one exercise");
+      return;
+    }
+
     setError(null);
     const submit = onSubmit || onCreate;
     if (!submit) return;
-    await submit(payload);
 
-    // If we're calling onCreate (create mode), reset form. If editing (initialData provided), keep values.
-    if (!initialData && onCreate) {
-      setName("");
-      setDescription("");
-      setWorkoutDays([
-        {
-          dayName: "Day 1",
-          area: "",
-          exercises: [{ exerciseId: "", customId: "", sets: "", reps: "" }],
-        },
-      ]);
+    try {
+      await submit(payload);
+
+      // Reset form only in create mode
+      if (!initialData && onCreate) {
+        resetForm();
+      }
+    } catch (err: any) {
+      setError(err.message || "Failed to save workout");
     }
   };
 
+  const resetForm = () => {
+    setName("");
+    setDescription("");
+    setWorkoutDays([
+      {
+        id: crypto.randomUUID(),
+        dayName: "Day 1",
+        area: "",
+        exercises: [],
+      },
+    ]);
+    setError(null);
+    setActiveTab("0");
+  };
+
   return (
-    <form onSubmit={handleCreate} className="space-y-2">
-      <input
-        placeholder="Program name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className="w-full p-2 border rounded"
-      />
-      <textarea
-        placeholder="Description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        className="w-full p-2 border rounded"
-      />
-      <div className="space-y-2">
-        <span className="text-sm">Days & Exercises</span>
-        {workoutDays.map((day, dayIdx) => (
-          <div key={dayIdx} className="border rounded p-2 mb-2 bg-gray-50">
-            <div className="flex items-center gap-2 mb-2">
-              <input
-                value={day.dayName}
-                onChange={(e) => {
-                  const copy = [...workoutDays];
-                  copy[dayIdx].dayName = e.target.value;
-                  setWorkoutDays(copy);
-                }}
-                className="p-2 border rounded flex-1"
-                placeholder={`Day ${dayIdx + 1} name`}
-              />
-              <select
-                value={day.area || ""}
-                onChange={(e) => {
-                  const copy = [...workoutDays];
-                  copy[dayIdx].area = e.target.value;
-                  setWorkoutDays(copy);
-                }}
-                className="p-2 border rounded"
-              >
-                <option value="">Select area</option>
-                {areaOptions.map((opt) => (
-                  <option key={opt} value={opt}>
-                    {opt}
-                  </option>
-                ))}
-              </select>
-              {workoutDays.length > 1 && (
-                <button
-                  type="button"
-                  onClick={() =>
-                    setWorkoutDays(
-                      workoutDays.filter((_: any, i: number) => i !== dayIdx),
-                    )
-                  }
-                  className="text-red-600 text-xs"
-                >
-                  Remove Day
-                </button>
-              )}
-            </div>
-            {day.exercises.map((it: any, idx: number) => (
-              <ExerciseRow key={idx} dayIdx={dayIdx} idx={idx} it={it} />
-            ))}
-            <div>
-              <button
-                type="button"
-                onClick={() => {
-                  const copy = [...workoutDays];
-                  copy[dayIdx].exercises.push({
-                    exerciseId: "",
-                    customId: "",
-                    sets: "",
-                    reps: "",
-                  });
-                  setWorkoutDays(copy);
-                }}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-3 py-1 rounded mt-1"
-              >
-                Add exercise
-              </button>
-            </div>
+    <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Program Details */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Program Details</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="program-name">Program Name *</Label>
+            <Input
+              id="program-name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="e.g., Upper Body Strength"
+              required
+            />
           </div>
-        ))}
-        <button
-          type="button"
-          onClick={() =>
-            setWorkoutDays([
-              ...workoutDays,
-              {
-                dayName: `Day ${workoutDays.length + 1}`,
-                area: "",
-                exercises: [
-                  { exerciseId: "", customId: "", sets: "", reps: "" },
-                ],
-              },
-            ])
-          }
-          className="bg-green-600 hover:bg-green-700 text-white font-semibold px-3 py-1 rounded mt-2"
-        >
-          Add Day
-        </button>
-      </div>
-      <div className="flex gap-2">
-        <button
-          type="submit"
-          className="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded"
-        >
-          {submitLabel || (initialData ? "Update program" : "Create program")}
-        </button>
+          <div className="space-y-2">
+            <Label htmlFor="program-description">Description</Label>
+            <Textarea
+              id="program-description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Brief description of the workout program..."
+              rows={3}
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Workout Days */}
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle>Workout Days</CardTitle>
+          <Button type="button" onClick={addDay} size="sm">
+            <Plus className="h-4 w-4 mr-2" />
+            Add Day
+          </Button>
+        </CardHeader>
+        <CardContent>
+          {/* Mobile: Tabs */}
+          <div className="block md:hidden">
+            <Tabs value={activeTab} onValueChange={setActiveTab}>
+              <TabsList
+                className="grid w-full"
+                style={{
+                  gridTemplateColumns: `repeat(${workoutDays.length}, minmax(0, 1fr))`,
+                }}
+              >
+                {workoutDays.map((day, idx) => (
+                  <TabsTrigger key={day.id} value={String(idx)}>
+                    {day.dayName || `Day ${idx + 1}`}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+              {workoutDays.map((day, idx) => (
+                <TabsContent key={day.id} value={String(idx)} className="mt-4">
+                  <DayCard
+                    day={day}
+                    dayIndex={idx}
+                    areaOptions={areaOptions}
+                    onUpdateDay={updateDay}
+                    onRemoveDay={removeDay}
+                    onAddExercise={addExercise}
+                    onUpdateExercise={updateExercise}
+                    onRemoveExercise={removeExercise}
+                    onReorderExercises={reorderExercises}
+                    isOnlyDay={workoutDays.length === 1}
+                  />
+                </TabsContent>
+              ))}
+            </Tabs>
+          </div>
+
+          {/* Desktop: Accordion */}
+          <div className="hidden md:block">
+            <Accordion
+              type="multiple"
+              defaultValue={workoutDays.map((_, idx) => String(idx))}
+            >
+              {workoutDays.map((day, idx) => (
+                <AccordionItem key={day.id} value={String(idx)}>
+                  <AccordionTrigger>
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold">
+                        {day.dayName || `Day ${idx + 1}`}
+                      </span>
+                      {day.area && (
+                        <Badge variant="secondary">{day.area}</Badge>
+                      )}
+                      <span className="text-sm text-muted-foreground">
+                        ({day.exercises.length} exercises)
+                      </span>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="pt-4">
+                    <DayCard
+                      day={day}
+                      dayIndex={idx}
+                      areaOptions={areaOptions}
+                      onUpdateDay={updateDay}
+                      onRemoveDay={removeDay}
+                      onAddExercise={addExercise}
+                      onUpdateExercise={updateExercise}
+                      onRemoveExercise={removeExercise}
+                      onReorderExercises={reorderExercises}
+                      isOnlyDay={workoutDays.length === 1}
+                    />
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Error Message */}
+      {error && (
+        <div className="p-4 bg-destructive/10 border border-destructive rounded-lg text-destructive text-sm">
+          {error}
+        </div>
+      )}
+
+      {/* Form Actions */}
+      <div className="flex gap-3">
+        <Button type="submit" className="flex-1 md:flex-initial">
+          {submitLabel || (initialData ? "Update Program" : "Create Program")}
+        </Button>
         {!initialData && (
-          <button
+          <Button
             type="button"
-            onClick={() => {
-              setName("");
-              setDescription("");
-              setWorkoutDays([
-                {
-                  dayName: "Day 1",
-                  area: "",
-                  exercises: [
-                    { exerciseId: "", customId: "", sets: "", reps: "" },
-                  ],
-                },
-              ]);
-              setError(null);
-            }}
-            className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded"
+            variant="outline"
+            onClick={resetForm}
+            className="flex-1 md:flex-initial"
           >
             Reset
-          </button>
+          </Button>
         )}
       </div>
-      {error && <div className="text-red-600 mt-2">{error}</div>}
     </form>
   );
 }

@@ -20,6 +20,10 @@ interface Exercise {
   videoUrl: string;
   muscleGroup: string | null;
   difficulty: string | null;
+  level: string | null;
+  primaryMuscles: string[];
+  instructions: string[];
+  images: string[];
   createdAt: string;
 }
 
@@ -35,63 +39,53 @@ export default function ExercisesPage() {
   const [total, setTotal] = useState(0);
   const [showTop, setShowTop] = useState(true);
 
-  // Fetch Top 40 on initial load
-  useEffect(() => {
-    setShowTop(true);
-    fetchTopExercises();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Fetch Top 40
-  const fetchTopExercises = async () => {
-    try {
-      setIsLoading(true);
-      setError("");
-      const response = await fetch("/api/v1/exercises/top?limit=40");
-      if (!response.ok) throw new Error("Failed to fetch top exercises");
-      const data = await response.json();
-      setExercises(data.exercises);
-      setTotal(data.exercises.length);
-      setPage(1);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load exercises");
-    } finally {
-      setIsLoading(false);
-      setIsLoadingMore(false);
-    }
-  };
-
-  // Fetch exercises with pagination (for All mode)
+  // Unified fetch function for all exercises (Top 40 or filtered)
   const fetchExercises = async ({
     name = "",
     area = "",
     page = 1,
     reset = false,
+    isTop40 = false,
   }: {
     name?: string;
     area?: string;
     page?: number;
     reset?: boolean;
+    isTop40?: boolean;
   }) => {
     try {
       if (reset) setIsLoading(true);
       else setIsLoadingMore(true);
       setError("");
+
       const query = new URLSearchParams();
       if (name) query.set("name", name);
       if (area) query.set("area", area);
       query.set("page", String(page));
-      query.set("pageSize", String(pageSize));
+
+      // For Top 40 view, use first page with 40 items limit
+      if (isTop40) {
+        query.set("pageSize", "40");
+        query.set("page", "1");
+      } else {
+        query.set("pageSize", String(pageSize));
+      }
+
       const url = `/api/v1/exercises?${query}`;
       const response = await fetch(url);
       if (!response.ok) throw new Error("Failed to fetch exercises");
       const data = await response.json();
+
       if (reset) {
         setExercises(data.exercises);
       } else {
         setExercises((prev) => [...prev, ...data.exercises]);
       }
       setTotal(data.total || 0);
+
+      if (isTop40) {
+        setPage(1);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load exercises");
     } finally {
@@ -100,18 +94,31 @@ export default function ExercisesPage() {
     }
   };
 
-  // Switch to All mode on search/filter
+  // Initial load - fetch Top 40
   useEffect(() => {
-    if (!showTop) {
+    fetchExercises({ reset: true, isTop40: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Handle search/filter changes
+  useEffect(() => {
+    if (search || area) {
+      // User is searching/filtering, switch to paginated mode
+      setShowTop(false);
       setPage(1);
       fetchExercises({ name: search, area, page: 1, reset: true });
+    } else if (!showTop) {
+      // Search cleared, go back to Top 40
+      setShowTop(true);
+      fetchExercises({ reset: true, isTop40: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search, area, showTop]);
+  }, [search, area]);
 
-  // Infinite scroll handler (All mode only)
+  // Infinite scroll handler (paginated mode only)
   useEffect(() => {
-    if (showTop) return;
+    if (showTop) return; // Don't scroll load in Top 40 mode
+
     const handleScroll = () => {
       if (
         window.innerHeight + window.scrollY >=
@@ -143,8 +150,12 @@ export default function ExercisesPage() {
         throw new Error("Failed to delete exercise");
       }
 
-      // Refresh list
-      fetchExercises({ name: search, area, page: 1, reset: true });
+      // Refresh list based on current mode
+      if (showTop) {
+        fetchExercises({ reset: true, isTop40: true });
+      } else {
+        fetchExercises({ name: search, area, page: 1, reset: true });
+      }
     } catch (err) {
       alert(err instanceof Error ? err.message : "Failed to delete exercise");
     }
@@ -164,10 +175,10 @@ export default function ExercisesPage() {
     setSearch("");
     setArea("");
     setPage(1);
-    fetchTopExercises();
+    fetchExercises({ reset: true, isTop40: true });
   };
 
-  // Area options (example)
+  // Area options
   const areaOptions = [
     "Chest",
     "Back",
@@ -178,15 +189,6 @@ export default function ExercisesPage() {
     "Glutes",
     "Full Body",
   ];
-
-  // Add logic to auto-switch to Top 40 if search and area are both empty
-  useEffect(() => {
-    if (!search && !area && !showTop) {
-      setShowTop(true);
-      fetchTopExercises();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search, area]);
 
   if (isLoading) {
     return (
